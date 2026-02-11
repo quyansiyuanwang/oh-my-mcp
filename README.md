@@ -18,23 +18,35 @@ This comprehensive MCP server provides tools for:
 - **🔍 Pylance/Pyright** (4 tools): Type checking, code analysis, diagnostics
 - **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic/ZhipuAI), parallel execution, conditional branching, persistent config
 
-### ⚡ Quick Configuration
+### ⚡ Quick Setup
 
-**One-command setup for Claude Desktop:**
+**🎯 Interactive Setup Wizard (Recommended):**
 
 ```bash
-python generate_config.py --claude
+uv run configure.py
+```
+
+This will guide you through:
+- Environment verification
+- Dependency installation
+- Subagent API configuration (OpenAI/Anthropic/ZhipuAI)
+- Claude Desktop integration
+
+📖 **[完整配置指南 (Setup Guide)](docs/SETUP_GUIDE.md)** | **[中文配置指南 (Chinese Guide)](docs/CONFIGURATION_GUIDE_CN.md)**
+
+**Alternative: Quick Claude Desktop config:**
+
+```bash
+python -m mcp_server.cli.config --claude
 ```
 
 **Or run an HTTP configuration server on port 8765:**
 
 ```bash
-python generate_config.py --http-server
+python -m mcp_server.cli.config --http-server
 ```
 
 Access configuration at: `http://localhost:8765/config`
-
-📖 **[中文配置指南 (Chinese Configuration Guide)](CONFIGURATION_GUIDE_CN.md)**
 
 ## 📦 Installation
 
