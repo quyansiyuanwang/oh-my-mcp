@@ -1,3 +1,0 @@
-This is test file 1 for compression testing.
-It contains multiple lines of text.
-Line 3 of the test file.

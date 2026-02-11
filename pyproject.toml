@@ -1,9 +1,28 @@
 [project]
 name = "mcp-server"
 version = "0.1.0"
-description = "Comprehensive MCP server with web search, file operations, data processing, and system utilities"
+description = "Comprehensive MCP server with 95+ practical tools across 10 categories"
 readme = "README.md"
 requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "MCP Server Project", email = "mcp-server@example.com"}
+]
+keywords = [
+    "mcp", "model-context-protocol", "tools", "web-search",
+    "file-operations", "data-processing", "python-development",
+    "system-utilities", "uv", "pylance"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: System :: Systems Administration",
+]
 dependencies = [
     "fastmcp>=2.14.5",
     "requests>=2.31.0",
@@ -16,8 +35,39 @@ dependencies = [
     "tomli>=2.0.0; python_version < '3.11'",
 ]
 
-[tool.uv.workspace]
-members = [
-    "test_project",
-    "test_uv_project",
+[project.urls]
+Homepage = "https://github.com/yourusername/mcp-server"
+Documentation = "https://github.com/yourusername/mcp-server/tree/main/docs"
+Repository = "https://github.com/yourusername/mcp-server.git"
+Issues = "https://github.com/yourusername/mcp-server/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "ruff>=0.1.0",
 ]
+
+[project.scripts]
+mcp-server = "mcp_server.main:main"
+
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "--cov=mcp_server --cov-report=html --cov-report=term-missing"
+
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

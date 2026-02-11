@@ -11,60 +11,60 @@ Version: 0.1.0
 from fastmcp import FastMCP
 
 # Import all tool modules
-from mcp_server import (
-    compression_tools,
-    web_tools,
-    file_tools,
-    data_tools,
-    text_tools,
-    system_tools,
-    utility_tools,
-    python_tools,
-    uv_tools,
-    pylance_tools,
+from mcp_server.tools import (
+    compression,
+    web,
+    file,
+    data,
+    text,
+    system,
+    utility,
+    python,
+    uv,
+    pylance,
 )
 from mcp_server.utils import logger
 
 # Define module registry with metadata
 TOOL_MODULES = [
     {
-        "module": compression_tools,
+        "module": compression,
         "category_key": "compression",
     },
     {
-        "module": web_tools,
+        "module": web,
         "category_key": "web_network",
     },
     {
-        "module": file_tools,
+        "module": file,
         "category_key": "file_system",
     },
     {
-        "module": data_tools,
+        "module": data,
         "category_key": "data_processing",
     },
     {
-        "module": text_tools,
+        "module": text,
         "category_key": "text_processing",
     },
     {
-        "module": system_tools,
+        "module": system,
         "category_key": "system",
     },
     {
-        "module": utility_tools,
+        "module": utility,
         "category_key": "utilities",
     },
     {
-        "module": python_tools,
+        "module": python,
         "category_key": "python_development",
     },
     {
-        "module": uv_tools,
+        "module": uv,
         "category_key": "uv_package_manager",
     },
     {
-        "module": pylance_tools,
+        "module": pylance,
         "category_key": "pylance_pyright",
     },
 ]
@@ -168,5 +168,10 @@ logger.info("Server ready to accept connections.")
 logger.info("=" * 60)
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point for the MCP server."""
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

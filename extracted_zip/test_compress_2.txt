@@ -1,3 +1,0 @@
-This is test file 2 for compression testing.
-Another file with different content.
-Testing ZIP compression functionality.

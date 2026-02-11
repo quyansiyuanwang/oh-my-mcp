@@ -8,3 +8,48 @@ wheels/
 
 # Virtual environments
 .venv
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+*.cover
+
+# Documentation
+docs/_build/
+site/
+
+# Logs
+*.log
+mcp_server.log
+
+# Temporary files
+*.tmp
+*.temp
+extracted_tar/
+extracted_zip/
+test_venv/
+test_project/
+test_uv_project/
+
+# Environment
+.env
+.env.local
+
+# OS
+Thumbs.db
+nul
+
+# UV lock file (for libraries)
+uv.lock
