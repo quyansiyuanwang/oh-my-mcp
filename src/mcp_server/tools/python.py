@@ -10,8 +10,8 @@ import json
 import sys
 from pathlib import Path
 
-from .command_executor import CommandExecutor
-from .utils import (
+from ..command_executor import CommandExecutor
+from ..utils import (
     CommandExecutionError,
     PYTHON_MAX_CODE_LENGTH,
     ValidationError,

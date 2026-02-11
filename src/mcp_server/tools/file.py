@@ -16,7 +16,7 @@ from pathlib import Path
 from typing import Optional
 import glob
 
-from .utils import (
+from ..utils import (
     logger,
     sanitize_path,
     safe_read_file,

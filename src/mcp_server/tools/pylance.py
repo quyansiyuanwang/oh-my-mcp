@@ -7,8 +7,8 @@ Provides tools for Python type checking, code analysis, and diagnostics using Py
 import json
 from pathlib import Path
 
-from .command_executor import CommandExecutor
-from .utils import (
+from ..command_executor import CommandExecutor
+from ..utils import (
     CommandExecutionError,
     ValidationError,
     logger,

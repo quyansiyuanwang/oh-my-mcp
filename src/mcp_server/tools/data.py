@@ -17,7 +17,7 @@ import sys
 from typing import Any, Optional
 import xml.etree.ElementTree as ET
 
-from .utils import logger, DataProcessingError, ValidationError
+from ..utils import logger, DataProcessingError, ValidationError
 
 # Import YAML support
 try:

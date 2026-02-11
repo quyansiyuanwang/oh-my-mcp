@@ -20,7 +20,7 @@ from typing import Optional
 
 from dateutil import parser as date_parser
 
-from .utils import logger, ValidationError
+from ..utils import logger, ValidationError
 
 # Module metadata
 CATEGORY_NAME = "Utilities"

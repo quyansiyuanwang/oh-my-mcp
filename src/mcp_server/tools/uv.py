@@ -7,8 +7,8 @@ Provides tools for fast Python package and project management using uv.
 import json
 from pathlib import Path
 
-from .command_executor import CommandExecutor
-from .utils import (
+from ..command_executor import CommandExecutor
+from ..utils import (
     CommandExecutionError,
     ValidationError,
     logger,

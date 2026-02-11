@@ -16,7 +16,7 @@ from urllib.parse import urlparse, urljoin
 import requests
 from bs4 import BeautifulSoup
 
-from .utils import (
+from ..utils import (
     logger,
     retry,
     validate_url as _validate_url,
@@ -241,7 +241,7 @@ def register_tools(mcp):
                         f.write(chunk)
 
             file_size = path.stat().st_size
-            from .utils import format_bytes
+            from ..utils import format_bytes
 
             return f"File downloaded successfully to {save_path} ({format_bytes(file_size)})"
 

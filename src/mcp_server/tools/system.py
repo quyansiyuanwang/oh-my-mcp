@@ -17,7 +17,7 @@ from typing import Optional
 
 import psutil
 
-from .utils import logger, format_bytes
+from ..utils import logger, format_bytes
 
 # Module metadata
 CATEGORY_NAME = "System"
