@@ -1,0 +1,3 @@
+category_name: "Utilities"
+category_description: "UUID, hashing, date/time operations, math, password generation"
+enabled: true

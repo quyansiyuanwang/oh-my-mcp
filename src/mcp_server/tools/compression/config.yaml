@@ -1,0 +1,3 @@
+category_name: "Compression"
+category_description: "ZIP/TAR compression and extraction with security features"
+enabled: true

@@ -1,0 +1,3 @@
+category_name: "File System"
+category_description: "Read, write, search files and directories, file comparison"
+enabled: true

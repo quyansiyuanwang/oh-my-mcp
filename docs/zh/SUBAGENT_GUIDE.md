@@ -2,17 +2,17 @@
 
 ## 概述
 
-Subagent 是一个强大的 AI 编排工具模块，允许您在 MCP 服务器中委派子任务给外部 AI 模型（OpenAI、Anthropic 和 ZhipuAI）。支持并行任务执行、条件分支决策、token 使用统计和成本追踪。
+Subagent 是一个强大的 AI 编排工具模块，允许您在 MCP 服务器中委派子任务给外部 AI 模型（OpenAI 和 Anthropic）。支持并行任务执行、条件分支决策、token 使用统计和自定义模型。
 
 ## 核心功能
 
-- ✅ **多 AI 接入商支持**：OpenAI (GPT-3.5/4)、Anthropic (Claude-3)、ZhipuAI (GLM-4)
+- ✅ **多 AI 接入商支持**：OpenAI (GPT-3.5/4)、Anthropic (Claude-3)
 - ✅ **自定义 API 端点**：支持私有部署和自定义 API 基础 URL
 - ✅ **持久化配置**：API 密钥自动保存，无需每次重新配置
 - ✅ **并行任务执行**：使用线程池同时执行多个独立子任务
 - ✅ **条件分支决策**：基于 AI 判断动态选择执行路径
 - ✅ **Token 统计**：实时计算输入/输出 token 使用量
-- ✅ **成本追踪**：自动计算 API 调用成本（USD）
+- ✅ **自定义模型支持**：支持使用任意自定义模型名称
 - ✅ **无状态设计**：每次调用独立，无需维护会话状态
 - ✅ **自动重试**：网络失败时自动重试（最多 3 次）
 - ✅ **安全保障**：API 密钥自动脱敏，环境变量管理
@@ -29,8 +29,8 @@ from mcp_server.tools.subagent import subagent_config_set
 # 设置 OpenAI (一次配置，永久生效)
 subagent_config_set("openai", "sk-proj-xxxxxxxxxxxx")
 
-# 设置 ZhipuAI
-subagent_config_set("zhipuai", "your-api-key.xxxxxxxxxx")
+# 设置 Anthropic
+subagent_config_set("anthropic", "sk-ant-xxxxxxxxxxxx")
 
 # 设置自定义端点
 subagent_config_set("openai", "sk-xxx", "https://api.openai-proxy.com/v1")
@@ -57,9 +57,6 @@ export OPENAI_API_KEY="sk-..."
 
 # Anthropic
 export ANTHROPIC_API_KEY="sk-ant-..."
-
-# ZhipuAI (智谱AI)
-export ZHIPUAI_API_KEY="your-api-key.xxxx"
 ```
 
 **Windows PowerShell:**
@@ -67,7 +64,6 @@ export ZHIPUAI_API_KEY="your-api-key.xxxx"
 ```powershell
 $env:OPENAI_API_KEY = "sk-..."
 $env:ANTHROPIC_API_KEY = "sk-ant-..."
-$env:ZHIPUAI_API_KEY = "your-api-key.xxxx"
 ```
 
 ### 2. 自定义 API 端点（可选）
@@ -80,9 +76,6 @@ export OPENAI_API_BASE="https://your-custom-endpoint.com/v1"
 
 # 自定义 Anthropic 端点
 export ANTHROPIC_API_BASE="https://your-custom-endpoint.com/v1"
-
-# 自定义 ZhipuAI 端点
-export ZHIPUAI_API_BASE="https://open.bigmodel.cn/api/paas/v4"
 ```
 
 ### 3. 使用工具
@@ -114,11 +107,6 @@ export ZHIPUAI_API_BASE="https://open.bigmodel.cn/api/paas/v4"
     "prompt_tokens": 123,
     "completion_tokens": 456,
     "total_tokens": 579
-  },
-  "cost": {
-    "input_cost": 0.000185,
-    "output_cost": 0.000912,
-    "total_cost": 0.001097
   },
   "model": "gpt-4",
   "provider": "openai",
@@ -160,14 +148,14 @@ result = subagent_call(
 ```
 
 ```python
-# 使用 ZhipuAI GLM-4 处理中文任务
+# 使用 Anthropic Claude 处理中文任务
 messages = [
     {"role": "user", "content": "请解释什么是人工智能"}
 ]
 
 result = subagent_call(
-    provider="zhipuai",
-    model="glm-4",
+    provider="anthropic",
+    model="claude-3-5-sonnet-20241022",
     messages=json.dumps(messages),
     max_tokens=500,
     temperature=0.7
@@ -216,7 +204,6 @@ result = subagent_call(
       "task_index": 0,
       "result": "...",
       "usage": {...},
-      "cost": {...},
       "status": "success"
     },
     {
@@ -224,7 +211,6 @@ result = subagent_call(
       "task_index": 1,
       "result": "...",
       "usage": {...},
-      "cost": {...},
       "status": "success"
     }
   ],
@@ -232,7 +218,6 @@ result = subagent_call(
     "total_tasks": 2,
     "successful": 2,
     "failed": 0,
-    "total_cost": 0.003456,
     "total_input_tokens": 234,
     "total_output_tokens": 567,
     "total_tokens": 801,
@@ -321,14 +306,12 @@ result = subagent_parallel(tasks=json.dumps(tasks), max_workers=3)
   "condition_result": {
     "text": "true",
     "evaluated_as": true,
-    "usage": {...},
-    "cost": {...}
+    "usage": {...}
   },
   "branch_taken": "true_branch",
   "final_result": {
     "result": "...",
     "usage": {...},
-    "cost": {...},
     "status": "success"
   },
   "total_usage": {
@@ -336,7 +319,6 @@ result = subagent_parallel(tasks=json.dumps(tasks), max_workers=3)
     "completion_tokens": 456,
     "total_tokens": 579
   },
-  "total_cost": 0.001234,
   "status": "success"
 }
 ```
@@ -392,10 +374,10 @@ print(f"Branch taken: {result['branch_taken']}")
 
 **参数：**
 
-| 参数       | 类型   | 必需 | 描述                                         |
-| ---------- | ------ | ---- | -------------------------------------------- |
-| `provider` | string | ✓    | 提供商：`"openai"` `"anthropic"` `"zhipuai"` |
-| `api_key`  | string | ✓    | API 密钥                                     |
+| 参数       | 类型   | 必需 | 描述                                    |
+| ---------- | ------ | ---- | ------------------------------------------ |
+| `provider` | string | ✓    | 提供商：`"openai"` `"anthropic"` |
+| `api_key`  | string | ✓    | API 密钥                              |
 | `api_base` | string | ✗    | API 基础 URL（可选）                         |
 
 **返回：**
@@ -420,8 +402,8 @@ subagent_config_set("openai", "sk-proj-xxxxxxxxxxxx")
 # 设置自定义端点
 subagent_config_set("openai", "sk-xxx", "https://api.openai-proxy.com/v1")
 
-# 设置 ZhipuAI
-subagent_config_set("zhipuai", "your-api-key.xxxxxxxxxx")
+# 设置 Anthropic
+subagent_config_set("anthropic", "sk-ant-xxxxxxxxxxxx")
 ```
 
 ### 5. `subagent_config_get` - 查询配置
@@ -470,9 +452,9 @@ print(f"OpenAI 配置来源: {config['source']}")
       "api_base": "https://api.openai.com/v1",
       "source": "config_file"
     },
-    "zhipuai": {
-      "api_key": "8ed3f43f...SQ29",
-      "api_base": "https://open.bigmodel.cn/api/paas/v4",
+    "anthropic": {
+      "api_key": "sk-ant-...eQhJ",
+      "api_base": "https://api.anthropic.com/v1",
       "source": "environment"
     }
   },
@@ -553,22 +535,6 @@ result = subagent_conditional(
 | `claude-3-5-sonnet-20241022` | $0.003/1K   | $0.015/1K   | 200K       | 最新最强 Claude    |
 | `claude-3-opus-20240229`     | $0.015/1K   | $0.075/1K   | 200K       | 最高质量推理       |
 
-### ZhipuAI GLM 模型
-
-| 模型          | 输入价格 | 输出价格 | 上下文窗口 | 适用场景           |
-| ------------- | -------- | -------- | ---------- | ------------------ |
-| `glm-4-flash` | 免费     | 免费     | 128K       | 免费试用、测试开发 |
-| `glm-4-air`   | ¥0.01/1K | ¥0.01/1K | 128K       | 最经济的中文模型   |
-| `glm-4`       | ¥0.1/1K  | ¥0.1/1K  | 128K       | 平衡性能和成本     |
-| `glm-4-airx`  | ¥0.1/1K  | ¥0.1/1K  | 8K         | 快速响应           |
-| `glm-4-plus`  | ¥0.5/1K  | ¥0.5/1K  | 128K       | 最强中文理解和生成 |
-
-> **注意**：
->
-> - ZhipuAI 价格以人民币计价
-> - 上表价格已按 1 USD ≈ 7 CNY 转换为美元等效价格用于成本计算
-> - 实际费用以智谱AI官方定价为准
-
 > **注意**：价格可能会随时调整，以官方最新定价为准。
 
 ## Token 计数算法
@@ -639,17 +605,24 @@ result = subagent_conditional(
 )
 ```
 
-### 5. 监控成本
+### 5. Token 使用监控
 
-所有工具都返回 `cost` 字段，定期查看成本报告：
+所有工具都返回 `usage` 字段，定期查看 token 使用情况：
 
 ```python
 result = subagent_call(...)
-print(f"This call cost: ${result['cost']['total_cost']}")
+print(f"Tokens used: {result['usage']['total_tokens']}")
+print(f"Input tokens: {result['usage']['prompt_tokens']}")
+print(f"Output tokens: {result['usage']['completion_tokens']}")
 
 result = subagent_parallel(...)
-print(f"Total parallel cost: ${result['summary']['total_cost']}")
+print(f"Total tokens: {result['summary']['total_tokens']}")
+print(f"Tasks completed: {result['summary']['successful']}/{result['summary']['total_tasks']}")
 ```
+
+**成本查询**: 可以通过 API provider 的官方控制台查看实际成本：
+- **OpenAI**: https://platform.openai.com/usage
+- **Anthropic**: https://console.anthropic.com/settings/usage
 
 ## 错误处理
 
@@ -1012,13 +985,14 @@ result = subagent_call(
 
 ## 最佳实践
 
-1. **始终设置 `max_tokens`**：避免意外的长输出和高成本
+1. **始终设置 `max_tokens`**：避免意外的长输出
 2. **使用并行处理**：独立任务应并行执行以节省时间
-3. **监控成本**：定期检查 `cost` 字段
-4. **选择合适的模型**：简单任务用便宜模型
+3. **监控 Token 使用**：定期检查 `usage` 字段，通过 API provider 控制台查看成本
+4. **选择合适的模型**：简单任务用便宜模型，复杂任务用高级模型
 5. **优雅降级**：检查 `status` 字段，处理失败情况
 6. **环境变量管理**：使用 `.env` 文件或密钥管理服务
 7. **日志审查**：定期检查日志以发现问题
+8. **自定义模型支持**：可以使用任意模型名称，包括自定义微调模型
 
 ## 限制和约束
 
@@ -1036,6 +1010,17 @@ result = subagent_call(
 - [FastMCP 框架](https://github.com/jlowin/fastmcp)
 
 ## 更新日志
+
+### v0.2.0 (2026-02-12)
+
+- ✅ **移除计费功能**: 不再返回 `cost` 字段，简化代码结构
+- ✅ **自定义模型支持**: 支持使用任意模型名称，无需预先配置价格
+- ✅ **移除 MODEL_PRICING**: 不再维护硬编码的价格表
+- ✅ **移除 CostCalculator**: 删除成本计算逻辑
+- ✅ **Token 统计保留**: 仍然返回 `usage` 字段用于监控
+- 📝 **文档更新**: 更新示例和最佳实践
+
+⚠️ **破坏性更改**: 返回值不再包含 `cost` 字段
 
 ### v0.1.0 (2026-02-11)
 

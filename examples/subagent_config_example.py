@@ -34,10 +34,10 @@ def example_1_set_config():
     config.set_api_base("openai", "https://api.openai-proxy.com/v1")
     print(f"✓ OpenAI API 密钥和自定义端点已保存")
 
-    # 设置 ZhipuAI
-    print("\n3. 设置 ZhipuAI 配置...")
-    config.set_api_key("zhipuai", "test_key_12345678.abcdefghijklmnop")
-    print(f"✓ ZhipuAI API 密钥已保存")
+    # 设置 Anthropic
+    print("\n3. 设置 Anthropic 配置...")
+    config.set_api_key("anthropic", "sk-ant-test-key-for-demo-purposes-only")
+    print(f"✓ Anthropic API 密钥已保存")
 
     print(f"\n配置文件: {config.get_config_path()}")
 

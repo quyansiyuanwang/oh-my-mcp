@@ -4,7 +4,7 @@ MCP Server Configuration Script - Interactive Environment Setup
 -----------------------------------------------------------------
 This script helps you configure the MCP server environment, including:
 - Python environment and dependencies
-- Subagent API credentials (OpenAI, Anthropic, ZhipuAI)
+- Subagent API credentials (OpenAI, Anthropic)
 - Claude Desktop integration
 
 Usage:
@@ -224,7 +224,7 @@ def configure_subagent(provider: str, api_key: str, api_base: Optional[str] = No
     Configure Subagent API credentials.
 
     Args:
-        provider: Provider name (openai, anthropic, zhipuai)
+        provider: Provider name (openai, anthropic)
         api_key: API key
         api_base: Optional custom API base URL
 
@@ -273,12 +273,6 @@ def get_provider_info() -> Dict[str, Dict]:
             "default_base": "https://api.anthropic.com/v1",
             "key_format": "sk-ant-...",
             "docs": "https://docs.anthropic.com/en/api/getting-started",
-        },
-        "zhipuai": {
-            "name": "ZhipuAI (智谱AI)",
-            "default_base": "https://open.bigmodel.cn/api/paas/v4",
-            "key_format": "xxxxxxxx.xxxxxxxxxx",
-            "docs": "See docs/ZHIPUAI_GUIDE.md",
         },
     }
 
@@ -538,7 +532,7 @@ def interactive_setup():
     # Stage 3: Subagent Configuration
     print_header("Stage 3: Configure Subagent Feature")
     print("Subagent allows Claude to delegate complex tasks to other AI models.")
-    print("This feature requires API credentials from AI providers (OpenAI/Anthropic/ZhipuAI).\n")
+    print("This feature requires API credentials from AI providers (OpenAI/Anthropic).\n")
 
     enable_subagent = input("Enable Subagent feature? (y/n): ").strip().lower()
 
@@ -652,7 +646,7 @@ Examples:
         "--provider",
         action="append",
         dest="providers",
-        choices=["openai", "anthropic", "zhipuai"],
+        choices=["openai", "anthropic"],
         help="AI provider to configure (can be repeated)",
     )
     parser.add_argument(

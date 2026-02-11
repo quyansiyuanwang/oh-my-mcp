@@ -1,0 +1,3 @@
+category_name: "Text Processing"
+category_description: "Regex, encoding, email/URL extraction, text similarity"
+enabled: true

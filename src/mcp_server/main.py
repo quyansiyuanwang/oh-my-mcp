@@ -1,112 +1,83 @@
 """
 Comprehensive MCP Server with Practical Tools
 
-This MCP server provides 74+ tools across 7 categories.
-Tool counts and descriptions are dynamically loaded from each module.
+This MCP server provides 74+ tools across multiple categories.
+Tool counts and descriptions are dynamically loaded from each plugin.
 
 Author: MCP Server Project
-Version: 0.1.0
 """
 
+import sys
+from pathlib import Path
 from typing import Any
 from fastmcp import FastMCP
 
-# Import all tool modules
-from mcp_server.tools import (
-    compression,
-    web,
-    file,
-    data,
-    text,
-    system,
-    utility,
-    subagent,
-)
+# Import tomllib for Python 3.11+ or fall back to tomli
+if sys.version_info >= (3, 11):
+    import tomllib
+else:
+    try:
+        import tomli as tomllib
+    except ImportError:
+        tomllib = None  # type: ignore
+
+from mcp_server.tools import load_all_plugins
 from mcp_server.utils import logger
 
-# Define module registry with metadata
-TOOL_MODULES = [
-    {
-        "module": compression,
-        "category_key": "compression",
-    },
-    {
-        "module": web,
-        "category_key": "web_network",
-    },
-    {
-        "module": file,
-        "category_key": "file_system",
-    },
-    {
-        "module": data,
-        "category_key": "data_processing",
-    },
-    {
-        "module": text,
-        "category_key": "text_processing",
-    },
-    {
-        "module": system,
-        "category_key": "system",
-    },
-    {
-        "module": utility,
-        "category_key": "utilities",
-    },
-    {
-        "module": subagent,
-        "category_key": "subagent_ai",
-    },
-]
+
+def get_version() -> str:
+    """Read version from pyproject.toml"""
+    if tomllib is None:
+        return "0.1.0"
+
+    try:
+        pyproject_path = Path(__file__).parent.parent.parent / "pyproject.toml"
+        with open(pyproject_path, "rb") as f:
+            data = tomllib.load(f)
+            return data.get("project", {}).get("version", "0.1.0")
+    except Exception:
+        return "0.1.0"
+
 
 # Create the comprehensive MCP server
-mcp = FastMCP("Comprehensive MCP Server")
+mcp = FastMCP("Comprehensive MCP Server with Practical Tools")
 
 # Log startup
+version = get_version()
 logger.info("=" * 60)
-logger.info("Starting Comprehensive MCP Server v0.1.0")
+logger.info(f"Starting Comprehensive MCP Server v{version}")
 logger.info("=" * 60)
 
-# Register all tools from each module dynamically
-for module_info in TOOL_MODULES:
-    module = module_info["module"]
-    category_name = getattr(module, "CATEGORY_NAME", "Unknown")
-    tool_count = len(getattr(module, "TOOLS", []))
+# Load and register all tool plugins
+plugins = load_all_plugins()
+logger.info(f"Discovered {len(plugins)} tool plugins")
 
-    logger.info(f"Registering {category_name} tools ({tool_count} tools)...")
-    module.register_tools(mcp)  # type: ignore[attr-defined]
+for plugin in plugins:
+    logger.info(f"Registering {plugin.category_name} plugin ({len(plugin.tools)} tools)...")
+    plugin.register_to_mcp(mcp)
 
 
 # Helper functions for resources
 def get_all_tools_info() -> dict[str, Any]:
     """Get all tools information as a dictionary."""
-    # Build categories dynamically from module metadata
+    plugins = load_all_plugins()
     categories = {}
     total_tools = 0
 
-    for module_info in TOOL_MODULES:
-        module = module_info["module"]
-        category_key = module_info["category_key"]
-
-        # Get metadata from module
-        category_name = getattr(module, "CATEGORY_NAME", "Unknown")
-        category_desc = getattr(module, "CATEGORY_DESCRIPTION", "")
-        tools_list = getattr(module, "TOOLS", [])
-
+    for plugin in plugins:
+        category_key = plugin.name
         categories[category_key] = {
-            "name": category_name,
-            "description": category_desc,
-            "count": len(tools_list),
-            "tools": tools_list,
+            "name": plugin.category_name,
+            "description": plugin.category_description,
+            "tool_count": len(plugin.tools),
+            "tools": [tool.__name__ for tool in plugin.tools],
         }
-
-        total_tools += len(tools_list)
+        total_tools += len(plugin.tools)
 
     return {
         "server": {
             "name": "Comprehensive MCP Server",
-            "version": "0.1.0",
+            "version": get_version(),
             "description": f"MCP server with {total_tools}+ practical tools",
         },
         "categories": categories,
@@ -125,24 +96,19 @@ def list_all_tools() -> str:
 
 def get_version_info() -> dict[str, Any]:
     """Get server version information as a dictionary."""
-    # Calculate total tools dynamically
-    total_tools = sum(len(getattr(m["module"], "TOOLS", [])) for m in TOOL_MODULES)
+    plugins = load_all_plugins()
+    total_tools = sum(len(plugin.tools) for plugin in plugins)
 
-    # Build features list from module descriptions
-    features = []
-    for module_info in TOOL_MODULES:
-        module = module_info["module"]
-        category_desc = getattr(module, "CATEGORY_DESCRIPTION", "")
-        if category_desc:
-            features.append(category_desc)
+    # Build features list from plugin descriptions
+    features = [plugin.category_description for plugin in plugins if plugin.category_description]
 
     return {
         "name": "Comprehensive MCP Server",
-        "version": "0.1.0",
-        "description": f"MCP server with {total_tools}+ practical tools across {len(TOOL_MODULES)} categories",
+        "version": get_version(),
+        "description": f"MCP server with {total_tools}+ practical tools across {len(plugins)} categories",
         "features": features,
         "total_tools": total_tools,
-        "total_categories": len(TOOL_MODULES),
+        "total_categories": len(plugins),
         "total_resources": 4,
     }
 

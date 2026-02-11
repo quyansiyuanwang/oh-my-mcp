@@ -73,7 +73,7 @@ class SubagentConfig:
         优先级：环境变量 > 配置文件
 
         Args:
-            provider: 提供商名称 ("openai", "anthropic", "zhipuai")
+            provider: 提供商名称 ("openai", "anthropic")
 
         Returns:
             API 密钥，如果未找到则返回 None
@@ -82,7 +82,6 @@ class SubagentConfig:
         env_var_map = {
             "openai": "OPENAI_API_KEY",
             "anthropic": "ANTHROPIC_API_KEY",
-            "zhipuai": "ZHIPUAI_API_KEY",
         }
 
         # 首先检查环境变量
@@ -145,14 +144,12 @@ class SubagentConfig:
         env_var_map = {
             "openai": "OPENAI_API_BASE",
             "anthropic": "ANTHROPIC_API_BASE",
-            "zhipuai": "ZHIPUAI_API_BASE",
         }
 
         # 默认值
         defaults = {
             "openai": "https://api.openai.com/v1",
             "anthropic": "https://api.anthropic.com/v1",
-            "zhipuai": "https://open.bigmodel.cn/api/paas/v4",
         }
 
         # 首先检查环境变量
@@ -222,7 +219,7 @@ class SubagentConfig:
         """
         result = {}
 
-        for provider in ["openai", "anthropic", "zhipuai"]:
+        for provider in ["openai", "anthropic"]:
             api_key = self.get_api_key(provider)
             api_base = self.get_api_base(provider)
 

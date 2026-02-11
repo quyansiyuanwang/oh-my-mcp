@@ -15,7 +15,7 @@ This comprehensive MCP server provides tools for:
 - **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
 - **💻 System** (8 tools): System info, CPU/memory monitoring, environment variables
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
-- **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic/ZhipuAI), parallel execution, conditional branching, persistent config
+- **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic), parallel execution, conditional branching, persistent config
 
 > **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
 
@@ -26,7 +26,7 @@ This comprehensive MCP server provides tools for:
 - **[🎯 Setup Guide](docs/SETUP_GUIDE.md)** - Interactive configuration wizard guide
 - **[📦 Build Guide](docs/BUILD.md)** - Package for Windows/Linux distribution
 - **[🏛️ Architecture Guide](docs/ARCHITECTURE.md)** - System architecture and design
-- **[🧪 Subagent Guide](docs/SUBAGENT_GUIDE.md)** - AI orchestration features
+- **[🧪 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md)** - AI orchestration features
 
 ### ⚡ Quick Setup
 
@@ -40,7 +40,7 @@ This will guide you through:
 
 - Environment verification
 - Dependency installation
-- Subagent API configuration (OpenAI/Anthropic/ZhipuAI)
+- Subagent API configuration (OpenAI/Anthropic)
 - Claude Desktop integration
 
 📖 **[完整配置指南 (Setup Guide)](docs/SETUP_GUIDE.md)** | **[中文配置指南 (Chinese Guide)](docs/CONFIGURATION_GUIDE_CN.md)**
@@ -892,7 +892,7 @@ check_password_strength(password="MyP@ssw0rd123")
 ```python
 # Set once, use forever
 subagent_config_set("openai", "sk-proj-xxxxxxxx")
-subagent_config_set("zhipuai", "your-api-key.xxxx")
+subagent_config_set("anthropic", "sk-ant-xxxxxxxx")
 
 # List all configured providers
 subagent_config_list()
@@ -903,12 +903,10 @@ subagent_config_list()
 ```bash
 export OPENAI_API_KEY="sk-..."
 export ANTHROPIC_API_KEY="sk-ant-..."
-export ZHIPUAI_API_KEY="your-api-key.xxxx"  # 智谱AI
 
 # Optional: Custom endpoints
 export OPENAI_API_BASE="https://custom-endpoint.com/v1"
 export ANTHROPIC_API_BASE="https://custom-endpoint.com/v1"
-export ZHIPUAI_API_BASE="https://open.bigmodel.cn/api/paas/v4"
 ```
 
 #### `subagent_call`
@@ -917,7 +915,7 @@ Call an external AI model to handle a subtask.
 
 ```python
 subagent_call(
-    provider="openai",  # or "anthropic", "zhipuai"
+    provider="openai",  # or "anthropic"
     model="gpt-4",
     messages='[{"role": "user", "content": "Explain quantum computing"}]',
     max_tokens=500,
@@ -966,9 +964,8 @@ subagent_conditional(
 
 **📖 Full Documentation:**
 
-- [docs/SUBAGENT_GUIDE.md](docs/SUBAGENT_GUIDE.md) - Complete usage guide with examples
-- [docs/SUBAGENT_CONFIG.md](docs/SUBAGENT_CONFIG.md) - Configuration management guide
-- [docs/ZHIPUAI_GUIDE.md](docs/ZHIPUAI_GUIDE.md) - ZhipuAI integration guide
+- [docs/zh/SUBAGENT_GUIDE.md](docs/zh/SUBAGENT_GUIDE.md) - Complete usage guide with examples
+- [docs/zh/SUBAGENT_CONFIG.md](docs/zh/SUBAGENT_CONFIG.md) - Configuration management guide
 
 **💡 Examples:**
 
@@ -1132,13 +1129,12 @@ This project is provided as-is for educational and practical use.
 ### Build & Deploy
 
 - [📦 Build Guide](docs/BUILD.md) - Package for Windows/Linux
-- [🚀 Installation Guide](docs/INSTALLATION.md) - Installation details
+- [🚀 Installation Guide](docs/en/INSTALLATION.md) - Installation details
 
 ### Advanced Features
 
-- [🤖 Subagent Configuration](docs/SUBAGENT_CONFIG.md) - AI task delegation setup
-- [🧠 Subagent Guide](docs/SUBAGENT_GUIDE.md) - AI orchestration features
-- [🌟 ZhipuAI Guide](docs/ZHIPUAI_GUIDE.md) - ZhipuAI (GLM) integration
+- [🤖 Subagent Configuration](docs/zh/SUBAGENT_CONFIG.md) - AI task delegation setup
+- [🧠 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md) - AI orchestration features
 - [🔍 Search Upgrade](docs/SEARCH_UPGRADE.md) - Search functionality enhancements
 
 ### Developer Resources

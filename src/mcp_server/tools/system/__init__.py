@@ -1,0 +1,1 @@
+"""System monitoring plugin."""

@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated Subagent tools from 3 to 6 total tools
-- Enhanced all AI client classes (OpenAI, Anthropic, ZhipuAI) to use config manager
+- Enhanced all AI client classes (OpenAI, Anthropic) to use config manager
 - Updated SUBAGENT_GUIDE.md with persistent configuration examples
 - Updated README.md tool count from 74+ to 77+ tools
 

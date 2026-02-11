@@ -157,7 +157,6 @@ Subagent 允许 Claude 将复杂任务委托给其他 AI 模型。
 | ------------- | --------------------- | --------------------- | ----------------------------------------------- |
 | **OpenAI**    | GPT-4, GPT-3.5 等模型 | `sk-...`              | [OpenAI Docs](https://platform.openai.com/docs) |
 | **Anthropic** | Claude 模型           | `sk-ant-...`          | [Anthropic Docs](https://docs.anthropic.com)    |
-| **ZhipuAI**   | 智谱 AI（GLM 模型）   | `xxxxxxxx.xxxxxxxxxx` | [ZhipuAI 指南](./ZHIPUAI_GUIDE.md)              |
 
 #### 交互式配置
 
@@ -194,13 +193,11 @@ API 配置保存在：
 {
   "api_keys": {
     "openai": "sk-xxxxxxxxxxxxxxxxxxxx",
-    "anthropic": "sk-ant-xxxxxxxxxxxx",
-    "zhipuai": "xxxxxxxx.xxxxxxxxxx"
+    "anthropic": "sk-ant-xxxxxxxxxxxx"
   },
   "api_bases": {
     "openai": "https://api.openai.com/v1",
-    "anthropic": "https://api.anthropic.com/v1",
-    "zhipuai": "https://open.bigmodel.cn/api/paas/v4"
+    "anthropic": "https://api.anthropic.com/v1"
   }
 }
 ```
@@ -250,8 +247,7 @@ python -m mcp_server.cli.config --claude
 ```bash
 uv run configure.py \
   --provider openai --api-key sk-openai-xxx \
-  --provider anthropic --api-key sk-ant-xxx \
-  --provider zhipuai --api-key zhipu.xxxxx
+  --provider anthropic --api-key sk-ant-xxx
 ```
 
 **注意**：`--provider`、`--api-key` 和 `--api-base` 的顺序必须一致。
@@ -354,7 +350,6 @@ uv run configure.py
 
 - **OpenAI**: [https://platform.openai.com/api-keys](https://platform.openai.com/api-keys)
 - **Anthropic**: [https://console.anthropic.com/settings/keys](https://console.anthropic.com/settings/keys)
-- **ZhipuAI**: 参见 [ZhipuAI 指南](./ZHIPUAI_GUIDE.md)
 
 ## 下一步
 
@@ -401,10 +396,6 @@ export OPENAI_API_BASE="https://api.openai.com/v1"
 # Anthropic
 export ANTHROPIC_API_KEY="sk-ant-xxx"
 export ANTHROPIC_API_BASE="https://api.anthropic.com/v1"
-
-# ZhipuAI
-export ZHIPUAI_API_KEY="xxxx.xxxx"
-export ZHIPUAI_API_BASE="https://open.bigmodel.cn/api/paas/v4"
 ```
 
 ### 编程方式配置
@@ -474,7 +465,6 @@ uv run configure.py --no-color
 - [Subagent 配置指南](./SUBAGENT_CONFIG.md)
 - [Subagent 使用指南](./SUBAGENT_GUIDE.md)
 - [配置指南（中文）](./CONFIGURATION_GUIDE_CN.md)
-- [ZhipuAI 集成指南](./ZHIPUAI_GUIDE.md)
 
 ## 支持
 

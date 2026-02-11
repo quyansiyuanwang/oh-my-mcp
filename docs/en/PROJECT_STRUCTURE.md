@@ -40,7 +40,6 @@ mcp-server/
 │   ├── CONFIG_UPDATE.md             # 配置系统更新
 │   ├── SUBAGENT_CONFIG.md           # Subagent 配置指南
 │   ├── SUBAGENT_GUIDE.md            # Subagent 使用指南
-│   ├── ZHIPUAI_GUIDE.md             # 智谱 AI 集成指南
 │   ├── SEARCH_UPGRADE.md            # 搜索功能升级说明
 │   ├── SEARCH_ADVANCED.md           # 高级搜索用法
 │   └── TEST_REPORT.md               # 测试报告
@@ -95,7 +94,6 @@ mcp-server/
 │   ├── CONFIGURATION_GUIDE_CN.md    # 配置指南
 │   ├── SUBAGENT_GUIDE.md            # Subagent 指南
 │   ├── SUBAGENT_CONFIG.md           # Subagent 配置
-│   ├── ZHIPUAI_GUIDE.md             # 智谱 AI
 │   ├── SEARCH_UPGRADE.md            # 搜索升级
 │   ├── SEARCH_ADVANCED.md           # 高级搜索
 │   ├── TEST_REPORT.md               # 测试报告

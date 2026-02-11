@@ -17,7 +17,7 @@
 Subagent 提供了灵活的配置管理系统，支持：
 
 ✅ **持久化存储** - API 密钥自动保存，下次启动无需重新配置  
-✅ **多提供商支持** - OpenAI、Anthropic、ZhipuAI 统一管理  
+✅ **多提供商支持** - OpenAI、Anthropic 统一管理  
 ✅ **自定义端点** - 支持配置自定义 API 基础 URL  
 ✅ **配置优先级** - 环境变量优先于配置文件  
 ✅ **安全存储** - 配置文件自动设置为仅所有者可读（Unix/Linux）  
@@ -45,12 +45,11 @@ C:\Users\<quyansiyuanwang>\.subagent_config.json
 {
   "api_keys": {
     "openai": "sk-xxxxxxxxxxxxxxxxxxxx",
-    "anthropic": "sk-ant-xxxxxxxxxxxx",
-    "zhipuai": "xxxxxxxx.xxxxxxxxxx"
+    "anthropic": "sk-ant-xxxxxxxxxxxx"
   },
   "api_bases": {
     "openai": "https://api.openai.com/v1",
-    "zhipuai": "https://open.bigmodel.cn/api/paas/v4"
+    "anthropic": "https://api.anthropic.com/v1"
   }
 }
 ```
@@ -62,10 +61,8 @@ Subagent 按以下优先级读取配置：
 1. **环境变量**（最高优先级）
    - `OPENAI_API_KEY`
    - `ANTHROPIC_API_KEY`
-   - `ZHIPUAI_API_KEY`
    - `OPENAI_API_BASE`
    - `ANTHROPIC_API_BASE`
-   - `ZHIPUAI_API_BASE`
 
 2. **配置文件**
    - `~/.subagent_config.json`
@@ -87,7 +84,7 @@ Subagent 按以下优先级读取配置：
 
 **参数:**
 
-- `provider` (str): 提供商名称，支持 "openai"、"anthropic"、"zhipuai"
+- `provider` (str): 提供商名称，支持 "openai"、"anthropic"
 - `api_key` (str): API 密钥
 - `api_base` (str, 可选): API 基础 URL
 
@@ -111,10 +108,10 @@ result = subagent_config_set(
     api_base="https://api.openai-proxy.com/v1"
 )
 
-# 设置 ZhipuAI
+# 设置 Anthropic
 result = subagent_config_set(
-    provider="zhipuai",
-    api_key="8ed3f43f8afe4a79af7132ecfa9c9a6c.awfja0KwwCYPSQ29"
+    provider="anthropic",
+    api_key="sk-ant-xxxxxxxxxxxx"
 )
 ```
 
@@ -176,9 +173,9 @@ print(providers)
 #       "api_base": "https://api.openai.com/v1",
 #       "source": "config_file"
 #     },
-#     "zhipuai": {
-#       "api_key": "8ed3f43f...SQ29",
-#       "api_base": "https://open.bigmodel.cn/api/paas/v4",
+#     "anthropic": {
+#       "api_key": "sk-ant-...eQhJ",
+#       "api_base": "https://api.anthropic.com/v1",
 #       "source": "environment"
 #     }
 #   },
@@ -207,13 +204,6 @@ print(json.loads(result))
 result = subagent_config_set(
     provider="anthropic",
     api_key="sk-ant-xxxxxxxxxxxxxxxx"
-)
-print(json.loads(result))
-
-# 配置 ZhipuAI
-result = subagent_config_set(
-    provider="zhipuai",
-    api_key="xxxxxxxx.xxxxxxxxxx"
 )
 print(json.loads(result))
 
@@ -462,5 +452,4 @@ Subagent 的配置管理系统提供了：
 **相关文档:**
 
 - [Subagent 使用指南](./SUBAGENT_GUIDE.md)
-- [ZhipuAI 集成指南](./ZHIPUAI_GUIDE.md)
 - [API 参考文档](./SUBAGENT_API.md)

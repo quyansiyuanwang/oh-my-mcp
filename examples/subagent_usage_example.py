@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
 """
-Subagent AI Orchestration - Usage Examples
+Subagent AI Orchestration - Usage Examples (Updated v0.2.0)
 
 This file demonstrates how to use the subagent tools for AI task delegation.
+
+Changes in v0.2.0:
+- Removed cost tracking (no more 'cost' field in返回值)
+- Added custom model support (use any model name)
+- Token usage statistics still available via 'usage' field
 
 Requirements:
 - Set OPENAI_API_KEY and/or ANTHROPIC_API_KEY environment variables
@@ -27,7 +32,8 @@ def example_single_call():
 
     # In your MCP client (Claude Desktop, etc.), you would call:
     print("\nMCP Tool Call:")
-    print("""
+    print(
+        """
     subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
@@ -38,7 +44,8 @@ def example_single_call():
         max_tokens=200,
         temperature=0.7
     )
-    """)
+    """
+    )
 
     print("\nExpected Response Structure:")
     print(
@@ -46,7 +53,6 @@ def example_single_call():
             {
                 "result": "Quantum computing uses quantum bits...",
                 "usage": {"prompt_tokens": 25, "completion_tokens": 45, "total_tokens": 70},
-                "cost": {"input_cost": 0.0000375, "output_cost": 0.00009, "total_cost": 0.0001275},
                 "model": "gpt-3.5-turbo",
                 "provider": "openai",
                 "elapsed_time": 1.23,
@@ -55,6 +61,9 @@ def example_single_call():
             indent=2,
         )
     )
+
+    print("\n💡 Note: Token usage statistics help you monitor API consumption")
+    print("   Check actual costs at: https://platform.openai.com/usage")
 
 
 def example_parallel_tasks():
@@ -101,12 +110,13 @@ def example_parallel_tasks():
     ]
 
     print("\nMCP Tool Call:")
-    print(f"""
+    print(
+        f"""
     subagent_parallel(
-        tasks=json.dumps({json.dumps(tasks, indent=8)}),
-        max_workers=3
+        tasks=json.dumps({json.dumps(tasks, indent=8)})
     )
-    """)
+    """
+    )
 
     print("\nExpected Response Structure:")
     print(
@@ -116,25 +126,22 @@ def example_parallel_tasks():
                     {
                         "task_name": "extract_entities",
                         "task_index": 0,
-                        "result": "AI, Machine Learning, Deep Learning...",
-                        "usage": {"prompt_tokens": 50, "completion_tokens": 30, "total_tokens": 80},
-                        "cost": {"total_cost": 0.000195},
+                        "result": "Key terms: AI, ML, neural networks",
+                        "usage": {"prompt_tokens": 30, "completion_tokens": 40, "total_tokens": 70},
                         "status": "success",
                     },
                     {
                         "task_name": "summarize",
                         "task_index": 1,
                         "result": "AI and ML are transforming industries...",
-                        "usage": {"prompt_tokens": 45, "completion_tokens": 20, "total_tokens": 65},
-                        "cost": {"total_cost": 0.0001475},
+                        "usage": {"prompt_tokens": 25, "completion_tokens": 35, "total_tokens": 60},
                         "status": "success",
                     },
                     {
                         "task_name": "sentiment",
                         "task_index": 2,
-                        "result": "Positive",
-                        "usage": {"prompt_tokens": 40, "completion_tokens": 5, "total_tokens": 45},
-                        "cost": {"total_cost": 0.00007},
+                        "result": "positive",
+                        "usage": {"prompt_tokens": 20, "completion_tokens": 5, "total_tokens": 25},
                         "status": "success",
                     },
                 ],
@@ -142,120 +149,140 @@ def example_parallel_tasks():
                     "total_tasks": 3,
                     "successful": 3,
                     "failed": 0,
-                    "total_cost": 0.0004125,
-                    "total_tokens": 190,
-                    "elapsed_time": 2.5,
+                    "total_input_tokens": 75,
+                    "total_output_tokens": 80,
+                    "total_tokens": 155,
+                    "elapsed_time": 2.45,
                 },
             },
             indent=2,
         )
     )
 
+    print("\n💡 Parallel execution saves time! These 3 tasks run simultaneously.")
+    print("   Total tokens used: 155 across all tasks")
+
 
 def example_conditional_branching():
-    """Example 3: Conditional branching based on AI decision"""
+    """Example 3: Conditional branching"""
     print("\n" + "=" * 60)
-    print("Example 3: Conditional Branching - Smart Routing")
+    print("Example 3: Conditional Branching - Language Detection")
     print("=" * 60)
 
-    user_message = "What is the capital of France?"
+    user_input = "你好，世界！"
 
-    # Condition: Is this a complex question?
     condition_task = {
         "provider": "openai",
         "model": "gpt-3.5-turbo",
         "messages": [
             {
                 "role": "user",
-                "content": f"Is this question complex requiring deep reasoning? '{user_message}'. Reply only 'true' or 'false'",
+                "content": f"Is this text in Chinese? Reply only 'true' or 'false': {user_input}",
             }
         ],
         "max_tokens": 10,
         "temperature": 0.1,
     }
 
-    # If complex, use GPT-4
-    complex_task = {
-        "provider": "openai",
-        "model": "gpt-4",
-        "messages": [{"role": "user", "content": user_message}],
-        "max_tokens": 1000,
-    }
-
-    # If simple, use GPT-3.5
-    simple_task = {
+    true_task = {
         "provider": "openai",
         "model": "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": user_message}],
-        "max_tokens": 200,
+        "messages": [{"role": "user", "content": f"Respond in Chinese to: {user_input}"}],
+        "max_tokens": 100,
+    }
+
+    false_task = {
+        "provider": "openai",
+        "model": "gpt-3.5-turbo",
+        "messages": [{"role": "user", "content": f"Respond in English to: {user_input}"}],
+        "max_tokens": 100,
     }
 
     print("\nMCP Tool Call:")
-    print(f"""
+    print(
+        f"""
     subagent_conditional(
         condition_task=json.dumps({json.dumps(condition_task, indent=8)}),
-        true_task=json.dumps({json.dumps(complex_task, indent=8)}),
-        false_task=json.dumps({json.dumps(simple_task, indent=8)})
+        true_task=json.dumps({json.dumps(true_task, indent=8)}),
+        false_task=json.dumps({json.dumps(false_task, indent=8)})
     )
-    """)
+    """
+    )
 
     print("\nExpected Response Structure:")
     print(
         json.dumps(
             {
                 "condition_result": {
-                    "text": "false",
-                    "evaluated_as": False,
-                    "usage": {"prompt_tokens": 30, "completion_tokens": 2, "total_tokens": 32},
-                    "cost": {"total_cost": 0.000049},
+                    "text": "true",
+                    "evaluated_as": True,
+                    "usage": {"prompt_tokens": 15, "completion_tokens": 5, "total_tokens": 20},
                 },
-                "branch_taken": "false_branch",
+                "branch_taken": "true_branch",
                 "final_result": {
-                    "result": "The capital of France is Paris.",
-                    "usage": {"prompt_tokens": 15, "completion_tokens": 8, "total_tokens": 23},
-                    "cost": {"total_cost": 0.0000385},
+                    "result": "你好！很高兴见到你...",
+                    "usage": {"prompt_tokens": 18, "completion_tokens": 35, "total_tokens": 53},
                     "status": "success",
                 },
-                "total_usage": {"prompt_tokens": 45, "completion_tokens": 10, "total_tokens": 55},
-                "total_cost": 0.0000875,
+                "total_usage": {
+                    "prompt_tokens": 33,
+                    "completion_tokens": 40,
+                    "total_tokens": 73,
+                },
                 "status": "success",
             },
             indent=2,
         )
     )
 
+    print("\n💡 Conditional branching: Only one branch executes based on the condition")
+    print("   Total tokens: 73 (condition check + selected branch)")
 
-def example_cost_comparison():
-    """Example 4: Model cost comparison"""
+
+def example_custom_models():
+    """Example 4: Custom model support"""
     print("\n" + "=" * 60)
-    print("Example 4: Cost Comparison Across Models")
+    print("Example 4: Custom Model Support (New in v0.2.0)")
     print("=" * 60)
 
-    prompt = "Explain machine learning in 3 sentences."
-    estimated_tokens = {"input": 50, "output": 100}
-
-    print("\nCost Estimates for 50 input + 100 output tokens:")
+    print("\nYou can now use ANY custom model name:")
     print("-" * 60)
 
-    models = [
-        ("gpt-3.5-turbo", "openai", 0.0015, 0.002),
-        ("gpt-4", "openai", 0.03, 0.06),
-        ("gpt-4o-mini", "openai", 0.00015, 0.0006),
-        ("claude-3-haiku-20240307", "anthropic", 0.00025, 0.00125),
-        ("claude-3-5-sonnet-20241022", "anthropic", 0.003, 0.015),
+    examples = [
+        ("gpt-3.5-turbo", "openai", "Standard OpenAI model"),
+        ("gpt-4", "openai", "GPT-4 standard"),
+        ("gpt-4o-mini", "openai", "Budget-friendly option"),
+        ("my-fine-tuned-gpt4", "openai", "🆕 Your custom fine-tuned model"),
+        ("gpt-4-turbo-2024-04-09", "openai", "🆕 Newly released (no code update!)"),
+        ("claude-3-5-sonnet-20241022", "anthropic", "Latest Claude"),
+        ("custom-claude-model", "anthropic", "🆕 Custom deployment"),
     ]
 
-    for model, provider, input_price, output_price in models:
-        input_cost = (estimated_tokens["input"] / 1000) * input_price
-        output_cost = (estimated_tokens["output"] / 1000) * output_price
-        total_cost = input_cost + output_cost
+    for model, provider, description in examples:
+        print(f"  {model:35} ({provider:10}): {description}")
 
-        print(f"{model:30} ({provider:10}): ${total_cost:.6f}")
+    print("\n📊 Token Usage Monitoring:")
+    print("-" * 60)
+    print("All tools return 'usage' field with detailed statistics:")
+    print(
+        json.dumps(
+            {"usage": {"prompt_tokens": 50, "completion_tokens": 100, "total_tokens": 150}},
+            indent=2,
+        )
+    )
 
-    print("\nRecommendation:")
-    print("- For simple tasks: Use gpt-3.5-turbo or claude-3-haiku")
-    print("- For complex reasoning: Use gpt-4 or claude-3-5-sonnet")
-    print("- For budget constraints: Use gpt-4o-mini")
+    print("\n💰 Cost Tracking:")
+    print("-" * 60)
+    print("Check actual costs through provider dashboards:")
+    print("  • OpenAI:    https://platform.openai.com/usage")
+    print("  • Anthropic: https://console.anthropic.com/settings/usage")
+
+    print("\n🎯 Model Selection Guide:")
+    print("-" * 60)
+    print("  Simple tasks:      gpt-3.5-turbo, claude-3-haiku")
+    print("  Complex reasoning: gpt-4, claude-3-5-sonnet")
+    print("  Budget-friendly:   gpt-4o-mini, claude-3-haiku")
+    print("  Custom needs:      Your own fine-tuned models!")
 
 
 def example_multi_turn_conversation():
@@ -265,113 +292,161 @@ def example_multi_turn_conversation():
     print("=" * 60)
 
     print("\nTurn 1: User asks a question")
-    messages_turn1 = [
+    messagesurn1 = [
         {"role": "system", "content": "You are a helpful assistant."},
         {"role": "user", "content": "What is Python?"},
     ]
 
     print("\nMCP Tool Call (Turn 1):")
-    print(f"""
+    print(
+        f"""
     result1 = subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
-        messages=json.dumps({json.dumps(messages_turn1, indent=8)})
+        messages=json.dumps([
+            {{"role": "system", "content": "You are a helpful assistant."}},
+            {{"role": "user", "content": "What is Python?"}}
+        ])
     )
-    """)
+    """
+    )
 
-    print("\nTurn 2: Follow-up question")
-    # In practice, you would extract result1['result'] and add it to conversation
-    messages_turn2 = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "What is Python?"},
-        {"role": "assistant", "content": "Python is a high-level programming language..."},
-        {"role": "user", "content": "What are its main uses?"},
-    ]
-
+    print("\nTurn 2: User asks follow-up (maintaining context)")
     print("\nMCP Tool Call (Turn 2):")
-    print(f"""
+    print(
+        f"""
+    # Add AI's response from Turn 1 to maintain context
+    messages_turn2 = [
+        {{"role": "system", "content": "You are a helpful assistant."}},
+        {{"role": "user", "content": "What is Python?"}},
+        {{"role": "assistant", "content": result1['result']}},  # Previous response
+        {{"role": "user", "content": "What are its main use cases?"}}  # Follow-up
+    ]
+    
     result2 = subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
-        messages=json.dumps({json.dumps(messages_turn2, indent=8)})
+        messages=json.dumps(messages_turn2)
     )
-    """)
+    """
+    )
 
     print("\nNote: Subagent is stateless. You must maintain conversation history")
-    print("      and pass it with each call.")
+    print("      by including previous messages in the messages array.")
 
 
 def example_error_handling():
-    """Example 6: Error handling"""
+    """Example 6: Error handling patterns"""
     print("\n" + "=" * 60)
     print("Example 6: Error Handling")
     print("=" * 60)
 
-    print("\nCommon Errors and Solutions:")
+    print("\nAlways check the 'status' field in responses:")
     print("-" * 60)
 
-    errors = [
-        {
-            "error": "OPENAI_API_KEY environment variable not set",
-            "solution": "Set your API key: export OPENAI_API_KEY='sk-...'",
-        },
-        {
-            "error": "Invalid OpenAI API key",
-            "solution": "Check your API key is correct and not expired",
-        },
-        {
-            "error": "API rate limit exceeded",
-            "solution": "Reduce max_workers or add delays between calls",
-        },
-        {
-            "error": "max_tokens cannot exceed 32000",
-            "solution": "Reduce max_tokens parameter or split task",
-        },
-        {
-            "error": "tasks list cannot be empty",
-            "solution": "Provide at least one task in the tasks array",
-        },
-    ]
-
-    for error_info in errors:
-        print(f"\nError: {error_info['error']}")
-        print(f"Solution: {error_info['solution']}")
-
-    print("\n\nChecking Response Status:")
-    print("""
-    result = subagent_call(...)
-    result_data = json.loads(result)
+    print("\nCode Pattern:")
+    print(
+        """
+    result = json.loads(subagent_call(...))
     
-    if result_data['status'] == 'success':
-        print(f"Result: {result_data['result']}")
-        print(f"Cost: ${result_data['cost']['total_cost']}")
+    if result['status'] == 'success':
+        print(f"Result: {result['result']}")
+        print(f"Tokens used: {result['usage']['total_tokens']}")
     else:
-        print(f"Error: {result_data.get('error', 'Unknown error')}")
-    """)
+        print(f"Error: {result.get('error', 'Unknown error')}")
+        # Handle error: retry, fallback model, or notify user
+    """
+    )
+
+    print("\nCommon errors:")
+    print("  • API key not configured")
+    print("  • Rate limit exceeded")
+    print("  • Invalid model name")
+    print("  • Network timeout")
+    print("  • Token limit exceeded")
+
+    print("\nBest practices:")
+    print("  1. Always set max_tokens to control costs")
+    print("  2. Check status before processing results")
+    print("  3. Monitor token usage via 'usage' field")
+    print("  4. Use appropriate temperature (0.1 for factual, 0.7-1.0 for creative)")
+    print("  5. Implement retry logic for transient failures")
+
+
+def example_best_practices():
+    """Example 7: Best practices summary"""
+    print("\n" + "=" * 60)
+    print("Example 7: Best Practices")
+    print("=" * 60)
+
+    print("\n1️⃣  Model Selection")
+    print("   • Start with cheaper models (gpt-3.5-turbo)")
+    print("   • Upgrade to premium only when needed")
+    print("   • Use custom fine-tuned models for specialized tasks")
+
+    print("\n2️⃣  Token Management")
+    print("   • Always set max_tokens parameter")
+    print("   • Monitor usage via 'usage' field")
+    print("   • Track cumulative usage over time")
+
+    print("\n3️⃣  Parallel Processing")
+    print("   • Use subagent_parallel for independent tasks")
+    print("   • Max 10 tasks per batch")
+    print("   • Speeds up workflows significantly")
+
+    print("\n4️⃣  Error Handling")
+    print("   • Check 'status' field in all responses")
+    print("   • Implement retry logic with exponential backoff")
+    print("   • Have fallback models ready")
+
+    print("\n5️⃣  Security")
+    print("   • Never hardcode API keys")
+    print("   • Use environment variables or config files")
+    print("   • Rotate keys regularly")
+
+    print("\n6️⃣  Cost Control")
+    print("   • Check provider dashboards regularly")
+    print("   • Set up billing alerts")
+    print("   • Monitor token usage trends")
+
+    print("\n7️⃣  Custom Models")
+    print("   • Fine-tune models for specific domains")
+    print("   • Test with small datasets first")
+    print("   • Version your custom models")
 
 
 def main():
     """Run all examples"""
     print("=" * 60)
-    print("SUBAGENT AI ORCHESTRATION - USAGE EXAMPLES")
+    print("SUBAGENT AI ORCHESTRATION - USAGE EXAMPLES (v0.2.0)")
     print("=" * 60)
+    print("\n🆕 What's New in v0.2.0:")
+    print("  • Removed cost tracking (simplified response structure)")
+    print("  • Added support for custom model names")
+    print("  • Token usage statistics still available")
+    print("  • Check costs via provider dashboards")
 
-    print("\nNote: These are demonstration examples showing the MCP tool call syntax.")
-    print("      To run actual AI calls, you need:")
-    print("      1. Valid API keys set in environment variables")
-    print("      2. MCP server running")
-    print("      3. MCP client (Claude Desktop, etc.) to invoke the tools")
+    # Check API keys
+    if not os.getenv("OPENAI_API_KEY") and not os.getenv("ANTHROPIC_API_KEY"):
+        print("\n⚠️  Warning: No API keys found!")
+        print("   Set OPENAI_API_KEY and/or ANTHROPIC_API_KEY environment variables")
+        print("   Or use: subagent_config_set() to configure permanently")
 
+    # Run examples
     example_single_call()
     example_parallel_tasks()
     example_conditional_branching()
-    example_cost_comparison()
+    example_custom_models()
     example_multi_turn_conversation()
     example_error_handling()
+    example_best_practices()
 
     print("\n" + "=" * 60)
-    print("For more information, see docs/SUBAGENT_GUIDE.md")
+    print("✨ Examples completed!")
     print("=" * 60)
+    print("\nFor more information, see docs/SUBAGENT_GUIDE.md")
+    print("For configuration help, see docs/SUBAGENT_CONFIG.md")
+    print("\n📚 Documentation: https://github.com/your-repo/mcp-server")
 
 
 if __name__ == "__main__":

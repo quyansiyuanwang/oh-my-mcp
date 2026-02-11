@@ -1,0 +1,3 @@
+category_name: "Web & Network"
+category_description: "Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup"
+enabled: true

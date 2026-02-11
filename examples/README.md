@@ -88,5 +88,5 @@ pip install -e .
 ## 更多资源
 
 - [完整文档](../docs/)
-- [Subagent 指南](../docs/SUBAGENT_GUIDE.md)
+- [Subagent 指南](../docs/zh/SUBAGENT_GUIDE.md)
 - [API 参考](../docs/API_REFERENCE.md)
