@@ -17,7 +17,7 @@
 pip install mcp-server
 
 # 或从源码安装
-git clone https://github.com/yourusername/mcp-server.git
+git clone https://github.com/quyansiyuanwang/mcp-server.git
 cd mcp-server
 pip install -e .
 ```
@@ -26,7 +26,7 @@ pip install -e .
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/mcp-server.git
+git clone https://github.com/quyansiyuanwang/mcp-server.git
 cd mcp-server
 
 # 使用 UV 安装
@@ -81,7 +81,7 @@ python -m mcp_server.cli.config --claude
 
 ```bash
 # 克隆仓库
-git clone https://github.com/yourusername/mcp-server.git
+git clone https://github.com/quyansiyuanwang/mcp-server.git
 cd mcp-server
 
 # 安装开发依赖
@@ -96,6 +96,7 @@ pytest tests/
 ### 导入错误
 
 如果遇到导入错误，确保：
+
 1. Python 版本 >= 3.12
 2. 所有依赖已安装：`pip install -r requirements.txt`
 

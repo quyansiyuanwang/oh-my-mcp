@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 This is a comprehensive Model Context Protocol (MCP) server built with FastMCP that provides 95+ practical tools across 10 categories:
+
 - Compression (5 tools): ZIP/TAR compression and extraction
 - Web & Network (15 tools): web search, page fetching, HTML parsing, downloads, HTTP API client
 - File System (12 tools): read, write, search files and directories, file comparison
@@ -86,6 +87,7 @@ The main.py entry point imports all modules and calls their `register_tools()` f
 ### Infrastructure (utils.py)
 
 The utils module provides shared infrastructure:
+
 - **Logging**: Dual output to console and mcp_server.log
 - **Custom Exceptions**: ValidationError, NetworkError, FileOperationError, DataProcessingError, CommandExecutionError, CommandValidationError, CommandTimeoutError, SecurityError
 - **Retry Logic**: `@retry` decorator for network operations (3 attempts)
@@ -99,12 +101,14 @@ The utils module provides shared infrastructure:
 The command_executor module provides secure command execution for Python development tools:
 
 **CommandValidator Class**:
+
 - **Command Whitelist**: Only allows python, python3, uv, pyright, pyright-python
 - **Argument Validation**: Checks for dangerous characters, path traversal, argument length
 - **Dangerous Pattern Detection**: Blocks shell injection attempts, dangerous operations
 - **Sanitization**: Removes null bytes, trims whitespace
 
 **CommandExecutor Class**:
+
 - **Secure Execution**: Uses subprocess.run() with shell=False to prevent injection
 - **Timeout Protection**: Default 30s, max 300s
 - **Output Limits**: Maximum 10MB output, automatically truncated
@@ -113,6 +117,7 @@ The command_executor module provides secure command execution for Python develop
 - **Error Handling**: Comprehensive error handling with specific exception types
 
 **Security Features**:
+
 - Command whitelist enforcement
 - No shell=True usage (prevents shell injection)
 - Path traversal prevention
@@ -123,6 +128,7 @@ The command_executor module provides secure command execution for Python develop
 ### Configuration System
 
 The `generate_config.py` script provides multiple configuration methods:
+
 - `--claude`: Auto-install to Claude Desktop config (merges with existing)
 - `--http-server`: Run HTTP server with /config, /info, /health endpoints
 - `--output`: Generate JSON config file
@@ -155,6 +161,7 @@ To add a new tool:
 ## Resources
 
 The server exposes MCP resources:
+
 - `config://tools`: List all tools by category
 - `config://version`: Server version and features
 - `system://info`: Real-time system information
@@ -163,6 +170,7 @@ The server exposes MCP resources:
 ## Logging
 
 Logs are written to:
+
 - Console (stdout)
 - `mcp_server.log` file
 

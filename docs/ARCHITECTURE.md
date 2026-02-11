@@ -33,6 +33,7 @@ mcp-server/
 ### 1. FastMCP 服务器 (main.py)
 
 服务器入口点，负责：
+
 - 初始化 FastMCP 实例
 - 注册所有工具模块
 - 提供 MCP 资源（config://tools, config://version）
@@ -58,6 +59,7 @@ def register_tools(mcp):
 ```
 
 **关键特性**：
+
 - 使用 `@mcp.tool()` 装饰器注册
 - 统一的错误处理模式
 - 返回 JSON 字符串
@@ -68,11 +70,13 @@ def register_tools(mcp):
 提供共享功能：
 
 **日志系统**：
+
 - 双输出：控制台 + mcp_server.log
 - INFO 级别日志
 - 结构化日志格式
 
 **自定义异常**：
+
 - ValidationError
 - NetworkError
 - FileOperationError
@@ -81,11 +85,13 @@ def register_tools(mcp):
 - SecurityError
 
 **重试逻辑**：
+
 - `@retry` 装饰器
 - 网络操作自动重试（3次）
 - 指数退避
 
 **验证和安全**：
+
 - URL 验证
 - 路径清理
 - 文件大小限制
@@ -97,11 +103,13 @@ def register_tools(mcp):
 安全执行外部命令：
 
 **CommandValidator**：
+
 - 命令白名单（python, uv, pyright）
 - 参数验证
 - 危险模式检测
 
 **CommandExecutor**：
+
 - 使用 subprocess.run()（shell=False）
 - 超时保护（默认 30s）
 - 输出大小限制（10MB）
@@ -112,6 +120,7 @@ def register_tools(mcp):
 ### 1. 模块化
 
 每个工具类别独立模块，便于：
+
 - 维护和扩展
 - 测试和调试
 - 按需加载
@@ -119,6 +128,7 @@ def register_tools(mcp):
 ### 2. 安全性
 
 多层安全措施：
+
 - 命令白名单
 - 参数验证
 - 路径清理
@@ -128,6 +138,7 @@ def register_tools(mcp):
 ### 3. 错误处理
 
 统一的错误处理策略：
+
 - Try-except 包装
 - 详细错误日志
 - 用户友好的错误消息
@@ -136,6 +147,7 @@ def register_tools(mcp):
 ### 4. 可扩展性
 
 易于添加新工具：
+
 1. 在合适的模块中添加函数
 2. 使用 `@mcp.tool()` 装饰器
 3. 遵循错误处理模式
@@ -168,6 +180,7 @@ def register_tools(mcp):
 ## 未来扩展
 
 计划中的改进：
+
 - 更多工具类别
 - 插件系统
 - 配置文件支持

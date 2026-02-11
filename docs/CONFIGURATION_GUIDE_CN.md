@@ -11,12 +11,14 @@ python generate_config.py --claude
 ```
 
 **功能：**
+
 - ✓ 自动检测 Claude Desktop 配置文件位置
 - ✓ 自动添加 MCP 服务器配置
 - ✓ 保留现有的其他 MCP 服务器
 - ✓ 自动创建目录（如果不存在）
 
 **配置文件位置：**
+
 - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Linux:** `~/.config/claude/claude_desktop_config.json`
@@ -40,18 +42,20 @@ python generate_config.py --http-server --port 9000
 
 **可用端点：**
 
-| 端点 | 功能 | 示例 |
-|------|------|------|
-| `GET /config` | 获取 MCP 配置 JSON | `curl http://localhost:8765/config` |
-| `GET /info` | 获取服务器信息和路径 | `curl http://localhost:8765/info` |
-| `GET /health` | 健康检查 | `curl http://localhost:8765/health` |
+| 端点          | 功能                 | 示例                                |
+| ------------- | -------------------- | ----------------------------------- |
+| `GET /config` | 获取 MCP 配置 JSON   | `curl http://localhost:8765/config` |
+| `GET /info`   | 获取服务器信息和路径 | `curl http://localhost:8765/info`   |
+| `GET /health` | 健康检查             | `curl http://localhost:8765/health` |
 
 **使用场景：**
+
 - 需要通过 HTTP 动态获取配置
 - 在多台机器上共享配置
 - 与配置管理工具集成
 
 **示例：**
+
 ```bash
 # 启动服务器
 python generate_config.py --http-server --port 8765
@@ -84,6 +88,7 @@ python generate_config.py --server-name my-mcp-tools --output config.json
 ```
 
 **生成的配置示例：**
+
 ```json
 {
   "mcpServers": {
@@ -98,6 +103,7 @@ python generate_config.py --server-name my-mcp-tools --output config.json
 ```
 
 **使用配置文件：**
+
 1. 复制生成的配置内容
 2. 添加到你的 MCP 客户端配置文件中
 3. 重启客户端应用
@@ -188,6 +194,7 @@ python main.py
 ### 预期输出
 
 成功启动后，你应该看到：
+
 ```
 ============================================================
 Starting Comprehensive MCP Server v0.1.0
@@ -211,6 +218,7 @@ Server ready to accept connections.
 ### 问题：找不到 Claude Desktop 配置
 
 **解决方案：**
+
 ```bash
 # 手动生成配置
 python generate_config.py --show-config
@@ -221,6 +229,7 @@ python generate_config.py --show-config
 ### 问题：端口被占用
 
 **解决方案：**
+
 ```bash
 # 使用不同端口
 python generate_config.py --http-server --port 9000
@@ -229,6 +238,7 @@ python generate_config.py --http-server --port 9000
 ### 问题：Python 路径不正确
 
 **解决方案：**
+
 ```bash
 # 配置文件会自动检测当前虚拟环境的 Python 路径
 # 如果需要手动修改，编辑生成的 JSON 文件中的 "command" 字段
@@ -247,6 +257,7 @@ python generate_config.py --http-server --port 9000
 ## ✨ 总结
 
 **最快开始方式：**
+
 ```bash
 # 1. 安装
 pip install -e .
@@ -259,6 +270,7 @@ python generate_config.py --claude
 ```
 
 **HTTP 服务器方式：**
+
 ```bash
 # 1. 启动配置服务器
 python generate_config.py --http-server --port 8765

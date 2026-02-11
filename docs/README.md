@@ -5,19 +5,23 @@
 ## 文档目录
 
 ### 快速开始
+
 - [安装指南](INSTALLATION.md) - 如何安装和配置 MCP Server
 - [使用指南](USAGE.md) - 基本使用方法和常见场景
 
 ### 深入了解
+
 - [架构概述](ARCHITECTURE.md) - 项目架构和设计理念
 - [API 参考](API_REFERENCE.md) - 完整的工具 API 文档
 
 ### 集成指南
+
 - [Claude Desktop 集成](guides/claude_desktop.md) - 与 Claude Desktop 集成
 - [HTTP 服务器](guides/http_server.md) - 运行 HTTP 配置服务器
 - [自定义工具](guides/custom_tools.md) - 如何添加自定义工具
 
 ### 项目文档
+
 - [CLAUDE.md](CLAUDE.md) - Claude Code 工作指南
 - [配置指南（中文）](CONFIGURATION_GUIDE_CN.md) - 详细配置说明
 - [测试报告](TEST_REPORT.md) - 测试覆盖率和结果
@@ -39,7 +43,7 @@ MCP Server 提供 95+ 个实用工具，分为 10 个类别：
 
 ## 快速链接
 
-- [GitHub 仓库](https://github.com/yourusername/mcp-server)
-- [问题追踪](https://github.com/yourusername/mcp-server/issues)
+- [GitHub 仓库](https://github.com/quyansiyuanwang/mcp-server)
+- [问题追踪](https://github.com/quyansiyuanwang/mcp-server/issues)
 - [贡献指南](../CONTRIBUTING.md)
 - [更新日志](../CHANGELOG.md)

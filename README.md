@@ -20,11 +20,13 @@ This comprehensive MCP server provides tools for:
 ### ⚡ Quick Configuration
 
 **One-command setup for Claude Desktop:**
+
 ```bash
 python generate_config.py --claude
 ```
 
 **Or run an HTTP configuration server on port 8765:**
+
 ```bash
 python generate_config.py --http-server
 ```
@@ -74,6 +76,7 @@ python generate_config.py --claude
 ```
 
 This will automatically:
+
 - Detect your Claude Desktop configuration file
 - Add the MCP server to your configuration
 - Preserve any existing MCP servers
@@ -89,6 +92,7 @@ python generate_config.py --http-server --port 9000
 ```
 
 Then access the configuration at:
+
 - `http://localhost:8765/config` - Get configuration JSON
 - `http://localhost:8765/info` - Server information
 - `http://localhost:8765/health` - Health check
@@ -140,6 +144,7 @@ The server will start and register all 74+ tools, ready to accept MCP connection
 ### Server Logs
 
 Logs are written to:
+
 - Console (stdout)
 - `mcp_server.log` file
 
@@ -1042,13 +1047,14 @@ python generate_config.py --show-config
 
 When running with `--http-server`:
 
-| Endpoint | Description |
-|----------|-------------|
-| `GET /config` | Returns MCP configuration JSON |
-| `GET /info` | Returns server information and paths |
-| `GET /health` | Health check endpoint |
+| Endpoint      | Description                          |
+| ------------- | ------------------------------------ |
+| `GET /config` | Returns MCP configuration JSON       |
+| `GET /info`   | Returns server information and paths |
+| `GET /health` | Health check endpoint                |
 
 Example usage:
+
 ```bash
 # Start server on port 8765
 python generate_config.py --http-server

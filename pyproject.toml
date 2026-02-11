@@ -33,13 +33,14 @@ dependencies = [
     "lxml>=5.0.0",
     "pyyaml>=6.0",
     "tomli>=2.0.0; python_version < '3.11'",
+    "pytest>=9.0.2",
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/mcp-server"
-Documentation = "https://github.com/yourusername/mcp-server/tree/main/docs"
-Repository = "https://github.com/yourusername/mcp-server.git"
-Issues = "https://github.com/yourusername/mcp-server/issues"
+Homepage = "https://github.com/quyansiyuanwang/mcp-server"
+Documentation = "https://github.com/quyansiyuanwang/mcp-server/tree/main/docs"
+Repository = "https://github.com/quyansiyuanwang/mcp-server.git"
+Issues = "https://github.com/quyansiyuanwang/mcp-server/issues"
 
 [project.optional-dependencies]
 dev = [
