@@ -30,7 +30,7 @@ Subagent 提供了灵活的配置管理系统，支持：
 **Windows:**
 
 ```
-C:\Users\<YourUsername>\.subagent_config.json
+C:\Users\<quyansiyuanwang>\.subagent_config.json
 ```
 
 **Linux/macOS:**

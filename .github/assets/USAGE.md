@@ -259,9 +259,9 @@ This server follows the [Model Context Protocol](https://modelcontextprotocol.io
 
 **A:**
 
-1. Check the [Documentation](https://github.com/yourusername/mcp-server/tree/main/docs)
-2. Search [existing issues](https://github.com/yourusername/mcp-server/issues)
-3. Create a new [Bug Report](https://github.com/yourusername/mcp-server/issues/new?template=bug_report.yml)
+1. Check the [Documentation](https://github.com/quyansiyuanwang/mcp-server/tree/main/docs)
+2. Search [existing issues](https://github.com/quyansiyuanwang/mcp-server/issues)
+3. Create a new [Bug Report](https://github.com/quyansiyuanwang/mcp-server/issues/new?template=bug_report.yml)
 
 ## Advanced Usage | 高级用法
 
@@ -304,9 +304,9 @@ python -m mcp_server.main
 
 ## Support | 支持
 
-- **Documentation:** [Project Documentation](https://github.com/yourusername/mcp-server/tree/main/docs)
-- **Issues:** [GitHub Issues](https://github.com/yourusername/mcp-server/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/yourusername/mcp-server/discussions)
+- **Documentation:** [Project Documentation](https://github.com/quyansiyuanwang/mcp-server/tree/main/docs)
+- **Issues:** [GitHub Issues](https://github.com/quyansiyuanwang/mcp-server/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/quyansiyuanwang/mcp-server/discussions)
 - **MCP Specification:** [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ## License | 许可证

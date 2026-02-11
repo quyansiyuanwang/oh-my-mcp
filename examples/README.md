@@ -12,8 +12,8 @@
 
 - [web_search_example.py](web_search_example.py) - 网络搜索和页面抓取
 - [file_operations_example.py](file_operations_example.py) - 文件读写和操作
-- [data_processing_example.py](data_processing_example.py) - JSON/CSV/YAML 数据处理
-- [python_tools_example.py](python_tools_example.py) - Python 代码执行和分析
+- [subagent_usage_example.py](subagent_usage_example.py) - AI 任务委派和编排
+- [subagent_config_example.py](subagent_config_example.py) - Subagent 配置管理
 
 ## 运行示例
 
@@ -25,6 +25,9 @@ python examples/basic_usage.py
 
 # 运行网络搜索示例
 python examples/web_search_example.py
+
+# 运行 Subagent 示例
+python examples/subagent_usage_example.py
 ```
 
 ## 前置要求
@@ -64,26 +67,26 @@ pip install -e .
 - 比较文件
 - 文件压缩和解压
 
-### data_processing_example.py
+### subagent_usage_example.py
 
 演示如何：
 
-- 解析 JSON/CSV/YAML
-- 数据格式转换
-- 数据查询和过滤
-- 数据验证
+- 委派任务到 AI 模型（OpenAI/Anthropic）
+- 并行执行多个任务
+- Token 使用追踪
+- 成本计算
 
-### python_tools_example.py
+### subagent_config_example.py
 
 演示如何：
 
-- 执行 Python 代码
-- 验证语法
-- 分析 AST
-- 格式化代码
+- 管理 Subagent 配置
+- 设置 API keys
+- 配置默认模型
+- 持久化配置
 
 ## 更多资源
 
 - [完整文档](../docs/)
+- [Subagent 指南](../docs/SUBAGENT_GUIDE.md)
 - [API 参考](../docs/API_REFERENCE.md)
-- [使用指南](../docs/USAGE.md)

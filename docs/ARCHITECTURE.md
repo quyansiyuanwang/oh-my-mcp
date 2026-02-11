@@ -18,9 +18,8 @@ mcp-server/
 │   │   ├── text.py          # 文本处理工具
 │   │   ├── system.py        # 系统工具
 │   │   ├── utility.py       # 实用工具
-│   │   ├── python.py        # Python 开发工具
-│   │   ├── uv.py            # UV 包管理工具
-│   │   └── pylance.py       # Pylance/Pyright 工具
+│   │   ├── subagent.py      # AI 编排工具
+│   │   └── subagent_config.py # Subagent 配置
 │   └── cli/                 # 命令行工具
 │       └── config.py        # 配置生成器
 ├── tests/                   # 测试套件

@@ -1,6 +1,8 @@
 # Comprehensive MCP Server
 
-A powerful Model Context Protocol (MCP) server with **104+ practical tools** across 11 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+A powerful Model Context Protocol (MCP) server with **86 practical tools** across 8 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+
+[![Build and Release](https://github.com/quyansiyuanwang/mcp-server/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/mcp-server/actions/workflows/build-release.yml)
 
 ## 🚀 Features
 
@@ -13,10 +15,18 @@ This comprehensive MCP server provides tools for:
 - **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
 - **💻 System** (8 tools): System info, CPU/memory monitoring, environment variables
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
-- **🐍 Python Development** (8 tools): Code execution, syntax validation, AST analysis, module introspection
-- **📦 UV Package Manager** (9 tools): Fast package management, virtual environments, dependency management
-- **🔍 Pylance/Pyright** (4 tools): Type checking, code analysis, diagnostics
 - **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic/ZhipuAI), parallel execution, conditional branching, persistent config
+
+> **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
+
+## 📚 Documentation
+
+- **[📖 Documentation Index](docs/README.md)** - Complete documentation hub (中文)
+- **[🏗️ Project Structure](docs/PROJECT_STRUCTURE.md)** - Detailed project organization
+- **[🎯 Setup Guide](docs/SETUP_GUIDE.md)** - Interactive configuration wizard guide
+- **[📦 Build Guide](docs/BUILD.md)** - Package for Windows/Linux distribution
+- **[🏛️ Architecture Guide](docs/ARCHITECTURE.md)** - System architecture and design
+- **[🧪 Subagent Guide](docs/SUBAGENT_GUIDE.md)** - AI orchestration features
 
 ### ⚡ Quick Setup
 
@@ -1103,6 +1113,39 @@ This project is provided as-is for educational and practical use.
 - [DuckDuckGo Search](https://pypi.org/project/duckduckgo-search/)
 
 ---
+
+## 📖 Additional Resources
+
+### Documentation
+
+- [📚 Documentation Hub](docs/README.md) - Complete documentation index (中文)
+- [🏗️ Project Structure](docs/PROJECT_STRUCTURE.md) - Project organization guide
+- [🏛️ Architecture](docs/ARCHITECTURE.md) - System architecture and design (中文)
+- [📋 Test Report](docs/TEST_REPORT.md) - Test coverage and results
+
+### Configuration & Setup
+
+- [⚙️ Configuration Guide (CN)](docs/CONFIGURATION_GUIDE_CN.md) - Complete configuration reference
+- [🔧 Configure Script Guide (CN)](docs/CONFIGURE_CN.md) - Using configure.py
+- [🎯 Setup Guide](docs/SETUP_GUIDE.md) - Step-by-step setup instructions
+
+### Build & Deploy
+
+- [📦 Build Guide](docs/BUILD.md) - Package for Windows/Linux
+- [🚀 Installation Guide](docs/INSTALLATION.md) - Installation details
+
+### Advanced Features
+
+- [🤖 Subagent Configuration](docs/SUBAGENT_CONFIG.md) - AI task delegation setup
+- [🧠 Subagent Guide](docs/SUBAGENT_GUIDE.md) - AI orchestration features
+- [🌟 ZhipuAI Guide](docs/ZHIPUAI_GUIDE.md) - ZhipuAI (GLM) integration
+- [🔍 Search Upgrade](docs/SEARCH_UPGRADE.md) - Search functionality enhancements
+
+### Developer Resources
+
+- [🏛️ Architecture Guide](docs/ARCHITECTURE.md) - System architecture and design
+- [🤝 Contributing Guide](docs/CONTRIBUTING.md) - How to contribute
+- [📝 Changelog](docs/CHANGELOG.md) - Version history
 
 ## 🎉 Quick Start
 

@@ -11,9 +11,6 @@ from . import data
 from . import text
 from . import system
 from . import utility
-from . import python
-from . import uv
-from . import pylance
 
 __all__ = [
     "compression",
@@ -23,7 +20,4 @@ __all__ = [
     "text",
     "system",
     "utility",
-    "python",
-    "uv",
-    "pylance",
 ]

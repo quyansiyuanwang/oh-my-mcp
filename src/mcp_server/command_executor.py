@@ -32,13 +32,7 @@ class CommandValidator:
     """Validates commands and arguments for safe execution."""
 
     # Whitelist of allowed commands
-    ALLOWED_COMMANDS = {
-        "python",
-        "python3",
-        "uv",
-        "pyright",
-        "pyright-python",
-    }
+    ALLOWED_COMMANDS = set()
 
     # Dangerous characters that could enable shell injection
     DANGEROUS_CHARS = {";", "|", "&", "$", "`", "\n", "\r"}
@@ -69,8 +63,18 @@ class CommandValidator:
         Returns:
             Tuple of (is_valid, error_message)
         """
-        # Check if command is in whitelist
-        if command not in cls.ALLOWED_COMMANDS:
+        # Extract base command name from full path if necessary
+        import os
+
+        command_name = os.path.basename(command)
+
+        # Remove .exe extension on Windows for comparison
+        if command_name.lower().endswith(".exe"):
+            command_name = command_name[:-4]
+
+        # Check if base command is in whitelist
+        # Also check the original command in case it's just the command name
+        if command not in cls.ALLOWED_COMMANDS and command_name not in cls.ALLOWED_COMMANDS:
             return False, f"Command not allowed: {command}"
 
         # Check argument count
