@@ -6,7 +6,7 @@ import json
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from mcp_server import data_tools
+from mcp_server.tools import data
 
 class MockMCP:
     def __init__(self):

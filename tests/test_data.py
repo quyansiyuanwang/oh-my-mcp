@@ -7,7 +7,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 
-from mcp_server import uv_tools, pylance_tools
+from mcp_server.tools import uv, pylance_tools
 
 class MockMCP:
     def __init__(self):

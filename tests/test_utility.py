@@ -8,7 +8,7 @@ from pathlib import Path
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent))
 
-from mcp_server import compression_tools, data_tools, file_tools, web_tools, utility_tools, text_tools
+from mcp_server.tools import compression, data, file, web, utility, text
 
 class MockMCP:
     """模拟MCP服务器用于测试"""

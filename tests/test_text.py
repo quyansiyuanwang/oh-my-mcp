@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from mcp_server import text_tools
+from mcp_server.tools import text
 
 class MockMCP:
     def __init__(self):

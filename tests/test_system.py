@@ -4,7 +4,7 @@
 """
 
 import json
-from main import get_all_tools_info, get_version_info, TOOL_MODULES
+from mcp_server.main import get_all_tools_info, get_version_info, TOOL_MODULES
 
 def test_tool_modules_metadata():
     """测试所有模块是否都有正确的元数据"""
