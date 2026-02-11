@@ -1,0 +1,87 @@
+name: 📚 Documentation Improvement | 文档改进
+description: Suggest improvements to documentation | 建议改进文档
+title: "[Docs] "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve our documentation! Clear docs make everyone's life easier.
+        感谢您帮助改进我们的文档！清晰的文档让每个人的生活更轻松。
+
+  - type: input
+    id: location
+    attributes:
+      label: Documentation Location | 文档位置
+      description: Which document needs improvement? | 哪个文档需要改进？
+      placeholder: e.g., README.md, docs/BUILD.md, examples/README.md | 例如：README.md，docs/BUILD.md，examples/README.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: Issue Description | 问题描述
+      description: What's wrong with the current documentation? | 当前文档有什么问题？
+      placeholder: |
+        The documentation is...
+        - Unclear about...
+        - Missing information on...
+        - Contains outdated information about...
+        - Has errors in...
+
+        这个文档...
+        - 对...不清楚
+        - 缺少关于...的信息
+        - 包含关于...的过时信息
+        - 有错误在...
+    validations:
+      required: true
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggested Improvement | 改进建议
+      description: How should the documentation be improved? | 应该如何改进文档？
+      placeholder: |
+        The documentation should...
+        Add a section about...
+        Clarify that...
+        Update the example to...
+
+        文档应该...
+        添加一个关于...的部分
+        澄清...
+        更新示例为...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type of Improvement | 改进类型
+      description: What kind of documentation improvement is this? | 这是什么类型的文档改进？
+      options:
+        - Clarification - Make existing content clearer | 澄清 - 使现有内容更清晰
+        - Addition - Add missing information | 添加 - 添加缺失信息
+        - Correction - Fix errors or outdated info | 更正 - 修复错误或过时信息
+        - Examples - Add or improve examples | 示例 - 添加或改进示例
+        - Translation - Language/translation issues | 翻译 - 语言/翻译问题
+    validations:
+      required: false
+
+  - type: textarea
+    id: related
+    attributes:
+      label: Related Links | 相关链接
+      description: Links to related documentation or external resources. | 相关文档或外部资源的链接。
+      placeholder: |
+        - https://...
+        - https://...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context | 额外上下文
+      description: Any other context about the documentation issue. | 关于文档问题的任何其他上下文。
+      placeholder: Any other information... | 任何其他信息...

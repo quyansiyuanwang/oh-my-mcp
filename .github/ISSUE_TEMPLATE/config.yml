@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions | 讨论区
+    url: https://github.com/yourusername/mcp-server/discussions
+    about: Ask questions and discuss ideas with the community | 在社区中提问和讨论想法
+  - name: 📖 Documentation | 文档
+    url: https://github.com/yourusername/mcp-server/tree/main/docs
+    about: Browse the complete documentation | 浏览完整文档

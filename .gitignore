@@ -19,7 +19,6 @@ env/
 *.swo
 *~
 .DS_Store
-CLAUDE.md
 
 # Testing
 .pytest_cache/
@@ -31,6 +30,7 @@ htmlcov/
 # Documentation
 docs/_build/
 site/
+CLAUDE.md
 
 # Logs
 *.log
@@ -55,3 +55,6 @@ nul
 
 # UV lock file (for libraries)
 uv.lock
+
+# Pyinstaller
+*.spec

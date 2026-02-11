@@ -1,0 +1,82 @@
+name: ✨ Feature Request | 功能请求
+description: Suggest a new feature or enhancement | 建议新功能或增强
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a new feature! Please provide as much detail as possible.
+        感谢您建议新功能！请尽可能提供详细信息。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature Description | 功能描述
+      description: A clear and concise description of the feature you'd like to see. | 清晰简明地描述你希望看到的功能。
+      placeholder: I would like to see... | 我希望看到...
+    validations:
+      required: true
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case | 使用场景
+      description: Describe the problem this feature would solve or the workflow it would enable. | 描述此功能将解决的问题或它将启用的工作流。
+      placeholder: |
+        This feature would help me...
+        When I'm working on...
+        It would enable...
+
+        这个功能将帮助我...
+        当我在做...的时候
+        它将使...成为可能
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Suggested Implementation | 建议的实现方式
+      description: If you have ideas on how this could be implemented, please share. | 如果你对如何实现有想法，请分享。
+      placeholder: |
+        This could be implemented by...
+        A new tool called...
+        Modify the existing...
+
+        这可以通过...实现
+        一个新工具叫做...
+        修改现有的...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered | 考虑的替代方案
+      description: Are there any workarounds or alternative solutions you've considered? | 你考虑过任何变通方法或替代解决方案吗？
+      placeholder: |
+        I've considered...
+        Currently, I work around this by...
+
+        我考虑过...
+        目前，我通过...来解决这个问题
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority | 优先级
+      description: How important is this feature to you? | 这个功能对你有多重要？
+      options:
+        - Low - Nice to have | 低 - 有就更好
+        - Medium - Would be helpful | 中 - 会很有帮助
+        - High - Critical for my workflow | 高 - 对我的工作流至关重要
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context | 额外上下文
+      description: Add any other context, screenshots, or examples about the feature request. | 添加关于功能请求的任何其他上下文、截图或示例。
+      placeholder: Any other information... | 任何其他信息...

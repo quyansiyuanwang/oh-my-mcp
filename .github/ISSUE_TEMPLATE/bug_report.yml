@@ -1,0 +1,112 @@
+name: 🐛 Bug Report | Bug报告
+description: Report a bug or issue with the MCP server | 报告MCP服务器的Bug或问题
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the following information to help us diagnose and fix the issue.
+        感谢您花时间报告Bug！请填写以下信息以帮助我们诊断和修复问题。
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description | Bug描述
+      description: A clear and concise description of what the bug is. | 清晰简明地描述这个Bug是什么。
+      placeholder: Describe the bug... | 描述这个Bug...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce | 复现步骤
+      description: Steps to reproduce the behavior. | 复现该行为的步骤。
+      placeholder: |
+        1. Configure Claude Desktop with...
+        2. Run the command...
+        3. See error...
+
+        1. 配置Claude Desktop...
+        2. 运行命令...
+        3. 看到错误...
+      value: |
+        1. 
+        2. 
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior | 预期行为
+      description: What you expected to happen. | 你期望发生什么。
+      placeholder: I expected... | 我期望...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior | 实际行为
+      description: What actually happened. | 实际发生了什么。
+      placeholder: Instead, I got... | 实际上，我得到了...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating System | 操作系统
+      description: Which operating system are you using? | 你使用的是哪个操作系统？
+      options:
+        - Windows
+        - Linux
+        - macOS (Intel)
+        - macOS (Apple Silicon)
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: MCP Server Version | MCP服务器版本
+      description: Which version of MCP server are you using? | 你使用的MCP服务器版本是多少？
+      placeholder: e.g., v1.0.0 or commit hash | 例如：v1.0.0或commit哈希
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs | 错误日志
+      description: Paste any relevant error messages or logs. | 粘贴任何相关的错误消息或日志。
+      placeholder: Paste logs here... | 在此粘贴日志...
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: config
+    attributes:
+      label: Configuration | 配置
+      description: Share your Claude Desktop configuration (remove sensitive data). | 分享你的Claude Desktop配置（移除敏感数据）。
+      placeholder: Paste your config here... | 在此粘贴你的配置...
+      render: json
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots | 截图
+      description: If applicable, add screenshots to help explain the problem. | 如果适用，添加截图以帮助解释问题。
+      placeholder: Drag and drop images here... | 拖放图片到这里...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context | 额外上下文
+      description: Add any other context about the problem. | 添加关于该问题的任何其他上下文。
+      placeholder: Any other information... | 任何其他信息...

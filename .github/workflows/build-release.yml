@@ -1,0 +1,209 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., v1.0.0)"
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }} (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - os: windows
+            runner: windows-latest
+            arch: x64
+            artifact_name: mcp-server-windows-x64.zip
+            dist_path: dist/mcp-server
+
+          - os: linux
+            runner: ubuntu-latest
+            arch: x64
+            artifact_name: mcp-server-linux-x64.tar.gz
+            dist_path: dist/mcp-server
+
+          - os: macos
+            runner: macos-13
+            arch: x64
+            artifact_name: mcp-server-macos-x64.tar.gz
+            dist_path: dist/mcp-server
+
+          - os: macos
+            runner: macos-latest
+            arch: arm64
+            artifact_name: mcp-server-macos-arm64.tar.gz
+            dist_path: dist/mcp-server
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+
+      - name: Run tests
+        run: pytest -v
+        continue-on-error: false
+
+      - name: Build executable
+        run: python scripts/build/build.py --onedir
+
+      - name: Verify build
+        run: |
+          ls -R ${{ matrix.dist_path }}
+        shell: bash
+
+      - name: Copy USAGE.md
+        run: |
+          cp .github/assets/USAGE.md USAGE.md
+        shell: bash
+
+      - name: Package for Windows
+        if: matrix.os == 'windows'
+        run: |
+          Copy-Item USAGE.md ${{ matrix.dist_path }}\USAGE.md
+          Compress-Archive -Path ${{ matrix.dist_path }}\* -DestinationPath ${{ matrix.artifact_name }}
+        shell: pwsh
+
+      - name: Package for Linux/macOS
+        if: matrix.os != 'windows'
+        run: |
+          cp USAGE.md ${{ matrix.dist_path }}/USAGE.md
+          tar -czf ${{ matrix.artifact_name }} -C dist mcp-server
+        shell: bash
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ matrix.artifact_name }}
+          retention-days: 7
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Display structure
+        run: ls -R artifacts
+
+      - name: Get version
+        id: get_version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Generate release notes
+        run: |
+          cat > RELEASE_NOTES.md << 'EOL'
+          ## MCP Server Release ${{ steps.get_version.outputs.version }}
+
+          ### 📦 Available Downloads | 可用下载
+
+          Choose the appropriate package for your platform:
+          为您的平台选择合适的包：
+
+          - **Windows (x64)**: `mcp-server-windows-x64.zip`
+          - **Linux (x64)**: `mcp-server-linux-x64.tar.gz`
+          - **macOS (Intel)**: `mcp-server-macos-x64.tar.gz`
+          - **macOS (Apple Silicon)**: `mcp-server-macos-arm64.tar.gz`
+
+          Each package includes:
+          每个包包含：
+          - Pre-built executable | 预构建的可执行文件
+          - USAGE.md with setup instructions | 包含设置说明的USAGE.md
+
+          ### ✨ Features | 功能
+
+          This release includes **86 tools** across 8 categories:
+          此版本包含8个类别的**86个工具**：
+
+          - 📁 **File Operations** (12 tools) - File and directory management
+          - 🗜️ **Compression** (5 tools) - TAR and ZIP archive operations
+          - 📊 **Data Processing** (15 tools) - JSON, CSV, XML, YAML, TOML
+          - 📝 **Text Processing** (9 tools) - Text manipulation and analysis
+          - 🌐 **Web Operations** (15 tools) - HTTP requests, web scraping, search
+          - 💻 **System Monitoring** (8 tools) - CPU, memory, disk, processes
+          - 🔧 **Utility Tools** (10 tools) - UUID, hashing, encoding, dates
+          - 🤖 **Subagent** (6 tools) - AI task delegation
+
+          ### 🚀 Quick Start | 快速开始
+
+          1. Download the appropriate package for your platform
+          2. Extract the archive
+          3. Follow the instructions in USAGE.md
+          4. Configure your MCP client (Claude Desktop, Claude Code, etc.)
+          5. Restart your MCP client
+
+          See USAGE.md in the package for detailed setup instructions.
+          有关详细设置说明，请参阅包中的USAGE.md。
+
+          ### 🔌 Compatible Clients | 兼容客户端
+
+          This MCP server works with:
+          - **Claude Desktop** - Official desktop application
+          - **Claude Code** - VS Code extension
+          - **ccswitch** - MCP server manager
+          - Any MCP-compatible client following the [Model Context Protocol](https://modelcontextprotocol.io/)
+
+          ### 📚 Documentation | 文档
+
+          - [Complete Documentation](https://github.com/${{ github.repository }}/tree/main/docs)
+          - [Build Guide](https://github.com/${{ github.repository }}/blob/main/docs/BUILD.md)
+          - [Architecture](https://github.com/${{ github.repository }}/blob/main/docs/ARCHITECTURE.md)
+
+          ### 🐛 Bug Reports | Bug报告
+
+          Found an issue? Please [create a bug report](https://github.com/${{ github.repository }}/issues/new?template=bug_report.yml).
+          发现问题？请[创建bug报告](https://github.com/${{ github.repository }}/issues/new?template=bug_report.yml)。
+
+          ### ⚠️ Important Notes | 重要说明
+
+          - **Python/UV/Pylance tools removed**: These tools required external dependencies and have been removed from the packaged version. All remaining tools work standalone.
+          - **Python/UV/Pylance工具已移除**：这些工具需要外部依赖，已从打包版本中移除。所有剩余工具均独立工作。
+          EOL
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          name: Release ${{ steps.get_version.outputs.version }}
+          body_path: RELEASE_NOTES.md
+          draft: true
+          prerelease: false
+          files: |
+            artifacts/mcp-server-windows-x64.zip/mcp-server-windows-x64.zip
+            artifacts/mcp-server-linux-x64.tar.gz/mcp-server-linux-x64.tar.gz
+            artifacts/mcp-server-macos-x64.tar.gz/mcp-server-macos-x64.tar.gz
+            artifacts/mcp-server-macos-arm64.tar.gz/mcp-server-macos-arm64.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
