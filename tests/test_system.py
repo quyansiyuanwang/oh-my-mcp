@@ -82,10 +82,10 @@ def test_get_server_version() -> None:
     for i, feature in enumerate(data["features"], 1):
         print(f"  {i}. {feature}")
 
-    # 验证数据
-    assert data["total_tools"] == 104, f"工具总数应为 104,实际为 {data['total_tools']}"
-    assert data["total_categories"] == 11, f"类别总数应为 11,实际为 {data['total_categories']}"
-    assert len(data["features"]) == 11, f"特性数量应为 11,实际为 {len(data['features'])}"
+    # 验证数据 (移除Python/UV/Pylance工具后: 104-21=83个工具, 11-3=8个类别)
+    assert data["total_tools"] == 83, f"工具总数应为 83,实际为 {data['total_tools']}"
+    assert data["total_categories"] == 8, f"类别总数应为 8,实际为 {data['total_categories']}"
+    assert len(data["features"]) == 8, f"特性数量应为 8,实际为 {len(data['features'])}"
 
     print("\nget_server_version() 验证通过!")
 

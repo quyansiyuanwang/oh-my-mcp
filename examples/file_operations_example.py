@@ -64,7 +64,7 @@ def example_file_operations():
         list_result = list_directory(tmpdir)
         list_data = json.loads(list_result)
         print(f"   找到 {list_data['count']} 个项目:")
-        for item in list_data['items']:
+        for item in list_data["items"]:
             print(f"   - {item['name']} ({item['type']})")
 
         # 7. 搜索文件

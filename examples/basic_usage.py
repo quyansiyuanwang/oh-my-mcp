@@ -31,11 +31,14 @@ def main():
     def get_info() -> str:
         """获取服务器信息"""
         import json
-        return json.dumps({
-            "name": "Example MCP Server",
-            "version": "0.1.0",
-            "tools": ["compression", "web", "file", "data", "text"]
-        })
+
+        return json.dumps(
+            {
+                "name": "Example MCP Server",
+                "version": "0.1.0",
+                "tools": ["compression", "web", "file", "data", "text"],
+            }
+        )
 
     logger.info("服务器准备就绪")
 

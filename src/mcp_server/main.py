@@ -20,9 +20,6 @@ from mcp_server.tools import (
     text,
     system,
     utility,
-    python,
-    uv,
-    pylance,
     subagent,
 )
 from mcp_server.utils import logger
@@ -56,18 +53,6 @@ TOOL_MODULES = [
     {
         "module": utility,
         "category_key": "utilities",
-    },
-    {
-        "module": python,
-        "category_key": "python_development",
-    },
-    {
-        "module": uv,
-        "category_key": "uv_package_manager",
-    },
-    {
-        "module": pylance,
-        "category_key": "pylance_pyright",
     },
     {
         "module": subagent,

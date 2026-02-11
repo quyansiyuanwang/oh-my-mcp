@@ -569,7 +569,7 @@ class SubagentOrchestrator:
             # 提交所有任务
             future_to_task = {}
             for i, task in enumerate(tasks):
-                task_name = task.get("name", f"task_{i+1}")
+                task_name = task.get("name", f"task_{i + 1}")
                 future = executor.submit(
                     self.manager.call_ai,
                     provider=task.get("provider", "openai"),

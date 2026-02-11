@@ -27,8 +27,7 @@ def example_single_call():
 
     # In your MCP client (Claude Desktop, etc.), you would call:
     print("\nMCP Tool Call:")
-    print(
-        """
+    print("""
     subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
@@ -39,8 +38,7 @@ def example_single_call():
         max_tokens=200,
         temperature=0.7
     )
-    """
-    )
+    """)
 
     print("\nExpected Response Structure:")
     print(
@@ -103,14 +101,12 @@ def example_parallel_tasks():
     ]
 
     print("\nMCP Tool Call:")
-    print(
-        f"""
+    print(f"""
     subagent_parallel(
         tasks=json.dumps({json.dumps(tasks, indent=8)}),
         max_workers=3
     )
-    """
-    )
+    """)
 
     print("\nExpected Response Structure:")
     print(
@@ -195,15 +191,13 @@ def example_conditional_branching():
     }
 
     print("\nMCP Tool Call:")
-    print(
-        f"""
+    print(f"""
     subagent_conditional(
         condition_task=json.dumps({json.dumps(condition_task, indent=8)}),
         true_task=json.dumps({json.dumps(complex_task, indent=8)}),
         false_task=json.dumps({json.dumps(simple_task, indent=8)})
     )
-    """
-    )
+    """)
 
     print("\nExpected Response Structure:")
     print(
@@ -277,15 +271,13 @@ def example_multi_turn_conversation():
     ]
 
     print("\nMCP Tool Call (Turn 1):")
-    print(
-        f"""
+    print(f"""
     result1 = subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
         messages=json.dumps({json.dumps(messages_turn1, indent=8)})
     )
-    """
-    )
+    """)
 
     print("\nTurn 2: Follow-up question")
     # In practice, you would extract result1['result'] and add it to conversation
@@ -297,15 +289,13 @@ def example_multi_turn_conversation():
     ]
 
     print("\nMCP Tool Call (Turn 2):")
-    print(
-        f"""
+    print(f"""
     result2 = subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
         messages=json.dumps({json.dumps(messages_turn2, indent=8)})
     )
-    """
-    )
+    """)
 
     print("\nNote: Subagent is stateless. You must maintain conversation history")
     print("      and pass it with each call.")
@@ -348,8 +338,7 @@ def example_error_handling():
         print(f"Solution: {error_info['solution']}")
 
     print("\n\nChecking Response Status:")
-    print(
-        """
+    print("""
     result = subagent_call(...)
     result_data = json.loads(result)
     
@@ -358,8 +347,7 @@ def example_error_handling():
         print(f"Cost: ${result_data['cost']['total_cost']}")
     else:
         print(f"Error: {result_data.get('error', 'Unknown error')}")
-    """
-    )
+    """)
 
 
 def main():
