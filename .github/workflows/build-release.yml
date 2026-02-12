@@ -105,6 +105,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
@@ -124,7 +132,46 @@ jobs:
 
       - name: Generate release notes
         run: |
-          cat > RELEASE_NOTES.md << 'EOL'
+          # Dynamically extract tool counts from plugin config.yaml files
+          TOTAL_TOOLS=0
+          TOOL_LINES=""
+
+          declare -A ICONS
+          ICONS[file]="📁"
+          ICONS[compression]="🗜️"
+          ICONS[data]="📊"
+          ICONS[text]="📝"
+          ICONS[web]="🌐"
+          ICONS[system]="💻"
+          ICONS[utility]="🔧"
+          ICONS[subagent]="🤖"
+
+          for config in src/mcp_server/tools/*/config.yaml; do
+            plugin_dir=$(dirname "$config")
+            plugin_name=$(basename "$plugin_dir")
+            handlers="$plugin_dir/handlers.py"
+
+            # Parse category_name from config.yaml
+            category_name=$(python3 -c "import yaml; c=yaml.safe_load(open('$config')); print(c.get('category_name',''))")
+
+            # Count @tool_handler decorated functions in handlers.py
+            tool_count=0
+            if [ -f "$handlers" ]; then
+              tool_count=$(grep -c '@tool_handler' "$handlers" || true)
+            fi
+
+            if [ "$tool_count" -gt 0 ] 2>/dev/null; then
+              TOTAL_TOOLS=$((TOTAL_TOOLS + tool_count))
+              icon="${ICONS[$plugin_name]:-🔹}"
+              TOOL_LINES="${TOOL_LINES}
+          - ${icon} **${category_name}** (${tool_count} tools)"
+            fi
+          done
+
+          # Count categories
+          TOTAL_CATEGORIES=$(echo "$TOOL_LINES" | grep -c "^-" || true)
+
+          cat > RELEASE_NOTES.md << EOL
           ## MCP Server Release ${{ steps.get_version.outputs.version }}
 
           ### 📦 Available Downloads | 可用下载
@@ -132,10 +179,10 @@ jobs:
           Choose the appropriate package for your platform:
           为您的平台选择合适的包：
 
-          - **Windows (x64)**: `mcp-server-windows-x64.zip`
-          - **Linux (x64)**: `mcp-server-linux-x64.tar.gz`
-          - **macOS (Intel)**: `mcp-server-macos-x64.tar.gz`
-          - **macOS (Apple Silicon)**: `mcp-server-macos-arm64.tar.gz`
+          - **Windows (x64)**: \`mcp-server-windows-x64.zip\`
+          - **Linux (x64)**: \`mcp-server-linux-x64.tar.gz\`
+          - **macOS (Intel)**: \`mcp-server-macos-x64.tar.gz\`
+          - **macOS (Apple Silicon)**: \`mcp-server-macos-arm64.tar.gz\`
 
           Each package includes:
           每个包包含：
@@ -144,36 +191,118 @@ jobs:
 
           ### ✨ Features | 功能
 
-          This release includes **86 tools** across 8 categories:
-          此版本包含8个类别的**86个工具**：
-
-          - 📁 **File Operations** (12 tools) - File and directory management
-          - 🗜️ **Compression** (5 tools) - TAR and ZIP archive operations
-          - 📊 **Data Processing** (15 tools) - JSON, CSV, XML, YAML, TOML
-          - 📝 **Text Processing** (9 tools) - Text manipulation and analysis
-          - 🌐 **Web Operations** (15 tools) - HTTP requests, web scraping, search
-          - 💻 **System Monitoring** (8 tools) - CPU, memory, disk, processes
-          - 🔧 **Utility Tools** (10 tools) - UUID, hashing, encoding, dates
-          - 🤖 **Subagent** (6 tools) - AI task delegation
+          This release includes **${TOTAL_TOOLS} tools** across ${TOTAL_CATEGORIES} categories:
+          此版本包含${TOTAL_CATEGORIES}个类别的**${TOTAL_TOOLS}个工具**：
+          ${TOOL_LINES}
 
           ### 🚀 Quick Start | 快速开始
 
-          1. Download the appropriate package for your platform
-          2. Extract the archive
-          3. Follow the instructions in USAGE.md
-          4. Configure your MCP client (Claude Desktop, Claude Code, etc.)
-          5. Restart your MCP client
+          #### 1. Download & Extract | 下载解压
 
-          See USAGE.md in the package for detailed setup instructions.
-          有关详细设置说明，请参阅包中的USAGE.md。
+          Download the package for your platform and extract it:
+          下载适合您平台的包并解压：
 
-          ### 🔌 Compatible Clients | 兼容客户端
+          **Windows:**
+          \`\`\`powershell
+          Expand-Archive -Path mcp-server-windows-x64.zip -DestinationPath C:\mcp-server
+          \`\`\`
 
-          This MCP server works with:
-          - **Claude Desktop** - Official desktop application
-          - **Claude Code** - VS Code extension
-          - **ccswitch** - MCP server manager
-          - Any MCP-compatible client following the [Model Context Protocol](https://modelcontextprotocol.io/)
+          **Linux/macOS:**
+          \`\`\`bash
+          tar -xzf mcp-server-*.tar.gz
+          \`\`\`
+
+          #### 2. Configure MCP Client | 配置 MCP 客户端
+
+          <details>
+          <summary><b>Claude Desktop</b></summary>
+
+          Edit your config file (create if not exists):
+          编辑配置文件（不存在则创建）：
+
+          - **Windows:** \`%APPDATA%\Claude\claude_desktop_config.json\`
+          - **macOS:** \`~/Library/Application Support/Claude/claude_desktop_config.json\`
+          - **Linux:** \`~/.config/Claude/claude_desktop_config.json\`
+
+          **Windows example:**
+          \`\`\`json
+          {
+            "mcpServers": {
+              "mcp-server": {
+                "command": "C:\\\\mcp-server\\\\mcp-server\\\\mcp-server.exe"
+              }
+            }
+          }
+          \`\`\`
+
+          **macOS/Linux example:**
+          \`\`\`json
+          {
+            "mcpServers": {
+              "mcp-server": {
+                "command": "/path/to/mcp-server/mcp-server"
+              }
+            }
+          }
+          \`\`\`
+
+          > ⚠️ Use **absolute paths** only. After saving, fully quit and restart Claude Desktop.
+          > ⚠️ 必须使用**绝对路径**。保存后完全退出并重启 Claude Desktop。
+
+          </details>
+
+          <details>
+          <summary><b>Claude Code (VS Code / CLI)</b></summary>
+
+          \`\`\`bash
+          claude mcp add mcp-server /absolute/path/to/mcp-server/mcp-server
+          \`\`\`
+
+          Or add to VS Code \`settings.json\`:
+          或添加到 VS Code \`settings.json\`：
+
+          \`\`\`json
+          {
+            "claude.mcpServers": {
+              "mcp-server": {
+                "command": "/absolute/path/to/mcp-server/mcp-server"
+              }
+            }
+          }
+          \`\`\`
+
+          </details>
+
+          <details>
+          <summary><b>Cursor</b></summary>
+
+          Edit \`~/.cursor/mcp.json\` (global) or \`<project>/.cursor/mcp.json\` (project-level):
+          编辑 \`~/.cursor/mcp.json\`（全局）或 \`<project>/.cursor/mcp.json\`（项目级）：
+
+          \`\`\`json
+          {
+            "mcpServers": {
+              "mcp-server": {
+                "command": "/absolute/path/to/mcp-server/mcp-server"
+              }
+            }
+          }
+          \`\`\`
+
+          </details>
+
+          <details>
+          <summary><b>Other MCP Clients | 其他客户端</b></summary>
+
+          Any MCP-compatible client can use this server. You typically need to provide the **absolute path** to the executable as the \`command\` field.
+          任何兼容 MCP 的客户端都可以使用此服务器，只需将可执行文件的**绝对路径**作为 \`command\` 字段。
+
+          </details>
+
+          #### 3. Verify | 验证
+
+          Ask your AI assistant: *"What MCP tools are available?"*
+          向你的 AI 助手提问：*"有哪些可用的 MCP 工具？"*
 
           ### 📚 Documentation | 文档
 
@@ -185,11 +314,6 @@ jobs:
 
           Found an issue? Please [create a bug report](https://github.com/${{ github.repository }}/issues/new?template=bug_report.yml).
           发现问题？请[创建bug报告](https://github.com/${{ github.repository }}/issues/new?template=bug_report.yml)。
-
-          ### ⚠️ Important Notes | 重要说明
-
-          - **Python/UV/Pylance tools removed**: These tools required external dependencies and have been removed from the packaged version. All remaining tools work standalone.
-          - **Python/UV/Pylance工具已移除**：这些工具需要外部依赖，已从打包版本中移除。所有剩余工具均独立工作。
           EOL
 
       - name: Create Release
