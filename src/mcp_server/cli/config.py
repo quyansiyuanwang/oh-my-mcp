@@ -57,7 +57,7 @@ def generate_mcp_config(
                 "command": python_path,
                 "args": [server_path],
                 "env": {},
-                "description": "Comprehensive MCP Server with 56+ practical tools",
+                "description": "Comprehensive MCP Server with 83 practical tools",
             }
         }
     }

@@ -1,7 +1,7 @@
 """
 Comprehensive MCP Server with Practical Tools
 
-This MCP server provides 74+ tools across multiple categories.
+This MCP server provides 83 tools across 8 categories.
 Tool counts and descriptions are dynamically loaded from each plugin.
 
 Author: MCP Server Project
