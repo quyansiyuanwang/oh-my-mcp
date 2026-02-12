@@ -7,7 +7,7 @@
 这是最简单的方法，一键配置：
 
 ```bash
-python generate_config.py --claude
+python -m mcp_server.cli.config --claude
 ```
 
 **功能：**
@@ -34,10 +34,10 @@ python generate_config.py --claude
 
 ```bash
 # 在端口 8765 上启动服务器
-python generate_config.py --http-server
+python -m mcp_server.cli.config --http-server
 
 # 或使用自定义端口
-python generate_config.py --http-server --port 9000
+python -m mcp_server.cli.config --http-server --port 9000
 ```
 
 **可用端点：**
@@ -58,7 +58,7 @@ python generate_config.py --http-server --port 9000
 
 ```bash
 # 启动服务器
-python generate_config.py --http-server --port 8765
+python -m mcp_server.cli.config --http-server --port 8765
 
 # 获取配置（在另一个终端）
 curl http://localhost:8765/config
@@ -75,16 +75,16 @@ curl http://localhost:8765/config
 
 ```bash
 # 生成默认配置文件 mcp_config.json
-python generate_config.py
+python -m mcp_server.cli.config
 
 # 自定义输出文件名
-python generate_config.py --output my_config.json
+python -m mcp_server.cli.config --output my_config.json
 
 # 在终端显示配置
-python generate_config.py --show-config
+python -m mcp_server.cli.config --show-config
 
 # 自定义服务器名称
-python generate_config.py --server-name my-mcp-tools --output config.json
+python -m mcp_server.cli.config --server-name my-mcp-tools --output config.json
 ```
 
 **生成的配置示例：**
@@ -94,9 +94,9 @@ python generate_config.py --server-name my-mcp-tools --output config.json
   "mcpServers": {
     "comprehensive-mcp": {
       "command": "D:\\path\\to\\python.exe",
-      "args": ["D:\\path\\to\\mcp-server\\main.py"],
+      "args": ["-m", "mcp_server.main"],
       "env": {},
-      "description": "Comprehensive MCP Server with 56+ practical tools"
+      "description": "Comprehensive MCP Server with 83 practical tools"
     }
   }
 }
@@ -126,20 +126,20 @@ pip install -e .
 
 ```bash
 # 方法 1：一键安装到 Claude Desktop
-python generate_config.py --claude
+python -m mcp_server.cli.config --claude
 
 # 方法 2：启动 HTTP 配置服务器
-python generate_config.py --http-server --port 8765
+python -m mcp_server.cli.config --http-server --port 8765
 
 # 方法 3：生成配置文件
-python generate_config.py --show-config
+python -m mcp_server.cli.config --show-config
 ```
 
 ### 3. 启动服务器（如果需要测试）
 
 ```bash
 # 直接运行 MCP 服务器
-python main.py
+python -m mcp_server.main
 ```
 
 ---
@@ -149,7 +149,7 @@ python main.py
 ### 命令行参数
 
 ```bash
-python generate_config.py [选项]
+python -m mcp_server.cli.config [选项]
 
 选项：
   --server-name NAME    自定义服务器名称（默认：comprehensive-mcp）
@@ -165,13 +165,13 @@ python generate_config.py [选项]
 
 ```bash
 # 生成配置并显示
-python generate_config.py --output config.json --show-config
+python -m mcp_server.cli.config --output config.json --show-config
 
 # 使用自定义服务器名称安装到 Claude
-python generate_config.py --server-name my-tools --claude
+python -m mcp_server.cli.config --server-name my-tools --claude
 
 # 在特定端口运行配置服务器
-python generate_config.py --http-server --port 9999
+python -m mcp_server.cli.config --http-server --port 9999
 ```
 
 ---
@@ -182,13 +182,13 @@ python generate_config.py --http-server --port 9999
 
 ```bash
 # 1. 生成配置并查看
-python generate_config.py --show-config
+python -m mcp_server.cli.config --show-config
 
 # 2. 检查 Python 和服务器路径
 curl http://localhost:8765/info  # 如果运行了 HTTP 服务器
 
 # 3. 测试服务器启动
-python main.py
+python -m mcp_server.main
 ```
 
 ### 预期输出
@@ -221,7 +221,7 @@ Server ready to accept connections.
 
 ```bash
 # 手动生成配置
-python generate_config.py --show-config
+python -m mcp_server.cli.config --show-config
 
 # 复制输出，手动添加到 Claude Desktop 配置文件
 ```
@@ -232,7 +232,7 @@ python generate_config.py --show-config
 
 ```bash
 # 使用不同端口
-python generate_config.py --http-server --port 9000
+python -m mcp_server.cli.config --http-server --port 9000
 ```
 
 ### 问题：Python 路径不正确
@@ -248,7 +248,7 @@ python generate_config.py --http-server --port 9000
 
 ## 📚 相关文档
 
-- [完整功能文档](README.md) - 查看所有 56+ 工具的详细说明
+- [完整功能文档](../README.md) - 查看所有 83 个工具的详细说明
 - [MCP 协议文档](https://modelcontextprotocol.io/) - 了解 MCP 协议
 - [Claude Desktop](https://claude.ai/download) - 下载 Claude Desktop
 
@@ -263,17 +263,17 @@ python generate_config.py --http-server --port 9000
 pip install -e .
 
 # 2. 配置
-python generate_config.py --claude
+python -m mcp_server.cli.config --claude
 
 # 3. 重启 Claude Desktop
-# 完成！开始使用 56+ 工具！
+# 完成！开始使用 83 个工具！
 ```
 
 **HTTP 服务器方式：**
 
 ```bash
 # 1. 启动配置服务器
-python generate_config.py --http-server --port 8765
+python -m mcp_server.cli.config --http-server --port 8765
 
 # 2. 访问 http://localhost:8765/config 获取配置
 # 3. 将配置添加到你的 MCP 客户端
