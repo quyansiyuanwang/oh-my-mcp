@@ -98,7 +98,7 @@ pytest tests/
 如果遇到导入错误，确保：
 
 1. Python 版本 >= 3.12
-2. 所有依赖已安装：`pip install -r requirements.txt`
+2. 所有依赖已安装：`pip install -e .`
 
 ### 权限问题
 
@@ -116,6 +116,6 @@ pip install mcp-server
 
 ## 下一步
 
-- 阅读[使用指南](USAGE.md)了解如何使用工具
-- 查看[示例代码](../examples/)学习常见用例
-- 参考[API 文档](API_REFERENCE.md)了解所有工具
+- 查看[示例代码](../../examples/)学习常见用例
+- 阅读[设置指南](../zh/SETUP_GUIDE.md)了解配置向导
+- 参考[架构文档](ARCHITECTURE.md)了解系统设计

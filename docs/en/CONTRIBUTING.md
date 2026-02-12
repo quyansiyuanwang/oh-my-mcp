@@ -89,12 +89,20 @@ pytest tests/ --cov=mcp_server --cov-report=html
 
 如果要添加新工具，请遵循以下步骤：
 
-1. 在 `src/mcp_server/tools/` 中选择合适的模块
-2. 在模块的 `register_tools(mcp)` 函数中添加工具
-3. 使用 `@mcp.tool()` 装饰器
+1. 在 `src/mcp_server/tools/` 中选择合适的插件目录
+2. 在插件的 `handlers.py` 文件中添加工具
+3. 使用 `@tool_handler` 装饰器
 4. 遵循错误处理模式（try/except with logger.error）
 5. 返回 JSON 字符串
 6. 在 `tests/` 中添加测试
+
+如果要添加新工具类别：
+
+1. 创建新插件目录 `src/mcp_server/tools/new_category/`
+2. 添加 `__init__.py`（空文件）
+3. 添加 `config.yaml`（类别名、描述、启用状态）
+4. 添加 `handlers.py`（使用 `@tool_handler` 装饰器）
+5. 无需修改 `main.py`——插件会自动发现
 
 ## 问题报告
 

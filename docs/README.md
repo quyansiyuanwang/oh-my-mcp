@@ -45,7 +45,7 @@
 
 ## 📊 Tool Categories | 工具分类
 
-**83+ practical tools across 8 categories:**
+**83 practical tools across 8 categories:**
 
 - **Compression** (5 tools): ZIP/TAR archive operations
 - **Web & Network** (18 tools): Web search, scraping, downloads

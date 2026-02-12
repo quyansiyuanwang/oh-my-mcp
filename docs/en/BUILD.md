@@ -338,8 +338,8 @@ pip install pyinstaller
 - Release 默认创建为 **draft**（草稿）状态，需要手动发布
 - 所有构建前会自动运行测试，确保代码质量
 - 每个压缩包都包含完整的使用说明（USAGE.md）
-- 工具数量：**86 个工具**（已移除 Python/UV/Pylance 工具）
+- 工具数量：**83 个工具**（已移除 Python/UV/Pylance 工具）
 
 **重要提醒：**
 
-打包后的可执行文件**不包含** Python Development、UV Package Manager 和 Pylance/Pyright 工具，因为这些工具需要外部的 Python 解释器和相关工具。剩余的 86 个工具完全独立运行，无需任何外部依赖。
+打包后的可执行文件**不包含** Python Development、UV Package Manager 和 Pylance/Pyright 工具，因为这些工具需要外部的 Python 解释器和相关工具。剩余的 83 个工具完全独立运行，无需任何外部依赖。

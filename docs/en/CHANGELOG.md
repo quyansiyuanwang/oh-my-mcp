@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Initial release of MCP Server
-- 95+ practical tools across 10 categories:
+- 95+ practical tools across 10 categories (later consolidated to 83 tools across 8 categories):
   - Compression (5 tools): ZIP/TAR compression and extraction
   - Web & Network (15 tools): web search, page fetching, HTML parsing, downloads
   - File System (12 tools): read, write, search files and directories
@@ -54,4 +54,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete test suite
 - Documentation and examples
 
+[0.1.1]: https://github.com/quyansiyuanwang/mcp-server/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/quyansiyuanwang/mcp-server/releases/tag/v0.1.0
