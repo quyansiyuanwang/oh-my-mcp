@@ -5,11 +5,22 @@ This package provides automatic plugin discovery and loading for tool modules.
 Each tool module is a self-contained plugin with its own configuration.
 """
 
+import sys
 from pathlib import Path
 from typing import List
 
-from .registry import ToolPlugin, load_plugin_config
 from mcp_server.utils import logger
+
+from .registry import ToolPlugin, load_plugin_config
+
+
+def _get_tools_dir() -> Path:
+    """Get the tools directory, handling both normal and frozen (PyInstaller) modes."""
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        # Running as a PyInstaller bundle
+        return Path(sys._MEIPASS) / "mcp_server" / "tools"
+    else:
+        return Path(__file__).parent
 
 
 def discover_tool_plugins() -> List[Path]:
@@ -21,7 +32,7 @@ def discover_tool_plugins() -> List[Path]:
     Returns:
         List of Path objects representing plugin directories
     """
-    tools_dir = Path(__file__).parent
+    tools_dir = _get_tools_dir()
     plugin_dirs = []
 
     for item in tools_dir.iterdir():
