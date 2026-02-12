@@ -29,21 +29,32 @@ pip install -e ".[dev]"
 
 我们使用以下工具来保持代码质量：
 
+- **isort**: 导入排序（兼容 Black）
 - **Black**: 代码格式化（行长度 100）
 - **Ruff**: 代码检查
+- **mypy**: 静态类型检查（严格模式）
 - **pytest**: 测试框架
 
 ### 运行代码检查
 
 ```bash
+# 排序导入
+isort src/ tests/
+
 # 格式化代码
 black src/ tests/
 
 # 运行代码检查
 ruff check src/ tests/
 
+# 类型检查
+mypy src/
+
 # 运行测试
 pytest tests/ -v
+
+# 仅检查导入顺序（不修改）
+isort --check-only --diff src/ tests/
 ```
 
 ## 测试要求
