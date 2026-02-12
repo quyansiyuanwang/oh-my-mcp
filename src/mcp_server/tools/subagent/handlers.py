@@ -20,8 +20,8 @@ from typing import Any, Dict, List, Optional
 import requests
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import logger, NetworkError, ValidationError, retry
 from mcp_server.tools.subagent_config import get_config
+from mcp_server.utils import NetworkError, ValidationError, logger, retry
 
 # 工具类别信息
 CATEGORY_NAME = "Subagent AI Orchestration"
@@ -84,7 +84,7 @@ class OpenAIClient:
         url = f"{self.api_base}/chat/completions"
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
-        payload = {"model": model, "messages": messages, "temperature": temperature}
+        payload: Dict[str, Any] = {"model": model, "messages": messages, "temperature": temperature}
 
         if max_tokens:
             payload["max_tokens"] = max_tokens
@@ -94,7 +94,7 @@ class OpenAIClient:
             response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             response.raise_for_status()
 
-            data = response.json()
+            data: Dict[str, Any] = response.json()
             logger.info(f"OpenAI API success: {data.get('usage', {})}")
             return data
 
@@ -157,15 +157,15 @@ class AnthropicClient:
             NetworkError: API 调用失败
         """
         url = f"{self.api_base}/messages"
-        headers = {
+        headers: dict[str, Any] = {
             "x-api-key": self.api_key,
             "anthropic-version": "2023-06-01",
             "Content-Type": "application/json",
         }
 
         # 转换消息格式: 提取 system 消息
-        system_message = None
-        user_messages = []
+        system_message: Optional[str] = None
+        user_messages: list[dict[str, str]] = []
 
         for msg in messages:
             if msg["role"] == "system":
@@ -173,7 +173,7 @@ class AnthropicClient:
             else:
                 user_messages.append(msg)
 
-        payload = {
+        payload: dict[str, Any] = {
             "model": model,
             "messages": user_messages,
             "max_tokens": max_tokens,
@@ -191,7 +191,7 @@ class AnthropicClient:
             data = response.json()
 
             # 转换为 OpenAI 兼容格式
-            converted = {
+            converted: dict[str, Any] = {
                 "choices": [
                     {
                         "message": {"role": "assistant", "content": data["content"][0]["text"]},
@@ -224,12 +224,13 @@ class AnthropicClient:
 
 
 class SubagentManager:
-    """Subagent 管理器 - 单例模式"""
+    """子代理管理器 - 单例模式"""
 
-    _instance = None
+    _instance: Optional["SubagentManager"] = None
     _lock = Lock()
+    _initialized: bool = False
 
-    def __new__(cls):
+    def __new__(cls) -> "SubagentManager":
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:
@@ -237,12 +238,12 @@ class SubagentManager:
                     cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         if self._initialized:
             return
 
-        self.openai_client = None
-        self.anthropic_client = None
+        self.openai_client: Optional[OpenAIClient] = None
+        self.anthropic_client: Optional[AnthropicClient] = None
         self._initialized = True
 
         logger.info("SubagentManager initialized")
@@ -299,14 +300,14 @@ class SubagentManager:
 
             # 调用相应的 API
             if provider.lower() == "openai":
-                client = self.get_openai_client()
-                response = client.call(model, messages, max_tokens, temperature, timeout)
+                openai_client = self.get_openai_client()
+                response = openai_client.call(model, messages, max_tokens, temperature, timeout)
             elif provider.lower() == "anthropic":
-                client = self.get_anthropic_client()
+                anthropic_client = self.get_anthropic_client()
                 # Anthropic 要求 max_tokens，如果未提供则使用默认值
                 if max_tokens is None:
                     max_tokens = 4096
-                response = client.call(model, messages, max_tokens, temperature, timeout)
+                response = anthropic_client.call(model, messages, max_tokens, temperature, timeout)
             else:
                 raise ValidationError(
                     f"Unsupported provider: {provider}. Use 'openai' or 'anthropic'"
@@ -438,7 +439,7 @@ class SubagentOrchestrator:
 
 
 # 全局单例
-_manager = None
+_manager: Optional[SubagentManager] = None
 _manager_lock = Lock()
 
 
@@ -454,7 +455,11 @@ def get_subagent_manager() -> SubagentManager:
 
 @tool_handler
 def subagent_call(
-    provider: str, model: str, messages: str, max_tokens: int = None, temperature: float = 0.7
+    provider: str,
+    model: str,
+    messages: str,
+    max_tokens: Optional[int] = None,
+    temperature: float = 0.7,
 ) -> str:
     """
     Call an external AI model to handle a subtask.

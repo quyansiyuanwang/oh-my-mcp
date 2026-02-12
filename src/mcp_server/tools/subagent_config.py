@@ -7,7 +7,7 @@ Subagent 配置管理模块
 import json
 import os
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Any, Dict, Optional
 
 from ..utils import logger
 
@@ -30,7 +30,7 @@ class SubagentConfig:
         else:
             self.config_path = Path(config_path)
 
-        self._config: Dict = {}
+        self._config: Dict[str, Any] = {}
         self._load_config()
 
     def _load_config(self) -> None:
@@ -93,7 +93,8 @@ class SubagentConfig:
 
         # 然后检查配置文件
         api_keys = self._config.get("api_keys", {})
-        return api_keys.get(provider.lower())
+        result: Optional[str] = api_keys.get(provider.lower())
+        return result
 
     def get_enable_subagent(self) -> bool:
         """
@@ -161,7 +162,7 @@ class SubagentConfig:
 
         # 然后检查配置文件
         api_bases = self._config.get("api_bases", {})
-        config_value = api_bases.get(provider.lower())
+        config_value: Optional[str] = api_bases.get(provider.lower())
         if config_value:
             return config_value
 
@@ -210,14 +211,14 @@ class SubagentConfig:
             self._save_config()
             logger.info(f"Removed API key for {provider}")
 
-    def list_providers(self) -> Dict[str, Dict[str, str]]:
+    def list_providers(self) -> Dict[str, Dict[str, str | None]]:
         """
         列出所有已配置的提供商
 
         Returns:
             提供商配置字典
         """
-        result = {}
+        result: Dict[str, Dict[str, str | None]] = {}
 
         for provider in ["openai", "anthropic"]:
             api_key = self.get_api_key(provider)

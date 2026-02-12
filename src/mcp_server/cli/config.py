@@ -5,13 +5,13 @@ Generates JSON configuration for MCP clients (e.g., Claude Desktop).
 Can also run a simple HTTP server to provide configuration on demand.
 """
 
+import argparse
 import json
 import os
 import sys
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from http.server import HTTPServer, BaseHTTPRequestHandler
 from typing import Any, Optional
-import argparse
 
 
 def get_python_executable() -> str:
@@ -98,7 +98,7 @@ def merge_with_existing_config(
     try:
         if existing_config_path.exists():
             with open(existing_config_path, "r", encoding="utf-8") as f:
-                existing = json.load(f)
+                existing: dict[str, Any] = json.load(f)
 
             # Merge mcpServers
             if "mcpServers" not in existing:

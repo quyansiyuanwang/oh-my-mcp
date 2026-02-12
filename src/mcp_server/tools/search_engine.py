@@ -60,7 +60,8 @@ class SearchCache:
                 if datetime.now() < entry["expires_at"]:
                     self.hits += 1
                     logger.info(f"Cache hit for {engine}:{query}")
-                    return entry["results"]
+                    result_list: list[dict[str, Any]] = entry["results"]
+                    return result_list
                 else:
                     # 删除过期条目
                     del self.cache[key]
@@ -189,7 +190,7 @@ class SearchEngine:
 class DuckDuckGoEngine(SearchEngine):
     """DuckDuckGo 搜索引擎"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("DuckDuckGo")
 
     def search(
@@ -238,7 +239,7 @@ class DuckDuckGoEngine(SearchEngine):
 class BingEngine(SearchEngine):
     """Bing 搜索引擎"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Bing")
 
     def search(
@@ -297,7 +298,7 @@ class BingEngine(SearchEngine):
 class GoogleEngine(SearchEngine):
     """Google 搜索引擎 (通过 Google Custom Search)"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Google")
 
     def search(
@@ -380,7 +381,7 @@ class GoogleEngine(SearchEngine):
 class BaiduEngine(SearchEngine):
     """Baidu 搜索引擎"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__("Baidu")
 
     def search(
@@ -439,14 +440,16 @@ class BaiduEngine(SearchEngine):
 
                 if title_elem and link_elem:
                     title = title_elem.get_text().strip()
-                    link = link_elem.get("href", "")
+                    href = link_elem.get("href", "")
+                    link = str(href) if href else ""
 
                     # 百度链接可能是重定向链接，需要提取真实URL
                     if link.startswith("http://www.baidu.com/link?url=") or link.startswith(
                         "https://www.baidu.com/link?url="
                     ):
                         # 尝试从 mu 属性获取真实URL
-                        real_link = item.get("mu")
+                        real_link_attr = item.get("mu")
+                        real_link = str(real_link_attr) if real_link_attr else ""
                         if real_link:
                             link = (
                                 real_link if real_link.startswith("http") else f"http://{real_link}"

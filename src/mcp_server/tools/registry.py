@@ -13,10 +13,10 @@ import yaml
 from mcp_server.utils import logger
 
 # Global registry for tool handlers
-_TOOL_REGISTRY: Dict[str, List[Callable]] = {}
+_TOOL_REGISTRY: Dict[str, List[Callable[..., Any]]] = {}
 
 
-def tool_handler(func: Callable) -> Callable:
+def tool_handler(func: Callable[..., Any]) -> Callable[..., Any]:
     """
     Decorator to mark a function as a tool handler.
 
@@ -54,7 +54,7 @@ class ToolPlugin:
         self.category_name = config.get("category_name", "Unknown")
         self.category_description = config.get("category_description", "")
         self.enabled = config.get("enabled", True)
-        self.tools: List[Callable] = []
+        self.tools: List[Callable[..., Any]] = []
         self._handlers_module: Optional[Any] = None
 
     def load_handlers(self) -> None:
@@ -90,7 +90,7 @@ class ToolPlugin:
 
         for tool_func in self.tools:
             # Register the tool with MCP using the decorator
-            decorated_func = mcp.tool()(tool_func)
+            _decorated_func = mcp.tool()(tool_func)
             logger.debug(f"Registered tool: {tool_func.__name__}")
 
 
@@ -127,7 +127,7 @@ def load_plugin_config(plugin_dir: Path) -> Dict[str, Any]:
         raise
 
 
-def get_plugin_tools(module: Any) -> List[Callable]:
+def get_plugin_tools(module: Any) -> List[Callable[..., Any]]:
     """
     Extract all tool handler functions from a module.
 

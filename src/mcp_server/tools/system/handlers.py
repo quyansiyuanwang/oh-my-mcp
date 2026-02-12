@@ -9,16 +9,17 @@ Provides tools for:
 - Time and timezone utilities
 """
 
-import os
-import sys
-import platform
-from datetime import datetime
 import json
+import os
+import platform
+import sys
+from datetime import datetime
+from typing import Any, Dict
 
 import psutil
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import logger, format_bytes
+from mcp_server.utils import format_bytes, logger
 
 
 @tool_handler
@@ -51,7 +52,7 @@ def get_system_info() -> str:
                 "implementation": platform.python_implementation(),
             },
             "environment": {
-                "user": os.getenv("USERNAME") or os.getenv("USER", "unknown"),
+                "user": os.getenv("USERNAME") or os.getenv("USER") or "unknown",
                 "home": os.path.expanduser("~"),
                 "cwd": os.getcwd(),
             },
@@ -279,7 +280,7 @@ def get_current_time(timezone: str = "local", format: str = "iso") -> str:
         else:
             now = datetime.now()
 
-        result = {"timezone": timezone}
+        result: Dict[str, Any] = {"timezone": timezone}
 
         if format == "iso":
             result["time"] = now.isoformat()

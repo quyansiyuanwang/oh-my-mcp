@@ -16,12 +16,12 @@ from pathlib import Path
 from typing import Any, Optional
 
 from .utils import (
+    COMMAND_TIMEOUT_DEFAULT,
+    COMMAND_TIMEOUT_MAX,
     CommandExecutionError,
     CommandTimeoutError,
     CommandValidationError,
     SecurityError,
-    COMMAND_TIMEOUT_DEFAULT,
-    COMMAND_TIMEOUT_MAX,
     logger,
     sanitize_command_output,
     validate_command_path,
@@ -32,7 +32,7 @@ class CommandValidator:
     """Validates commands and arguments for safe execution."""
 
     # Whitelist of allowed commands
-    ALLOWED_COMMANDS = set()
+    ALLOWED_COMMANDS: set[str] = set()
 
     # Dangerous characters that could enable shell injection
     DANGEROUS_CHARS = {";", "|", "&", "$", "`", "\n", "\r"}

@@ -10,11 +10,12 @@ Provides tools for:
 - Data validation and querying
 """
 
-import json
 import csv
 import io
+import json
 import sys
 import xml.etree.ElementTree as ET
+from typing import Any, Dict
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import logger
@@ -23,7 +24,7 @@ from mcp_server.utils import logger
 try:
     import yaml
 except ImportError:
-    yaml = None
+    yaml = None  # type: ignore[assignment]
 
 # Import TOML support (Python 3.11+ has built-in tomllib)
 if sys.version_info >= (3, 11):
@@ -32,7 +33,7 @@ else:
     try:
         import tomli as tomllib
     except ImportError:
-        tomllib = None
+        tomllib = None  # type: ignore[assignment]
 
 
 @tool_handler
@@ -175,16 +176,16 @@ def json_to_csv(json_string: str) -> str:
             return ""
 
         # Get all unique keys from all objects
-        keys = set()
+        keys: set[str] = set()
         for item in data:
             if isinstance(item, dict):
                 keys.update(item.keys())
 
-        keys = sorted(keys)
+        sorted_keys: list[str] = sorted(keys)
 
         # Create CSV
         output = io.StringIO()
-        writer = csv.DictWriter(output, fieldnames=keys)
+        writer = csv.DictWriter(output, fieldnames=sorted_keys)
         writer.writeheader()
 
         for item in data:
@@ -245,7 +246,7 @@ def validate_json_schema(json_string: str) -> str:
     try:
         data = json.loads(json_string)
 
-        def analyze_structure(obj, depth=0):
+        def analyze_structure(obj: Any, depth: int = 0) -> Dict[str, Any]:
             if isinstance(obj, dict):
                 return {"type": "object", "keys": len(obj), "depth": depth}
             elif isinstance(obj, list):
@@ -294,8 +295,8 @@ def flatten_json(json_string: str, separator: str = ".") -> str:
     try:
         data = json.loads(json_string)
 
-        def flatten(obj, parent_key=""):
-            items = []
+        def flatten(obj: Any, parent_key: str = "") -> Dict[str, Any]:
+            items: list[tuple[str, Any]] = []
             if isinstance(obj, dict):
                 for k, v in obj.items():
                     new_key = f"{parent_key}{separator}{k}" if parent_key else k
@@ -343,7 +344,7 @@ def merge_json(json_string1: str, json_string2: str, deep: bool = True) -> str:
         if not isinstance(data1, dict) or not isinstance(data2, dict):
             return '{"error": "Both JSON inputs must be objects"}'
 
-        def deep_merge(dict1, dict2):
+        def deep_merge(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
             result = dict1.copy()
             for key, value in dict2.items():
                 if key in result and isinstance(result[key], dict) and isinstance(value, dict):
@@ -379,8 +380,8 @@ def xml_to_json(xml_string: str) -> str:
     try:
         root = ET.fromstring(xml_string)
 
-        def element_to_dict(element):
-            result = {}
+        def element_to_dict(element: ET.Element) -> Any:
+            result: Dict[str, Any] = {}
 
             # Add attributes
             if element.attrib:
@@ -391,7 +392,7 @@ def xml_to_json(xml_string: str) -> str:
                 result["text"] = element.text.strip()
 
             # Add children
-            children = {}
+            children: Dict[str, Any] = {}
             for child in element:
                 child_data = element_to_dict(child)
                 if child.tag in children:

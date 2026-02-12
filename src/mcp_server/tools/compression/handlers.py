@@ -8,18 +8,18 @@ Provides tools for:
 """
 
 import json
-import zipfile
 import tarfile
-from typing import List
+import zipfile
+from typing import List, Optional
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import (
-    logger,
-    ValidationError,
     FileOperationError,
-    sanitize_path,
-    safe_get_file_size,
+    ValidationError,
     format_bytes,
+    logger,
+    safe_get_file_size,
+    sanitize_path,
     validate_archive_safety,
 )
 
@@ -99,7 +99,7 @@ def compress_zip(files: List[str], output_path: str, compression_level: int = 6)
 
 
 @tool_handler
-def extract_zip(zip_path: str, extract_to: str = ".", password: str = None) -> str:
+def extract_zip(zip_path: str, extract_to: str = ".", password: Optional[str] = None) -> str:
     """
     Extract a ZIP archive.
 
@@ -222,10 +222,10 @@ def compress_tar(files: List[str], output_path: str, compression: str = "gz") ->
         output.parent.mkdir(parents=True, exist_ok=True)
 
         # 确定压缩模式
-        mode_map = {"none": "w", "gz": "w:gz", "bz2": "w:bz2"}
-        mode = mode_map[compression]
+        mode_map: dict[str, str] = {"none": "w", "gz": "w:gz", "bz2": "w:bz2"}
+        tar_mode = mode_map[compression]
 
-        with tarfile.open(output, mode) as tf:
+        with tarfile.open(str(output), tar_mode) as tf:  # type: ignore[call-overload]
             for p in validated_files:
                 tf.add(p, arcname=p.name)
 
@@ -378,7 +378,7 @@ def list_archive_contents(archive_path: str) -> str:
                             {
                                 "name": member.name,
                                 "size": format_bytes(member.size),
-                                "modified": member.mtime,
+                                "modified": str(member.mtime),
                             }
                         )
                         total_size += member.size

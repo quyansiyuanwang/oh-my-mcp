@@ -11,22 +11,23 @@ Provides tools for:
 """
 
 import json
-from urllib.parse import urlparse, urljoin
+from typing import Any, Optional
+from urllib.parse import urljoin, urlparse
 
 import requests
 from bs4 import BeautifulSoup
 
 from ...utils import (
-    logger,
-    retry,
-    validate_url as _validate_url,
     NetworkError,
     ValidationError,
-    sanitize_path,
     format_bytes,
+    logger,
+    retry,
+    sanitize_path,
 )
-from ..search_engine import get_search_manager
+from ...utils import validate_url as _validate_url
 from ..registry import tool_handler
+from ..search_engine import get_search_manager
 
 # 获取搜索管理器实例
 search_manager = get_search_manager()
@@ -286,7 +287,8 @@ def fetch_webpage(url: str, timeout: int = 10) -> str:
         HTML content of the webpage
     """
     try:
-        return _fetch_webpage_helper(url, timeout)
+        result: str = _fetch_webpage_helper(url, timeout)
+        return result
     except Exception as e:
         logger.error(f"fetch_webpage tool failed: {e}")
         raise
@@ -451,10 +453,14 @@ def get_page_links(url: str, timeout: int = 10, absolute: bool = True) -> str:
         for a_tag in soup.find_all("a", href=True):
             href = a_tag["href"]
 
-            if absolute and not href.startswith(("http://", "https://", "//")):
+            if (
+                absolute
+                and isinstance(href, str)
+                and not href.startswith(("http://", "https://", "//"))
+            ):
                 href = urljoin(url, href)
 
-            links.append({"url": href, "text": a_tag.get_text(strip=True)})
+            links.append({"url": str(href), "text": a_tag.get_text(strip=True)})
 
         return json.dumps(
             {"source_url": url, "count": len(links), "links": links},
@@ -605,7 +611,7 @@ def http_request(
     url: str,
     method: str = "GET",
     headers: str = "{}",
-    body: str = None,
+    body: Optional[str] = None,
     timeout: int = 10,
 ) -> str:
     """
@@ -702,25 +708,25 @@ def get_network_info() -> str:
         stats = psutil.net_if_stats()
 
         for interface_name, addr_list in addrs.items():
-            interface_info = {
+            interface_info: dict[str, Any] = {
                 "name": interface_name,
                 "addresses": [],
                 "is_up": stats[interface_name].isup if interface_name in stats else False,
             }
 
             for addr in addr_list:
-                addr_info = {"family": str(addr.family)}
+                addr_info: dict[str, str] = {"family": str(addr.family)}
                 if addr.family.name == "AF_INET":
                     addr_info["type"] = "IPv4"
-                    addr_info["address"] = addr.address
-                    addr_info["netmask"] = addr.netmask
+                    addr_info["address"] = addr.address or ""
+                    addr_info["netmask"] = addr.netmask or ""
                 elif addr.family.name == "AF_INET6":
                     addr_info["type"] = "IPv6"
-                    addr_info["address"] = addr.address
-                    addr_info["netmask"] = addr.netmask
+                    addr_info["address"] = addr.address or ""
+                    addr_info["netmask"] = addr.netmask or ""
                 elif addr.family.name == "AF_LINK":
                     addr_info["type"] = "MAC"
-                    addr_info["address"] = addr.address
+                    addr_info["address"] = addr.address or ""
 
                 interface_info["addresses"].append(addr_info)
 

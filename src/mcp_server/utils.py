@@ -368,8 +368,8 @@ def validate_archive_safety(archive_path: Path, max_size: int = MAX_EXTRACT_SIZE
     Raises:
         ValidationError: If archive is unsafe (too large, suspicious compression ratio)
     """
-    import zipfile
     import tarfile
+    import zipfile
 
     try:
         file_ext = archive_path.suffix.lower()

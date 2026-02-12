@@ -11,12 +11,13 @@ Provides tools for:
 """
 
 import hashlib
-import uuid
-import random
-import string
-import secrets
-from datetime import datetime
 import json
+import random
+import secrets
+import string
+import uuid
+from datetime import datetime
+from typing import Any, Dict
 
 from dateutil import parser as date_parser
 
@@ -203,7 +204,7 @@ def calculate_date_diff(date1: str, date2: str, unit: str = "days") -> str:
         # Calculate in different units
         total_seconds = diff.total_seconds()
 
-        result = {
+        result: Dict[str, Any] = {
             "date1": dt1.isoformat(),
             "date2": dt2.isoformat(),
             "difference": {

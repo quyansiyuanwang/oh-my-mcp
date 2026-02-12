@@ -10,6 +10,7 @@ Author: MCP Server Project
 import sys
 from pathlib import Path
 from typing import Any
+
 from fastmcp import FastMCP
 
 # Import tomllib for Python 3.11+ or fall back to tomli
@@ -34,7 +35,8 @@ def get_version() -> str:
         pyproject_path = Path(__file__).parent.parent.parent / "pyproject.toml"
         with open(pyproject_path, "rb") as f:
             data = tomllib.load(f)
-            return data.get("project", {}).get("version", "0.1.0")
+            version: str = data.get("project", {}).get("version", "0.1.0")
+            return version
     except Exception:
         return "0.1.0"
 

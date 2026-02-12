@@ -9,24 +9,24 @@ Provides tools for:
 - File comparison and diff
 """
 
-import shutil
 import difflib
-import json
 import glob
+import json
+import shutil
 from pathlib import Path
 from typing import Any
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import (
-    logger,
-    sanitize_path,
-    safe_read_file,
-    safe_write_file,
-    safe_get_file_size,
-    format_bytes,
-    format_timestamp,
     FileOperationError,
     ValidationError,
+    format_bytes,
+    format_timestamp,
+    logger,
+    safe_get_file_size,
+    safe_read_file,
+    safe_write_file,
+    sanitize_path,
 )
 
 

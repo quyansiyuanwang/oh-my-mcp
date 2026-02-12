@@ -9,12 +9,13 @@ Provides tools for:
 - Text summarization and manipulation
 """
 
-import re
 import base64
 import json
+import re
+from typing import Any, Dict
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import logger, extract_text_by_regex, truncate_text, ValidationError
+from mcp_server.utils import ValidationError, extract_text_by_regex, logger, truncate_text
 
 
 @tool_handler
@@ -37,7 +38,7 @@ def count_words(text: str, detailed: bool = True) -> str:
         char_count_no_spaces = len(text.replace(" ", ""))
         line_count = len(text.splitlines())
 
-        result = {
+        result: Dict[str, Any] = {
             "word_count": word_count,
             "character_count": char_count,
             "character_count_no_spaces": char_count_no_spaces,
@@ -330,13 +331,13 @@ def calculate_text_similarity(text1: str, text2: str, method: str = "levenshtein
 
         if method == "levenshtein":
             # Levenshtein 距离算法（编辑距离）
-            def levenshtein_distance(s1, s2):
+            def levenshtein_distance(s1: str, s2: str) -> int:
                 if len(s1) < len(s2):
                     return levenshtein_distance(s2, s1)
                 if len(s2) == 0:
                     return len(s1)
 
-                previous_row = range(len(s2) + 1)
+                previous_row: list[int] = list(range(len(s2) + 1))
                 for i, c1 in enumerate(s1):
                     current_row = [i + 1]
                     for j, c2 in enumerate(s2):
@@ -368,7 +369,7 @@ def calculate_text_similarity(text1: str, text2: str, method: str = "levenshtein
 
         else:  # jaccard
             # Jaccard 相似度（基于集合）
-            def jaccard_similarity(s1, s2):
+            def jaccard_similarity(s1: str, s2: str) -> float:
                 # 转换为单词集合
                 set1 = set(s1.lower().split())
                 set2 = set(s2.lower().split())
