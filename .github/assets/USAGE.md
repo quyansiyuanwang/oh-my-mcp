@@ -39,80 +39,60 @@ You should see the MCP server start and display available tools.
 
 ## Available Tools | 可用工具
 
-This MCP server includes **86 tools** across 8 categories:
+This MCP server includes tools across multiple categories. Ask your AI assistant *"What MCP tools are available?"* to see the full list.
+本 MCP 服务器包含多个类别的工具。向你的 AI 助手提问 *"有哪些可用的 MCP 工具？"* 查看完整列表。
 
-### 📁 File Operations (12 tools) | 文件操作
+### 📁 File Operations | 文件操作
 
 - Read, write, append, delete files
 - File information and existence checks
 - Directory operations
 - File comparison
 
-### 🗜️ Compression (5 tools) | 压缩操作
+### 🗜️ Compression | 压缩操作
 
 - Create and extract TAR archives
 - Create and extract ZIP archives
 - List archive contents
 
-### 📊 Data Processing (15 tools) | 数据处理
+### 📊 Data Processing | 数据处理
 
 - JSON: parse, validate, merge, extract
 - CSV: convert to/from JSON
 - XML: convert to JSON
 - YAML: convert to/from JSON
 - TOML: convert to JSON
-- Email extraction from text
 
-### 📝 Text Processing (9 tools) | 文本处理
+### 📝 Text Processing | 文本处理
 
-- Text comparison (diff)
-- Case conversion
-- Word count and statistics
-- String similarity
-- URL extraction
-- Text search and replace
+- Word count, regex, text similarity
+- Base64 encoding/decoding
+- URL and email extraction
 
-### 🌐 Web Operations (15 tools) | Web操作
+### 🌐 Web Operations | Web操作
 
 - HTTP requests (GET, POST, PUT, DELETE)
-- Web scraping with CSS selectors
-- HTML parsing
-- URL validation
-- HTTP status checking
-- Download files
-- Extract page titles and headers
-- Search the web using DuckDuckGo
+- Web scraping and HTML parsing
+- URL validation and DNS lookup
+- Web search via DuckDuckGo
 
-### 💻 System Monitoring (8 tools) | 系统监控
+### 💻 System Monitoring | 系统监控
 
-- CPU usage and information
-- Memory statistics
-- Disk usage
-- Process information
+- CPU, memory, disk, process info
 - Network statistics
-- Environment variables
-- System uptime
+- Environment variables and uptime
 
-### 🔧 Utility Tools (10 tools) | 实用工具
+### 🔧 Utility Tools | 实用工具
 
-- UUID generation
-- Password generation
-- Random data generation
-- Hashing (MD5, SHA1, SHA256, SHA512)
-- Base64 encoding/decoding
-- Date/time operations
-- Timestamp conversion
+- UUID, hash, password generation
+- Date/time and timestamp operations
 - Mathematical expression evaluation
-- Password strength checking
-- DNS lookup
 
-### 🤖 Subagent (6 tools) | 子代理
+### 🤖 Subagent | 子代理
 
 - AI task delegation to OpenAI and Anthropic
-- Parallel task execution
-- Batch processing
+- Parallel and conditional task execution
 - Token usage tracking
-- Cost calculation
 
 ## Configuration | 配置
 
@@ -156,13 +136,24 @@ macOS/Linux:
 
 **Restart:** After updating configuration, completely quit (Cmd+Q on macOS, Exit from system tray on Windows) and restart Claude Desktop.
 
-### Claude Code (VS Code Extension)
+### Claude Code (VS Code / CLI)
 
-Claude Code can also use MCP servers. Configure it in VS Code settings:
+The fastest way is via CLI:
+最快的方式是通过命令行：
 
-1. Open VS Code Settings (Cmd+, or Ctrl+,)
-2. Search for "Claude MCP"
-3. Add server configuration or edit `settings.json`:
+```bash
+# Add this server | 添加此服务器
+claude mcp add mcp-server /absolute/path/to/mcp-server/mcp-server
+
+# Windows example | Windows 示例
+claude mcp add mcp-server C:\mcp-server\mcp-server\mcp-server.exe
+
+# Verify | 验证
+claude mcp list
+```
+
+Or edit VS Code `settings.json`:
+或编辑 VS Code `settings.json`：
 
 ```json
 {
@@ -173,6 +164,36 @@ Claude Code can also use MCP servers. Configure it in VS Code settings:
   }
 }
 ```
+
+### Cursor
+
+Edit `~/.cursor/mcp.json` (global) or `<project>/.cursor/mcp.json` (project-level):
+编辑 `~/.cursor/mcp.json`（全局）或 `<project>/.cursor/mcp.json`（项目级）：
+
+```json
+{
+  "mcpServers": {
+    "mcp-server": {
+      "command": "/absolute/path/to/mcp-server/mcp-server"
+    }
+  }
+}
+```
+
+Windows:
+
+```json
+{
+  "mcpServers": {
+    "mcp-server": {
+      "command": "C:\\mcp-server\\mcp-server\\mcp-server.exe"
+    }
+  }
+}
+```
+
+**Restart:** After saving, restart Cursor to apply changes.
+**重启：** 保存后重启 Cursor 以生效。
 
 ### ccswitch (MCP Server Manager)
 
@@ -218,7 +239,7 @@ This server follows the [Model Context Protocol](https://modelcontextprotocol.io
 
 ### Q: Why are Python/UV/Pylance tools not available?
 
-**A:** These tools have been removed because they require external Python interpreters and package managers that are not bundled with the executable. The remaining 86 tools work completely standalone without any external dependencies.
+**A:** These tools have been removed because they require external Python interpreters and package managers that are not bundled with the executable. All remaining tools work completely standalone without any external dependencies.
 
 ### Q: Can I run multiple MCP servers simultaneously?
 
