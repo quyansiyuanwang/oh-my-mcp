@@ -1,6 +1,6 @@
 # Comprehensive MCP Server
 
-A powerful Model Context Protocol (MCP) server with **86 practical tools** across 8 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+A powerful Model Context Protocol (MCP) server with **83 practical tools** across 8 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/mcp-server/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/mcp-server/actions/workflows/build-release.yml)
 
@@ -9,7 +9,7 @@ A powerful Model Context Protocol (MCP) server with **86 practical tools** acros
 This comprehensive MCP server provides tools for:
 
 - **📦 Compression** (5 tools): ZIP/TAR compression and extraction with security features
-- **🌐 Web & Network** (15 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup
+- **🌐 Web & Network** (18 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup
 - **📁 File System** (12 tools): Read, write, search files and directories, file comparison
 - **📊 Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
 - **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
@@ -22,10 +22,10 @@ This comprehensive MCP server provides tools for:
 ## 📚 Documentation
 
 - **[📖 Documentation Index](docs/README.md)** - Complete documentation hub (中文)
-- **[🏗️ Project Structure](docs/PROJECT_STRUCTURE.md)** - Detailed project organization
-- **[🎯 Setup Guide](docs/SETUP_GUIDE.md)** - Interactive configuration wizard guide
-- **[📦 Build Guide](docs/BUILD.md)** - Package for Windows/Linux distribution
-- **[🏛️ Architecture Guide](docs/ARCHITECTURE.md)** - System architecture and design
+- **[🏗️ Project Structure](docs/en/PROJECT_STRUCTURE.md)** - Detailed project organization
+- **[🎯 Setup Guide](docs/zh/SETUP_GUIDE.md)** - Interactive configuration wizard guide
+- **[📦 Build Guide](docs/en/BUILD.md)** - Package for Windows/Linux distribution
+- **[🏛️ Architecture Guide](docs/en/ARCHITECTURE.md)** - System architecture and design
 - **[🧪 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md)** - AI orchestration features
 
 ### ⚡ Quick Setup
@@ -43,7 +43,7 @@ This will guide you through:
 - Subagent API configuration (OpenAI/Anthropic)
 - Claude Desktop integration
 
-📖 **[完整配置指南 (Setup Guide)](docs/SETUP_GUIDE.md)** | **[中文配置指南 (Chinese Guide)](docs/CONFIGURATION_GUIDE_CN.md)**
+📖 **[完整配置指南 (Setup Guide)](docs/zh/SETUP_GUIDE.md)** | **[中文配置指南 (Chinese Guide)](docs/zh/CONFIGURATION_GUIDE_CN.md)**
 
 **Alternative: Quick Claude Desktop config:**
 
@@ -96,7 +96,7 @@ The easiest way to configure MCP clients (like Claude Desktop):
 
 ```bash
 # Install configuration directly to Claude Desktop
-python generate_config.py --claude
+python -m mcp_server.cli.config --claude
 ```
 
 This will automatically:
@@ -109,10 +109,10 @@ This will automatically:
 
 ```bash
 # Run a configuration server on port 8765
-python generate_config.py --http-server
+python -m mcp_server.cli.config --http-server
 
 # With custom port
-python generate_config.py --http-server --port 9000
+python -m mcp_server.cli.config --http-server --port 9000
 ```
 
 Then access the configuration at:
@@ -125,13 +125,13 @@ Then access the configuration at:
 
 ```bash
 # Generate mcp_config.json
-python generate_config.py
+python -m mcp_server.cli.config
 
 # Custom output file
-python generate_config.py --output my_config.json
+python -m mcp_server.cli.config --output my_config.json
 
 # Show configuration in console
-python generate_config.py --show-config
+python -m mcp_server.cli.config --show-config
 ```
 
 ### Manual Configuration
@@ -147,23 +147,23 @@ For Claude Desktop, add to your `claude_desktop_config.json`:
   "mcpServers": {
     "comprehensive-mcp": {
       "command": "path/to/python.exe",
-      "args": ["path/to/mcp-server/main.py"],
+      "args": ["-m", "mcp_server.main"],
       "env": {},
-      "description": "Comprehensive MCP Server with 74+ practical tools"
+      "description": "Comprehensive MCP Server with 83 practical tools"
     }
   }
 }
 ```
 
-Use `python generate_config.py --show-config` to get the exact paths for your system.
+Use `python -m mcp_server.cli.config --show-config` to get the exact paths for your system.
 
 ### Start the Server Directly
 
 ```bash
-python main.py
+python -m mcp_server.main
 ```
 
-The server will start and register all 77+ tools, ready to accept MCP connections.
+The server will start and register all 83 tools, ready to accept MCP connections.
 
 ### Server Logs
 
@@ -225,7 +225,7 @@ list_archive_contents(archive_path="archive.zip")
 
 ---
 
-### 🌐 Web & Network Tools (15)
+### 🌐 Web & Network Tools (18)
 
 #### `web_search`
 
@@ -368,7 +368,7 @@ dns_lookup(hostname="example.com", record_type="A")
 
 ---
 
-### 📁 File System Tools (10)
+### 📁 File System Tools (12)
 
 #### `read_file`
 
@@ -482,7 +482,7 @@ diff_text(text1="Hello World", text2="Hello Universe", format="unified")
 
 ---
 
-### 📊 Data Processing Tools (10)
+### 📊 Data Processing Tools (15)
 
 #### `parse_json`
 
@@ -621,7 +621,7 @@ toml_to_json(toml_string='[section]\nkey = "value"', indent=2)
 
 ---
 
-### 📝 Text Processing Tools (8)
+### 📝 Text Processing Tools (9)
 
 #### `count_words`
 
@@ -784,7 +784,7 @@ get_process_info()
 
 ---
 
-### 🛠️ Utility Tools (8)
+### 🛠️ Utility Tools (10)
 
 #### `generate_uuid`
 
@@ -922,7 +922,7 @@ subagent_call(
     temperature=0.7
 )
 # Returns: JSON with result, token usage, cost, and status
-# Supported models: GPT-3.5/4, Claude-3 series, GLM-4 series
+# Supported models: GPT-3.5/4, Claude-3 series
 # Features: Auto-retry, cost tracking, token counting
 ```
 
@@ -1040,28 +1040,40 @@ Errors are returned as JSON with descriptive messages.
 
 ```
 mcp-server/
-├── main.py                      # Entry point
 ├── pyproject.toml               # Dependencies
+├── configure.py                 # Interactive setup wizard
 ├── README.md                    # Documentation
-├── mcp_server/
-│   ├── __init__.py              # Package init
-│   ├── utils.py                 # Infrastructure & utilities
-│   ├── compression_tools.py     # Compression tools (ZIP, TAR)
-│   ├── web_tools.py             # Web & network tools
-│   ├── file_tools.py            # File system tools
-│   ├── data_tools.py            # Data processing tools
-│   ├── text_tools.py            # Text processing tools
-│   ├── system_tools.py          # System tools
-│   └── utility_tools.py         # Utility tools
-└── mcp_server.log               # Log file (generated)
+└── src/
+    └── mcp_server/
+        ├── __init__.py              # Package init
+        ├── main.py                  # Server entry point
+        ├── utils.py                 # Infrastructure & utilities
+        ├── command_executor.py      # Secure command execution
+        ├── cli/
+        │   └── config.py            # Configuration generator
+        └── tools/                   # Tool plugins (8 categories)
+            ├── __init__.py          # Plugin auto-discovery
+            ├── registry.py          # @tool_handler & ToolPlugin
+            ├── search_engine.py     # Web search backend
+            ├── subagent_config.py   # Subagent config manager
+            ├── compression/         # Compression tools (5)
+            ├── web/                 # Web & Network tools (18)
+            ├── file/                # File System tools (12)
+            ├── data/                # Data Processing tools (15)
+            ├── text/                # Text Processing tools (9)
+            ├── system/              # System tools (8)
+            ├── utility/             # Utility tools (10)
+            └── subagent/            # AI Orchestration tools (6)
 ```
 
 ### Adding New Tools
 
-Create a new tool in the appropriate module:
+Create a new tool in the appropriate plugin's `handlers.py`:
 
 ```python
-@mcp.tool()
+from mcp_server.tools.registry import tool_handler
+
+@tool_handler
 def your_tool(param: str) -> str:
     """Tool description.
 
@@ -1116,32 +1128,31 @@ This project is provided as-is for educational and practical use.
 ### Documentation
 
 - [📚 Documentation Hub](docs/README.md) - Complete documentation index (中文)
-- [🏗️ Project Structure](docs/PROJECT_STRUCTURE.md) - Project organization guide
-- [🏛️ Architecture](docs/ARCHITECTURE.md) - System architecture and design (中文)
-- [📋 Test Report](docs/TEST_REPORT.md) - Test coverage and results
+- [🏗️ Project Structure](docs/en/PROJECT_STRUCTURE.md) - Project organization guide
+- [🏛️ Architecture](docs/en/ARCHITECTURE.md) - System architecture and design
+- [📋 Test Report](tests/) - Test suite
 
 ### Configuration & Setup
 
-- [⚙️ Configuration Guide (CN)](docs/CONFIGURATION_GUIDE_CN.md) - Complete configuration reference
-- [🔧 Configure Script Guide (CN)](docs/CONFIGURE_CN.md) - Using configure.py
-- [🎯 Setup Guide](docs/SETUP_GUIDE.md) - Step-by-step setup instructions
+- [⚙️ Configuration Guide (CN)](docs/zh/CONFIGURATION_GUIDE_CN.md) - Complete configuration reference
+- [🎯 Setup Guide](docs/zh/SETUP_GUIDE.md) - Step-by-step setup instructions
 
 ### Build & Deploy
 
-- [📦 Build Guide](docs/BUILD.md) - Package for Windows/Linux
+- [📦 Build Guide](docs/en/BUILD.md) - Package for Windows/Linux
 - [🚀 Installation Guide](docs/en/INSTALLATION.md) - Installation details
 
 ### Advanced Features
 
 - [🤖 Subagent Configuration](docs/zh/SUBAGENT_CONFIG.md) - AI task delegation setup
 - [🧠 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md) - AI orchestration features
-- [🔍 Search Upgrade](docs/SEARCH_UPGRADE.md) - Search functionality enhancements
+- [🔍 Advanced Search](docs/zh/SEARCH_ADVANCED.md) - Search functionality details
 
 ### Developer Resources
 
-- [🏛️ Architecture Guide](docs/ARCHITECTURE.md) - System architecture and design
-- [🤝 Contributing Guide](docs/CONTRIBUTING.md) - How to contribute
-- [📝 Changelog](docs/CHANGELOG.md) - Version history
+- [🏛️ Architecture Guide](docs/en/ARCHITECTURE.md) - System architecture and design
+- [🤝 Contributing Guide](docs/en/CONTRIBUTING.md) - How to contribute
+- [📝 Changelog](docs/en/CHANGELOG.md) - Version history
 
 ## 🎉 Quick Start
 
@@ -1150,7 +1161,7 @@ This project is provided as-is for educational and practical use.
 pip install -e .
 
 # 2. Auto-configure for Claude Desktop
-python generate_config.py --claude
+python -m mcp_server.cli.config --claude
 
 # 3. Restart Claude Desktop and start using the tools!
 ```
@@ -1159,16 +1170,16 @@ python generate_config.py --claude
 
 ```bash
 # Generate configuration via HTTP
-python generate_config.py --http-server --port 8765
+python -m mcp_server.cli.config --http-server --port 8765
 ```
 
 **Or start the MCP server directly:**
 
 ```bash
-python main.py
+python -m mcp_server.main
 ```
 
-The server provides 77+ tools across 7 categories! Check the logs for startup confirmation.
+The server provides 83 tools across 8 categories! Check the logs for startup confirmation.
 
 ---
 
@@ -1176,20 +1187,20 @@ The server provides 77+ tools across 7 categories! Check the logs for startup co
 
 ### Configuration Generator Tool
 
-The `generate_config.py` script provides multiple ways to configure MCP clients:
+The `python -m mcp_server.cli.config` command provides multiple ways to configure MCP clients:
 
 ```bash
 # Quick install to Claude Desktop
-python generate_config.py --claude
+python -m mcp_server.cli.config --claude
 
 # Run HTTP server on custom port
-python generate_config.py --http-server --port 9000
+python -m mcp_server.cli.config --http-server --port 9000
 
 # Generate config file with custom server name
-python generate_config.py --server-name my-tools --output config.json
+python -m mcp_server.cli.config --server-name my-tools --output config.json
 
 # Show configuration in console
-python generate_config.py --show-config
+python -m mcp_server.cli.config --show-config
 ```
 
 ### Configuration Server Endpoints
@@ -1206,7 +1217,7 @@ Example usage:
 
 ```bash
 # Start server on port 8765
-python generate_config.py --http-server
+python -m mcp_server.cli.config --http-server
 
 # Get configuration
 curl http://localhost:8765/config
