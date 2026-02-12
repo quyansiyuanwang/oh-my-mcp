@@ -141,16 +141,6 @@ jobs:
           TOTAL_TOOLS=0
           TOOL_LINES=""
 
-          declare -A ICONS
-          ICONS[file]="📁"
-          ICONS[compression]="🗜️"
-          ICONS[data]="📊"
-          ICONS[text]="📝"
-          ICONS[web]="🌐"
-          ICONS[system]="💻"
-          ICONS[utility]="🔧"
-          ICONS[subagent]="🤖"
-
           for config in src/mcp_server/tools/*/config.yaml; do
             plugin_dir=$(dirname "$config")
             plugin_name=$(basename "$plugin_dir")
@@ -167,9 +157,8 @@ jobs:
 
             if [ "$tool_count" -gt 0 ] 2>/dev/null; then
               TOTAL_TOOLS=$((TOTAL_TOOLS + tool_count))
-              icon="${ICONS[$plugin_name]:-🔹}"
               TOOL_LINES="${TOOL_LINES}
-          - ${icon} **${category_name}** (${tool_count} tools)"
+          - **${category_name}** (${tool_count} tools)"
             fi
           done
 
@@ -185,9 +174,13 @@ jobs:
           sed -i "s/{{TOTAL_CATEGORIES}}/${TOTAL_CATEGORIES}/g" RELEASE_NOTES.md
           sed -i "s|{{REPO_URL}}|https://github.com/${{ github.repository }}|g" RELEASE_NOTES.md
           
-          # Replace tool lines (escape special characters for sed)
-          TOOL_LINES_ESCAPED=$(echo "$TOOL_LINES" | sed 's/[[\*^$()+?{|]/\\&/g')
-          sed -i "s|{{TOOL_LINES}}|${TOOL_LINES_ESCAPED}|g" RELEASE_NOTES.md
+          # Replace tool lines - write to temp file to avoid sed issues with special characters
+          {
+            sed '/{{TOOL_LINES}}/q' RELEASE_NOTES.md | sed '$d'
+            echo "$TOOL_LINES"
+            sed -n '/{{TOOL_LINES}}/,$p' RELEASE_NOTES.md | tail -n +2
+          } > RELEASE_NOTES.md.tmp
+          mv RELEASE_NOTES.md.tmp RELEASE_NOTES.md
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
