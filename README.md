@@ -1,8 +1,8 @@
 # Comprehensive MCP Server
 
-A powerful Model Context Protocol (MCP) server with **83 practical tools** across 8 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+A powerful Model Context Protocol (MCP) server with **116 practical tools** across 9 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
-[![Build and Release](https://github.com/quyansiyuanwang/mcp-server/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/mcp-server/actions/workflows/build-release.yml)
+[![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
 
 ## 🚀 Features
 
@@ -16,6 +16,7 @@ This comprehensive MCP server provides tools for:
 - **💻 System** (8 tools): System info, CPU/memory monitoring, environment variables
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
 - **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic), parallel execution, conditional branching, persistent config
+- **🌐 Browser Automation** (33 tools): Selenium-based browser control, page navigation, element interaction, screenshots, JavaScript execution, multi-tab management
 
 > **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
 
@@ -70,7 +71,7 @@ Access configuration at: `http://localhost:8765/config`
 
 ```bash
 # Clone or navigate to the project directory
-cd mcp-server
+cd oh-my-mcp
 
 # Install the package in development mode
 pip install -e .
@@ -149,7 +150,7 @@ For Claude Desktop, add to your `claude_desktop_config.json`:
       "command": "path/to/python.exe",
       "args": ["-m", "mcp_server.main"],
       "env": {},
-      "description": "Comprehensive MCP Server with 83 practical tools"
+      "description": "Comprehensive MCP Server with 116 practical tools"
     }
   }
 }
@@ -163,7 +164,7 @@ Use `python -m mcp_server.cli.config --show-config` to get the exact paths for y
 python -m mcp_server.main
 ```
 
-The server will start and register all 83 tools, ready to accept MCP connections.
+The server will start and register all 116 tools, ready to accept MCP connections.
 
 ### Server Logs
 
@@ -1039,7 +1040,7 @@ Errors are returned as JSON with descriptive messages.
 ### Project Structure
 
 ```
-mcp-server/
+oh-my-mcp/
 ├── pyproject.toml               # Dependencies
 ├── configure.py                 # Interactive setup wizard
 ├── README.md                    # Documentation
@@ -1051,7 +1052,7 @@ mcp-server/
         ├── command_executor.py      # Secure command execution
         ├── cli/
         │   └── config.py            # Configuration generator
-        └── tools/                   # Tool plugins (8 categories)
+        └── tools/                   # Tool plugins (9 categories)
             ├── __init__.py          # Plugin auto-discovery
             ├── registry.py          # @tool_handler & ToolPlugin
             ├── search_engine.py     # Web search backend
@@ -1179,7 +1180,7 @@ python -m mcp_server.cli.config --http-server --port 8765
 python -m mcp_server.main
 ```
 
-The server provides 83 tools across 8 categories! Check the logs for startup confirmation.
+The server provides 116 tools across 9 categories! Check the logs for startup confirmation.
 
 ---
 

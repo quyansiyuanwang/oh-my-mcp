@@ -45,8 +45,8 @@ python scripts/build/build.py
 
 **输出位置**：
 
-- Windows: `dist/mcp-server/mcp-server.exe`
-- Linux: `dist/mcp-server/mcp-server`
+- Windows: `dist/oh-my-mcp/oh-my-mcp.exe`
+- Linux: `dist/oh-my-mcp/oh-my-mcp`
 
 **优点**：
 
@@ -70,8 +70,8 @@ python scripts/build/build.py -F
 
 **输出位置**：
 
-- Windows: `dist/mcp-server.exe`
-- Linux: `dist/mcp-server`
+- Windows: `dist/oh-my-mcp.exe`
+- Linux: `dist/oh-my-mcp`
 
 **优点**：
 
@@ -141,7 +141,7 @@ scripts/build/build.sh --clean --onefile
 {
   "mcpServers": {
     "comprehensive-mcp": {
-      "command": "D:\\Developments\\mcp-server\\dist\\mcp-server\\mcp-server.exe"
+      "command": "D:\\Developments\\oh-my-mcp\\dist\\oh-my-mcp\\oh-my-mcp.exe"
     }
   }
 }
@@ -161,7 +161,7 @@ scripts/build/build.sh --clean --onefile
 {
   "mcpServers": {
     "comprehensive-mcp": {
-      "command": "/path/to/mcp-server/dist/mcp-server/mcp-server"
+      "command": "/path/to/oh-my-mcp/dist/oh-my-mcp/oh-my-mcp"
     }
   }
 }
@@ -176,17 +176,17 @@ scripts/build/build.sh --clean --onefile
 ### Windows
 
 ```powershell
-.\dist\mcp-server\mcp-server.exe
+.\dist\oh-my-mcp\oh-my-mcp.exe
 # 或单文件版本
-.\dist\mcp-server.exe
+.\dist\oh-my-mcp.exe
 ```
 
 ### Linux / macOS
 
 ```bash
-./dist/mcp-server/mcp-server
+./dist/oh-my-mcp/oh-my-mcp
 # 或单文件版本
-./dist/mcp-server
+./dist/oh-my-mcp
 ```
 
 服务器应该启动并显示：
@@ -206,21 +206,21 @@ Server ready to accept connections.
 
 ### 目录模式分发
 
-打包整个 `dist/mcp-server/` 目录：
+打包整个 `dist/oh-my-mcp/` 目录：
 
 ```bash
 # Windows
 cd dist
-Compress-Archive -Path mcp-server -DestinationPath mcp-server-windows.zip
+Compress-Archive -Path oh-my-mcp -DestinationPath oh-my-mcp-windows.zip
 
 # Linux
 cd dist
-tar -czf mcp-server-linux.tar.gz mcp-server/
+tar -czf oh-my-mcp-linux.tar.gz oh-my-mcp/
 ```
 
 ### 单文件分发
 
-直接分发 `dist/mcp-server.exe` (Windows) 或 `dist/mcp-server` (Linux)。
+直接分发 `dist/oh-my-mcp.exe` (Windows) 或 `dist/oh-my-mcp` (Linux)。
 
 ## 🔍 故障排除
 

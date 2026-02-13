@@ -5,7 +5,7 @@
 ## 📁 目录结构
 
 ```
-mcp-server/
+oh-my-mcp/
 │
 ├── 📂 src/                          # 源代码目录
 │   └── mcp_server/
@@ -18,7 +18,7 @@ mcp-server/
 │       │   ├── __init__.py
 │       │   └── config.py            # ⚙️ 配置生成器
 │       │
-│       └── 📂 tools/                # 工具插件目录 (8 个类别)
+│       └── 📂 tools/                # 工具插件目录 (9 个类别)
 │           ├── __init__.py          # 🔍 插件自动发现
 │           ├── registry.py          # 📋 @tool_handler 装饰器与 ToolPlugin
 │           ├── search_engine.py     # 🔎 搜索引擎后端
@@ -52,9 +52,14 @@ mcp-server/
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           └── 📂 subagent/         # 🤖 AI 编排 (6 tools)
+│           ├── 📂 subagent/         # 🤖 AI 编排 (6 tools)
+│           │   ├── __init__.py
+│           │   ├── config.yaml
+│           │   └── handlers.py
+│           └── 📂 browser/          # 🌐 浏览器自动化 (33 tools)
 │               ├── __init__.py
 │               ├── config.yaml
+│               ├── session_manager.py
 │               └── handlers.py
 │
 ├── 📂 docs/                         # 📚 文档目录
@@ -97,7 +102,7 @@ mcp-server/
 ├── 🔧 配置文件
 │   ├── pyproject.toml               # 📦 项目配置和依赖
 │   ├── pytest.ini                   # 🧪 pytest 配置
-│   ├── mcp-server.spec              # 📦 PyInstaller 配置
+    ├── oh-my-mcp.spec              # 📦 PyInstaller 配置
 │   ├── uv.lock                      # 🔒 UV 依赖锁定
 │   ├── .python-version              # 🐍 Python 版本
 │   └── configure.py                 # ⚙️ 交互式配置向导
@@ -231,7 +236,7 @@ python scripts/build/build.py
 python scripts/build/build.py --onefile
 
 # 4. 测试构建
-./dist/mcp-server/mcp-server
+./dist/oh-my-mcp/oh-my-mcp
 ```
 
 ## 📝 文档组织

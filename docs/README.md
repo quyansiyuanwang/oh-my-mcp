@@ -45,7 +45,7 @@
 
 ## 📊 Tool Categories | 工具分类
 
-**83 practical tools across 8 categories:**
+**116 practical tools across 9 categories:**
 
 - **Compression** (5 tools): ZIP/TAR archive operations
 - **Web & Network** (18 tools): Web search, scraping, downloads
@@ -55,6 +55,7 @@
 - **System** (8 tools): System information and monitoring
 - **Utilities** (10 tools): UUID, hashing, datetime
 - **Subagent AI** (6 tools): AI task orchestration with OpenAI and Anthropic
+- **Browser Automation** (33 tools): Selenium-based browser control, navigation, screenshots
 
 ---
 
@@ -82,6 +83,6 @@ docs/
 
 ## 🔗 External Links | 外部链接
 
-- [GitHub Repository](https://github.com/quyansiyuanwang/mcp-server)
+- [GitHub Repository](https://github.com/quyansiyuanwang/oh-my-mcp)
 - [MCP Protocol](https://modelcontextprotocol.io)
 - [FastMCP Framework](https://github.com/jlowin/fastmcp)

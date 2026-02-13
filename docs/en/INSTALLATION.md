@@ -14,11 +14,11 @@
 
 ```bash
 # 从 PyPI 安装（发布后）
-pip install mcp-server
+pip install oh-my-mcp
 
 # 或从源码安装
-git clone https://github.com/quyansiyuanwang/mcp-server.git
-cd mcp-server
+git clone https://github.com/quyansiyuanwang/oh-my-mcp.git
+cd oh-my-mcp
 pip install -e .
 ```
 
@@ -26,8 +26,8 @@ pip install -e .
 
 ```bash
 # 克隆仓库
-git clone https://github.com/quyansiyuanwang/mcp-server.git
-cd mcp-server
+git clone https://github.com/quyansiyuanwang/oh-my-mcp.git
+cd oh-my-mcp
 
 # 使用 UV 安装
 uv pip install -e .
@@ -42,7 +42,7 @@ uv pip install -e .
 python -c "import mcp_server; print(mcp_server.__version__)"
 
 # 运行服务器
-mcp-server
+oh-my-mcp
 ```
 
 ## 配置 Claude Desktop
@@ -67,7 +67,7 @@ python -m mcp_server.cli.config --claude
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
+    "oh-my-mcp": {
       "command": "python",
       "args": ["-m", "mcp_server.main"]
     }
@@ -81,8 +81,8 @@ python -m mcp_server.cli.config --claude
 
 ```bash
 # 克隆仓库
-git clone https://github.com/quyansiyuanwang/mcp-server.git
-cd mcp-server
+git clone https://github.com/quyansiyuanwang/oh-my-mcp.git
+cd oh-my-mcp
 
 # 安装开发依赖
 pip install -e ".[dev]"
@@ -111,7 +111,7 @@ pytest tests/
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install mcp-server
+pip install oh-my-mcp
 ```
 
 ## 下一步

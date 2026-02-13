@@ -5,7 +5,7 @@
 ## 项目结构
 
 ```
-mcp-server/
+oh-my-mcp/
 ├── src/mcp_server/              # 源代码
 │   ├── main.py                  # 服务器入口点
 │   ├── utils.py                 # 共享工具和基础设施
@@ -36,8 +36,12 @@ mcp-server/
 │   │   ├── utility/             # 实用工具 (10 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
-│   │   └── subagent/            # AI 编排 (6 tools)
+│   │   ├── subagent/            # AI 编排 (6 tools)
+│   │   │   ├── config.yaml
+│   │   │   └── handlers.py
+│   │   └── browser/             # 浏览器自动化 (33 tools)
 │   │       ├── config.yaml
+│   │       ├── session_manager.py
 │   │       └── handlers.py
 │   └── cli/                     # 命令行工具
 │       └── config.py            # 配置生成器

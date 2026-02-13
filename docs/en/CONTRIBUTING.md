@@ -14,8 +14,8 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/quyansiyuanwang/mcp-server.git
-cd mcp-server
+git clone https://github.com/quyansiyuanwang/oh-my-mcp.git
+cd oh-my-mcp
 
 # 创建虚拟环境
 python -m venv .venv

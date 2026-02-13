@@ -281,7 +281,7 @@ python examples/subagent_config_example.py
 ### 3. 运行 MCP 服务器
 
 ```bash
-mcp-server
+oh-my-mcp
 ```
 
 ## 常见问题
@@ -364,7 +364,7 @@ uv run configure.py
 2. **运行 MCP 服务器**
 
    ```bash
-   mcp-server
+   oh-my-mcp
    ```
 
 3. **学习更多**
@@ -471,5 +471,5 @@ uv run configure.py --no-color
 如有问题或建议，请：
 
 - 查看 [文档目录](./README.md)
-- 提交 [Issue](https://github.com/your-repo/mcp-server/issues)
+- 提交 [Issue](https://github.com/quyansiyuanwang/oh-my-mcp/issues)
 - 参考 [示例代码](../examples/)

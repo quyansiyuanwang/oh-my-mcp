@@ -54,5 +54,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete test suite
 - Documentation and examples
 
-[0.1.1]: https://github.com/quyansiyuanwang/mcp-server/compare/v0.1.0...v0.1.1
-[0.1.0]: https://github.com/quyansiyuanwang/mcp-server/releases/tag/v0.1.0
+[0.1.1]: https://github.com/quyansiyuanwang/oh-my-mcp/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/quyansiyuanwang/oh-my-mcp/releases/tag/v0.1.0

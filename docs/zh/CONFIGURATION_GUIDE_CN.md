@@ -116,7 +116,7 @@ python -m mcp_server.cli.config --server-name my-mcp-tools --output config.json
 
 ```bash
 # 克隆或进入项目目录
-cd mcp-server
+cd oh-my-mcp
 
 # 安装依赖
 pip install -e .
