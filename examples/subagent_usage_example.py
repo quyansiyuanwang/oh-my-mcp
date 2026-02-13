@@ -446,7 +446,7 @@ def main():
     print("=" * 60)
     print("\nFor more information, see docs/SUBAGENT_GUIDE.md")
     print("For configuration help, see docs/SUBAGENT_CONFIG.md")
-    print("\n📚 Documentation: https://github.com/your-repo/mcp-server")
+    print("\n📚 Documentation: https://github.com/quyansiyuanwang/oh-my-mcp")
 
 
 if __name__ == "__main__":

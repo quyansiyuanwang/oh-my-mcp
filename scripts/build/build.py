@@ -198,7 +198,7 @@ def build_executable(onefile: bool = False) -> bool:
         "-m",
         "PyInstaller",
         "--name",
-        "mcp-server",
+        "oh-my-mcp",
         "--console",  # Console application
         "--noconfirm",  # Replace output directory without asking
     ]
@@ -260,11 +260,11 @@ def show_build_info():
     plat = get_platform_info()
 
     if plat["is_windows"]:
-        exe_path = Path("dist/mcp-server/mcp-server.exe")
-        onefile_path = Path("dist/mcp-server.exe")
+        exe_path = Path("dist/oh-my-mcp/oh-my-mcp.exe")
+        onefile_path = Path("dist/oh-my-mcp.exe")
     else:
-        exe_path = Path("dist/mcp-server/mcp-server")
-        onefile_path = Path("dist/mcp-server")
+        exe_path = Path("dist/oh-my-mcp/oh-my-mcp")
+        onefile_path = Path("dist/oh-my-mcp")
 
     if onefile_path.exists():
         size_mb = onefile_path.stat().st_size / (1024 * 1024)
