@@ -348,12 +348,22 @@ class TestScreenshot:
 
     def test_browser_screenshot_base64(self, mock_mcp, mock_session_manager, mock_driver):
         """Test browser_screenshot returns base64."""
-        result = mock_mcp.tools["browser_screenshot"]("test-session-123")
-        data = json.loads(result)
+        from mcp_server.tools.browser.browser_config import BrowserConfig
 
-        assert data["success"] is True
-        assert "base64" in data
-        assert data["format"] == "png"
+        # Mock config with no screenshot_dir to ensure base64 response
+        test_config = BrowserConfig()
+        test_config._config = {"screenshot_dir": None}
+
+        with patch(
+            "mcp_server.tools.browser.handlers.get_browser_config",
+            return_value=test_config,
+        ):
+            result = mock_mcp.tools["browser_screenshot"]("test-session-123")
+            data = json.loads(result)
+
+            assert data["success"] is True
+            assert "base64" in data
+            assert data["format"] == "png"
 
     def test_browser_screenshot_save(self, mock_mcp, mock_session_manager, mock_driver, tmp_path):
         """Test browser_screenshot saves to file."""
