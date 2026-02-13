@@ -7,14 +7,14 @@
 **Windows:**
 
 ```powershell
-Expand-Archive -Path mcp-server-windows-x64.zip -DestinationPath C:\mcp-server
+Expand-Archive -Path oh-my-mcp-windows-x64.zip -DestinationPath C:\oh-my-mcp
 ```
 
 **Linux/macOS:**
 
 ```bash
-tar -xzf mcp-server-*.tar.gz
-cd mcp-server
+tar -xzf oh-my-mcp-*.tar.gz
+cd oh-my-mcp
 ```
 
 ### 2. Verify Installation | 验证安装
@@ -24,15 +24,15 @@ Run the executable to ensure it works:
 **Windows:**
 
 ```powershell
-cd C:\mcp-server\mcp-server
-.\mcp-server.exe
+cd C:\oh-my-mcp\oh-my-mcp
+.\oh-my-mcp.exe
 ```
 
 **Linux/macOS:**
 
 ```bash
-cd mcp-server
-./mcp-server
+cd oh-my-mcp
+./oh-my-mcp
 ```
 
 You should see the MCP server start and display available tools.
@@ -113,8 +113,8 @@ Windows:
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "C:\\mcp-server\\mcp-server\\mcp-server.exe"
+    "oh-my-mcp": {
+      "command": "C:\\oh-my-mcp\\oh-my-mcp\\oh-my-mcp.exe"
     }
   }
 }
@@ -125,8 +125,8 @@ macOS/Linux:
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "/absolute/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/absolute/path/to/oh-my-mcp/oh-my-mcp"
     }
   }
 }
@@ -143,10 +143,10 @@ The fastest way is via CLI:
 
 ```bash
 # Add this server | 添加此服务器
-claude mcp add mcp-server /absolute/path/to/mcp-server/mcp-server
+claude mcp add oh-my-mcp /absolute/path/to/oh-my-mcp/oh-my-mcp
 
 # Windows example | Windows 示例
-claude mcp add mcp-server C:\mcp-server\mcp-server\mcp-server.exe
+claude mcp add oh-my-mcp C:\oh-my-mcp\oh-my-mcp\oh-my-mcp.exe
 
 # Verify | 验证
 claude mcp list
@@ -158,8 +158,8 @@ Or edit VS Code `settings.json`:
 ```json
 {
   "claude.mcpServers": {
-    "mcp-server": {
-      "command": "/absolute/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/absolute/path/to/oh-my-mcp/oh-my-mcp"
     }
   }
 }
@@ -173,8 +173,8 @@ Edit `~/.cursor/mcp.json` (global) or `<project>/.cursor/mcp.json` (project-leve
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "/absolute/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/absolute/path/to/oh-my-mcp/oh-my-mcp"
     }
   }
 }
@@ -185,8 +185,8 @@ Windows:
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "C:\\mcp-server\\mcp-server\\mcp-server.exe"
+    "oh-my-mcp": {
+      "command": "C:\\oh-my-mcp\\oh-my-mcp\\oh-my-mcp.exe"
     }
   }
 }
@@ -208,13 +208,13 @@ npm install -g ccswitch
 **Add this server:**
 
 ```bash
-ccswitch add mcp-server /path/to/mcp-server/mcp-server
+ccswitch add oh-my-mcp /path/to/oh-my-mcp/oh-my-mcp
 ```
 
 **Switch between servers:**
 
 ```bash
-ccswitch use mcp-server
+ccswitch use oh-my-mcp
 ```
 
 **List all servers:**
@@ -248,8 +248,8 @@ This server follows the [Model Context Protocol](https://modelcontextprotocol.io
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/path/to/oh-my-mcp/oh-my-mcp"
     },
     "another-server": {
       "command": "/path/to/another-server"
@@ -272,7 +272,7 @@ This server follows the [Model Context Protocol](https://modelcontextprotocol.io
 **A:** Check these common issues:
 
 - Verify the path to the executable is absolute and correct
-- Ensure the executable has execute permissions (Linux/macOS: `chmod +x mcp-server`)
+- Ensure the executable has execute permissions (Linux/macOS: `chmod +x oh-my-mcp`)
 - Check if your MCP client requires a restart after configuration changes
 - Look for error messages in your client's logs
 
@@ -280,9 +280,9 @@ This server follows the [Model Context Protocol](https://modelcontextprotocol.io
 
 **A:**
 
-1. Check the [Documentation](https://github.com/quyansiyuanwang/mcp-server/tree/main/docs)
-2. Search [existing issues](https://github.com/quyansiyuanwang/mcp-server/issues)
-3. Create a new [Bug Report](https://github.com/quyansiyuanwang/mcp-server/issues/new?template=bug_report.yml)
+1. Check the [Documentation](https://github.com/quyansiyuanwang/oh-my-mcp/tree/main/docs)
+2. Search [existing issues](https://github.com/quyansiyuanwang/oh-my-mcp/issues)
+3. Create a new [Bug Report](https://github.com/quyansiyuanwang/oh-my-mcp/issues/new?template=bug_report.yml)
 
 ## Advanced Usage | 高级用法
 
@@ -292,13 +292,13 @@ The server supports various command-line arguments for advanced configuration:
 
 ```bash
 # Show help
-./mcp-server --help
+./oh-my-mcp --help
 
 # Run with custom configuration
-./mcp-server --config /path/to/config.json
+./oh-my-mcp --config /path/to/config.json
 
 # Enable debug logging
-./mcp-server --debug
+./oh-my-mcp --debug
 ```
 
 ### Environment Variables
@@ -325,9 +325,9 @@ python -m mcp_server.main
 
 ## Support | 支持
 
-- **Documentation:** [Project Documentation](https://github.com/quyansiyuanwang/mcp-server/tree/main/docs)
-- **Issues:** [GitHub Issues](https://github.com/quyansiyuanwang/mcp-server/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/quyansiyuanwang/mcp-server/discussions)
+- **Documentation:** [Project Documentation](https://github.com/quyansiyuanwang/oh-my-mcp/tree/main/docs)
+- **Issues:** [GitHub Issues](https://github.com/quyansiyuanwang/oh-my-mcp/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/quyansiyuanwang/oh-my-mcp/discussions)
 - **MCP Specification:** [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ## License | 许可证

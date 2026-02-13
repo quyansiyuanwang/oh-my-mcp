@@ -22,26 +22,26 @@ jobs:
           - os: windows
             runner: windows-latest
             arch: x64
-            artifact_name: mcp-server-windows-x64.zip
-            dist_path: dist/mcp-server
+            artifact_name: oh-my-mcp-windows-x64.zip
+            dist_path: dist/oh-my-mcp
 
           - os: linux
             runner: ubuntu-latest
             arch: x64
-            artifact_name: mcp-server-linux-x64.tar.gz
-            dist_path: dist/mcp-server
+            artifact_name: oh-my-mcp-linux-x64.tar.gz
+            dist_path: dist/oh-my-mcp
 
           - os: macos
             runner: macos-15-intel
             arch: x64
-            artifact_name: mcp-server-macos-x64.tar.gz
-            dist_path: dist/mcp-server
+            artifact_name: oh-my-mcp-macos-x64.tar.gz
+            dist_path: dist/oh-my-mcp
 
           - os: macos
             runner: macos-latest
             arch: arm64
-            artifact_name: mcp-server-macos-arm64.tar.gz
-            dist_path: dist/mcp-server
+            artifact_name: oh-my-mcp-macos-arm64.tar.gz
+            dist_path: dist/oh-my-mcp
 
     steps:
       - name: Checkout code
@@ -86,7 +86,7 @@ jobs:
         if: matrix.os != 'windows'
         run: |
           cp USAGE.md ${{ matrix.dist_path }}/USAGE.md
-          tar -czf ${{ matrix.artifact_name }} -C dist mcp-server
+          tar -czf ${{ matrix.artifact_name }} -C dist oh-my-mcp
         shell: bash
 
       - name: Upload artifact
@@ -191,9 +191,9 @@ jobs:
           draft: true
           prerelease: false
           files: |
-            artifacts/mcp-server-windows-x64.zip/mcp-server-windows-x64.zip
-            artifacts/mcp-server-linux-x64.tar.gz/mcp-server-linux-x64.tar.gz
-            artifacts/mcp-server-macos-x64.tar.gz/mcp-server-macos-x64.tar.gz
-            artifacts/mcp-server-macos-arm64.tar.gz/mcp-server-macos-arm64.tar.gz
+            artifacts/oh-my-mcp-windows-x64.zip/oh-my-mcp-windows-x64.zip
+            artifacts/oh-my-mcp-linux-x64.tar.gz/oh-my-mcp-linux-x64.tar.gz
+            artifacts/oh-my-mcp-macos-x64.tar.gz/oh-my-mcp-macos-x64.tar.gz
+            artifacts/oh-my-mcp-macos-arm64.tar.gz/oh-my-mcp-macos-arm64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,14 +1,14 @@
-## MCP Server Release {{VERSION}}
+## Oh My MCP Release {{VERSION}}
 
 ### 📦 Available Downloads | 可用下载
 
 Choose the appropriate package for your platform:
 为您的平台选择合适的包：
 
-- **Windows (x64)**: `mcp-server-windows-x64.zip`
-- **Linux (x64)**: `mcp-server-linux-x64.tar.gz`
-- **macOS (Intel)**: `mcp-server-macos-x64.tar.gz`
-- **macOS (Apple Silicon)**: `mcp-server-macos-arm64.tar.gz`
+- **Windows (x64)**: `oh-my-mcp-windows-x64.zip`
+- **Linux (x64)**: `oh-my-mcp-linux-x64.tar.gz`
+- **macOS (Intel)**: `oh-my-mcp-macos-x64.tar.gz`
+- **macOS (Apple Silicon)**: `oh-my-mcp-macos-arm64.tar.gz`
 
 Each package includes:
 每个包包含：
@@ -30,12 +30,12 @@ Download the package for your platform and extract it:
 
 **Windows:**
 ```powershell
-Expand-Archive -Path mcp-server-windows-x64.zip -DestinationPath C:\mcp-server
+Expand-Archive -Path oh-my-mcp-windows-x64.zip -DestinationPath C:\oh-my-mcp
 ```
 
 **Linux/macOS:**
 ```bash
-tar -xzf mcp-server-*.tar.gz
+tar -xzf oh-my-mcp-*.tar.gz
 ```
 
 #### 2. Configure MCP Client | 配置 MCP 客户端
@@ -54,8 +54,8 @@ Edit your config file (create if not exists):
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "C:\\mcp-server\\mcp-server\\mcp-server.exe"
+    "oh-my-mcp": {
+      "command": "C:\\oh-my-mcp\\oh-my-mcp\\oh-my-mcp.exe"
     }
   }
 }
@@ -65,8 +65,8 @@ Edit your config file (create if not exists):
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/path/to/oh-my-mcp/oh-my-mcp"
     }
   }
 }
@@ -81,7 +81,7 @@ Edit your config file (create if not exists):
 <summary><b>Claude Code (VS Code / CLI)</b></summary>
 
 ```bash
-claude mcp add mcp-server /absolute/path/to/mcp-server/mcp-server
+claude mcp add oh-my-mcp /absolute/path/to/oh-my-mcp/oh-my-mcp
 ```
 
 Or add to VS Code `settings.json`:
@@ -90,8 +90,8 @@ Or add to VS Code `settings.json`:
 ```json
 {
   "claude.mcpServers": {
-    "mcp-server": {
-      "command": "/absolute/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/absolute/path/to/oh-my-mcp/oh-my-mcp"
     }
   }
 }
@@ -108,8 +108,8 @@ Edit `~/.cursor/mcp.json` (global) or `<project>/.cursor/mcp.json` (project-leve
 ```json
 {
   "mcpServers": {
-    "mcp-server": {
-      "command": "/absolute/path/to/mcp-server/mcp-server"
+    "oh-my-mcp": {
+      "command": "/absolute/path/to/oh-my-mcp/oh-my-mcp"
     }
   }
 }
