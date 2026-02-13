@@ -504,8 +504,8 @@ web_search_advanced("中文查询", engines="baidu,google")
 ## 反馈和支持
 
 - 📧 邮箱: qysyw-team@qq.com
-- 🐛 问题: https://github.com/quyansiyuanwang/mcp-server/issues
-- 📖 文档: https://github.com/quyansiyuanwang/mcp-server/docs
+- 🐛 问题: https://github.com/quyansiyuanwang/oh-my-mcp/issues
+- 📖 文档: https://github.com/quyansiyuanwang/oh-my-mcp/docs
 
 ---
 
