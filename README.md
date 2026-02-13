@@ -3,6 +3,11 @@
 A powerful Model Context Protocol (MCP) server with **116 practical tools** across 9 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
+[![Tests](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml)
+[![Lint](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/lint.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/lint.yml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/quyansiyuanwang/oh-my-mcp)
 
 ## 🚀 Features
 
