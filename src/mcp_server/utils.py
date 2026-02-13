@@ -85,6 +85,18 @@ class SecurityError(MCPServerError):
     pass
 
 
+class BrowserError(MCPServerError):
+    """Raised when browser automation operations fail."""
+
+    pass
+
+
+class BrowserTimeoutError(BrowserError):
+    """Raised when browser operations time out."""
+
+    pass
+
+
 # Validation utilities
 def validate_url(url: str) -> bool:
     """

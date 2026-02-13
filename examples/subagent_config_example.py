@@ -4,7 +4,6 @@ Subagent 配置管理使用示例
 演示如何使用配置管理类持久化保存和管理 API 密钥
 """
 
-import json
 import os
 import sys
 
@@ -26,18 +25,18 @@ def example_1_set_config():
     # 设置 OpenAI API
     print("\n1. 设置 OpenAI 配置...")
     config.set_api_key("openai", "sk-proj-test-key-for-demo-purposes-only-12345678")
-    print(f"✓ OpenAI API 密钥已保存")
+    print("✓ OpenAI API 密钥已保存")
 
     # 设置带自定义端点的配置
     print("\n2. 设置 OpenAI 配置（自定义端点）...")
     config.set_api_key("openai", "sk-proj-test-key-for-demo-purposes-only-12345678")
     config.set_api_base("openai", "https://api.openai-proxy.com/v1")
-    print(f"✓ OpenAI API 密钥和自定义端点已保存")
+    print("✓ OpenAI API 密钥和自定义端点已保存")
 
     # 设置 Anthropic
     print("\n3. 设置 Anthropic 配置...")
     config.set_api_key("anthropic", "sk-ant-test-key-for-demo-purposes-only")
-    print(f"✓ Anthropic API 密钥已保存")
+    print("✓ Anthropic API 密钥已保存")
 
     print(f"\n配置文件: {config.get_config_path()}")
 
@@ -59,7 +58,7 @@ def example_2_get_config():
 
     if api_key:
         masked_key = api_key[:8] + "..." + api_key[-4:] if len(api_key) > 12 else "***"
-        print(f"✓ OpenAI 已配置")
+        print("✓ OpenAI 已配置")
         print(f"  密钥预览: {masked_key}")
         print(f"  API 端点: {api_base}")
 
@@ -75,9 +74,9 @@ def example_2_get_config():
     api_key = config.get_api_key("anthropic")
 
     if api_key:
-        print(f"✓ Anthropic 已配置")
+        print("✓ Anthropic 已配置")
     else:
-        print(f"✗ Anthropic 未配置")
+        print("✗ Anthropic 未配置")
 
 
 def example_3_list_config():
@@ -123,7 +122,7 @@ def example_4_test_with_config():
 
     if api_key:
         masked_key = api_key[:8] + "..." + api_key[-4:] if len(api_key) > 12 else "***"
-        print(f"\n✓ OpenAI 已配置")
+        print("\n✓ OpenAI 已配置")
 
         # 检测来源
         env_key = os.getenv("OPENAI_API_KEY")
@@ -138,7 +137,7 @@ def example_4_test_with_config():
         print("      示例: subagent_call(provider='openai', model='gpt-3.5-turbo', ...)")
 
     else:
-        print(f"\n✗ OpenAI 未配置")
+        print("\n✗ OpenAI 未配置")
         print("请先使用 config.set_api_key() 配置 API 密钥")
 
 
@@ -191,8 +190,9 @@ def example_6_custom_config_file():
     print("示例 6: 使用自定义配置文件路径")
     print("=" * 60)
 
-    from mcp_server.tools.subagent_config import SubagentConfig
     import tempfile
+
+    from mcp_server.tools.subagent_config import SubagentConfig
 
     # 创建临时配置文件
     temp_config = os.path.join(tempfile.gettempdir(), "test_subagent_config.json")

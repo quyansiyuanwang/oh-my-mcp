@@ -1,0 +1,10 @@
+category_name: "Browser Automation"
+category_description: "Selenium-based browser automation: navigation, interaction, screenshots, JS execution, console logs, cookies, network monitoring, form filling, multi-tab management"
+enabled: true
+
+# Environment variable configuration:
+#   CHROME_DRIVER_PATH  - Path to chromedriver executable (bypasses auto-download)
+#   EDGE_DRIVER_PATH    - Path to msedgedriver executable (bypasses auto-download)
+#   HTTPS_PROXY         - Proxy for driver download (respected by Selenium Manager)
+#
+# If Chrome driver creation fails (e.g., network issue), Edge is used as auto-fallback.

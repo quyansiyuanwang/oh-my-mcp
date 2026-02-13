@@ -5,6 +5,7 @@ MCP Server 基本使用示例
 """
 
 from fastmcp import FastMCP
+
 from mcp_server.tools import load_all_plugins
 from mcp_server.utils import logger
 

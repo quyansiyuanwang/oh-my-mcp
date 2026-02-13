@@ -5,11 +5,12 @@
 """
 
 import json
+
 from mcp_server.tools.web.handlers import (
-    web_search,
     fetch_webpage_text,
-    get_page_title,
     get_page_links,
+    get_page_title,
+    web_search,
 )
 
 
@@ -54,7 +55,7 @@ def example_fetch_webpage():
 
     if "error" not in text_data:
         content = text_data.get("content", "")
-        print(f"\n内容预览 (前 200 字符):")
+        print("\n内容预览 (前 200 字符):")
         print(content[:200] + "...")
 
     # 获取页面链接

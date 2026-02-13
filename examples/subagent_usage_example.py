@@ -24,16 +24,9 @@ def example_single_call():
     print("Example 1: Single AI Call")
     print("=" * 60)
 
-    # Prepare messages
-    messages = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Explain quantum computing in 2 sentences."},
-    ]
-
     # In your MCP client (Claude Desktop, etc.), you would call:
     print("\nMCP Tool Call:")
-    print(
-        """
+    print("""
     subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
@@ -44,8 +37,7 @@ def example_single_call():
         max_tokens=200,
         temperature=0.7
     )
-    """
-    )
+    """)
 
     print("\nExpected Response Structure:")
     print(
@@ -110,13 +102,11 @@ def example_parallel_tasks():
     ]
 
     print("\nMCP Tool Call:")
-    print(
-        f"""
+    print(f"""
     subagent_parallel(
         tasks=json.dumps({json.dumps(tasks, indent=8)})
     )
-    """
-    )
+    """)
 
     print("\nExpected Response Structure:")
     print(
@@ -199,15 +189,13 @@ def example_conditional_branching():
     }
 
     print("\nMCP Tool Call:")
-    print(
-        f"""
+    print(f"""
     subagent_conditional(
         condition_task=json.dumps({json.dumps(condition_task, indent=8)}),
         true_task=json.dumps({json.dumps(true_task, indent=8)}),
         false_task=json.dumps({json.dumps(false_task, indent=8)})
     )
-    """
-    )
+    """)
 
     print("\nExpected Response Structure:")
     print(
@@ -292,35 +280,28 @@ def example_multi_turn_conversation():
     print("=" * 60)
 
     print("\nTurn 1: User asks a question")
-    messagesurn1 = [
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "What is Python?"},
-    ]
 
     print("\nMCP Tool Call (Turn 1):")
-    print(
-        f"""
+    print("""
     result1 = subagent_call(
         provider="openai",
         model="gpt-3.5-turbo",
         messages=json.dumps([
-            {{"role": "system", "content": "You are a helpful assistant."}},
-            {{"role": "user", "content": "What is Python?"}}
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": "What is Python?"}
         ])
     )
-    """
-    )
+    """)
 
     print("\nTurn 2: User asks follow-up (maintaining context)")
     print("\nMCP Tool Call (Turn 2):")
-    print(
-        f"""
+    print("""
     # Add AI's response from Turn 1 to maintain context
     messages_turn2 = [
-        {{"role": "system", "content": "You are a helpful assistant."}},
-        {{"role": "user", "content": "What is Python?"}},
-        {{"role": "assistant", "content": result1['result']}},  # Previous response
-        {{"role": "user", "content": "What are its main use cases?"}}  # Follow-up
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "What is Python?"},
+        {"role": "assistant", "content": result1['result']},  # Previous response
+        {"role": "user", "content": "What are its main use cases?"}  # Follow-up
     ]
     
     result2 = subagent_call(
@@ -328,8 +309,7 @@ def example_multi_turn_conversation():
         model="gpt-3.5-turbo",
         messages=json.dumps(messages_turn2)
     )
-    """
-    )
+    """)
 
     print("\nNote: Subagent is stateless. You must maintain conversation history")
     print("      by including previous messages in the messages array.")
@@ -345,8 +325,7 @@ def example_error_handling():
     print("-" * 60)
 
     print("\nCode Pattern:")
-    print(
-        """
+    print("""
     result = json.loads(subagent_call(...))
     
     if result['status'] == 'success':
@@ -355,8 +334,7 @@ def example_error_handling():
     else:
         print(f"Error: {result.get('error', 'Unknown error')}")
         # Handle error: retry, fallback model, or notify user
-    """
-    )
+    """)
 
     print("\nCommon errors:")
     print("  • API key not configured")

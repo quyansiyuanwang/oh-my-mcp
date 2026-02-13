@@ -15,18 +15,21 @@ from ..utils import logger
 class SubagentConfig:
     """Subagent 配置管理器"""
 
-    DEFAULT_CONFIG_FILE = ".subagent_config.json"
+    DEFAULT_CONFIG_DIR = ".oh-my-mcp"
+    DEFAULT_CONFIG_FILE = "subagent_config.json"
 
     def __init__(self, config_path: Optional[str] = None):
         """
         初始化配置管理器
 
         Args:
-            config_path: 配置文件路径，默认为用户目录下的 .subagent_config.json
+            config_path: 配置文件路径，默认为用户目录下的 ~/.oh-my-mcp/
         """
         if config_path is None:
-            # 默认配置文件位置：用户主目录
-            self.config_path = Path.home() / self.DEFAULT_CONFIG_FILE
+            # 默认配置文件位置：~/.oh-my-mcp/
+            config_dir = Path.home() / self.DEFAULT_CONFIG_DIR
+            config_dir.mkdir(parents=True, exist_ok=True)
+            self.config_path = config_dir / self.DEFAULT_CONFIG_FILE
         else:
             self.config_path = Path(config_path)
 
@@ -35,6 +38,9 @@ class SubagentConfig:
 
     def _load_config(self) -> None:
         """从配置文件加载配置"""
+        # 先尝试迁移旧配置
+        self._migrate_old_config()
+
         if self.config_path.exists():
             try:
                 with open(self.config_path, "r", encoding="utf-8") as f:
@@ -65,6 +71,36 @@ class SubagentConfig:
         except Exception as e:
             logger.error(f"Failed to save config to {self.config_path}: {e}")
             raise
+
+    def _migrate_old_config(self) -> None:
+        """迁移旧的配置文件到新位置"""
+        # 旧配置路径列表（按优先级）
+        old_paths = [
+            Path.home() / "oh-my-mcp" / self.DEFAULT_CONFIG_FILE,  # ~/oh-my-mcp/
+            Path.home() / ".subagent_config.json",  # 最早的单文件配置
+        ]
+
+        # 如果新配置已存在，不需要迁移
+        if self.config_path.exists():
+            return
+
+        # 尝试从旧路径迁移
+        for old_config_path in old_paths:
+            if old_config_path.exists():
+                try:
+                    import shutil
+
+                    # 确保目录存在
+                    self.config_path.parent.mkdir(parents=True, exist_ok=True)
+                    # 复制配置文件
+                    shutil.copy2(old_config_path, self.config_path)
+                    logger.info(f"Migrated config from {old_config_path} to {self.config_path}")
+                    # 删除旧配置文件
+                    old_config_path.unlink()
+                    logger.info(f"Removed old config file: {old_config_path}")
+                    return  # 迁移成功，退出循环
+                except Exception as e:
+                    logger.warning(f"Failed to migrate old config from {old_config_path}: {e}")
 
     def get_api_key(self, provider: str) -> Optional[str]:
         """
