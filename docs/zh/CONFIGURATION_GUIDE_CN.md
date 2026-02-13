@@ -96,7 +96,7 @@ python -m mcp_server.cli.config --server-name my-mcp-tools --output config.json
       "command": "D:\\path\\to\\python.exe",
       "args": ["-m", "mcp_server.main"],
       "env": {},
-      "description": "Comprehensive MCP Server with 83 practical tools"
+      "description": "Comprehensive MCP Server with 116 practical tools"
     }
   }
 }
