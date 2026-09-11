@@ -19,7 +19,7 @@ from typing import Any, Dict
 import psutil
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import format_bytes, logger
+from mcp_server.utils import error_json, format_bytes, logger
 
 
 @tool_handler
@@ -62,7 +62,7 @@ def get_system_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get system info: {e}")
-        return f'{{"error": "Failed to get system info: {str(e)}"}}'
+        return error_json(f"Failed to get system info: {str(e)}")
 
 
 @tool_handler
@@ -97,7 +97,7 @@ def get_cpu_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get CPU info: {e}")
-        return f'{{"error": "Failed to get CPU info: {str(e)}"}}'
+        return error_json(f"Failed to get CPU info: {str(e)}")
 
 
 @tool_handler
@@ -136,7 +136,7 @@ def get_memory_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get memory info: {e}")
-        return f'{{"error": "Failed to get memory info: {str(e)}"}}'
+        return error_json(f"Failed to get memory info: {str(e)}")
 
 
 @tool_handler
@@ -191,7 +191,7 @@ def get_disk_info(path: str = "/") -> str:
 
     except Exception as e:
         logger.error(f"Failed to get disk info: {e}")
-        return f'{{"error": "Failed to get disk info: {str(e)}"}}'
+        return error_json(f"Failed to get disk info: {str(e)}")
 
 
 @tool_handler
@@ -213,7 +213,7 @@ def get_env_variable(name: str, default: str = "") -> str:
 
     except Exception as e:
         logger.error(f"Failed to get env variable: {e}")
-        return f'{{"error": "Failed to get env variable: {str(e)}"}}'
+        return error_json(f"Failed to get env variable: {str(e)}")
 
 
 @tool_handler
@@ -257,7 +257,7 @@ def list_env_variables(filter_pattern: str = "") -> str:
 
     except Exception as e:
         logger.error(f"Failed to list env variables: {e}")
-        return f'{{"error": "Failed to list env variables: {str(e)}"}}'
+        return error_json(f"Failed to list env variables: {str(e)}")
 
 
 @tool_handler
@@ -303,7 +303,7 @@ def get_current_time(timezone: str = "local", format: str = "iso") -> str:
 
     except Exception as e:
         logger.error(f"Failed to get current time: {e}")
-        return f'{{"error": "Failed to get current time: {str(e)}"}}'
+        return error_json(f"Failed to get current time: {str(e)}")
 
 
 @tool_handler
@@ -339,4 +339,4 @@ def get_process_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get process info: {e}")
-        return f'{{"error": "Failed to get process info: {str(e)}"}}'
+        return error_json(f"Failed to get process info: {str(e)}")

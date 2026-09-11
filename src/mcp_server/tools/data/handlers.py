@@ -18,7 +18,7 @@ import xml.etree.ElementTree as ET
 from typing import Any, Dict
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import logger
+from mcp_server.utils import error_json, logger
 
 # Import YAML support
 try:
@@ -52,7 +52,7 @@ def parse_json(json_string: str) -> str:
         return json.dumps(data, indent=2, ensure_ascii=False)
     except json.JSONDecodeError as e:
         logger.error(f"JSON parsing failed: {e}")
-        return f'{{"error": "Invalid JSON: {str(e)}"}}'
+        return error_json(f"Invalid JSON: {str(e)}")
 
 
 @tool_handler
@@ -72,7 +72,7 @@ def format_json(json_string: str, indent: int = 2, sort_keys: bool = False) -> s
         data = json.loads(json_string)
         return json.dumps(data, indent=indent, sort_keys=sort_keys, ensure_ascii=False)
     except json.JSONDecodeError as e:
-        return f'{{"error": "Invalid JSON: {str(e)}"}}'
+        return error_json(f"Invalid JSON: {str(e)}")
 
 
 @tool_handler
@@ -102,19 +102,19 @@ def json_query(json_string: str, path: str) -> str:
                     index = int(part)
                     current = current[index]
                 except (ValueError, IndexError):
-                    return f'{{"error": "Invalid array index: {part}"}}'
+                    return error_json(f"Invalid array index: {part}")
             else:
-                return f'{{"error": "Cannot navigate path at: {part}"}}'
+                return error_json(f"Cannot navigate path at: {part}")
 
             if current is None:
-                return f'{{"error": "Path not found: {path}"}}'
+                return error_json(f"Path not found: {path}")
 
         return json.dumps({"path": path, "value": current}, indent=2, ensure_ascii=False)
 
     except json.JSONDecodeError as e:
-        return f'{{"error": "Invalid JSON: {str(e)}"}}'
+        return error_json(f"Invalid JSON: {str(e)}")
     except Exception as e:
-        return f'{{"error": "Query failed: {str(e)}"}}'
+        return error_json(f"Query failed: {str(e)}")
 
 
 @tool_handler
@@ -152,7 +152,7 @@ def csv_to_json(csv_string: str, delimiter: str = ",", has_header: bool = True) 
 
     except Exception as e:
         logger.error(f"CSV to JSON conversion failed: {e}")
-        return f'{{"error": "Conversion failed: {str(e)}"}}'
+        return error_json(f"Conversion failed: {str(e)}")
 
 
 @tool_handler
@@ -229,7 +229,7 @@ def parse_csv(csv_string: str, delimiter: str = ",") -> str:
 
     except Exception as e:
         logger.error(f"CSV parsing failed: {e}")
-        return f'{{"error": "CSV parsing failed: {str(e)}"}}'
+        return error_json(f"CSV parsing failed: {str(e)}")
 
 
 @tool_handler
@@ -253,10 +253,11 @@ def validate_json_schema(json_string: str) -> str:
                 return {"type": "array", "length": len(obj), "depth": depth}
             elif isinstance(obj, str):
                 return {"type": "string", "length": len(obj)}
+            elif isinstance(obj, bool):
+                # bool 是 int 的子类，必须先于 int/float 检查
+                return {"type": "boolean"}
             elif isinstance(obj, (int, float)):
                 return {"type": "number", "value_type": type(obj).__name__}
-            elif isinstance(obj, bool):
-                return {"type": "boolean"}
             elif obj is None:
                 return {"type": "null"}
             else:
@@ -319,9 +320,9 @@ def flatten_json(json_string: str, separator: str = ".") -> str:
         return json.dumps(flattened, indent=2, ensure_ascii=False)
 
     except json.JSONDecodeError as e:
-        return f'{{"error": "Invalid JSON: {str(e)}"}}'
+        return error_json(f"Invalid JSON: {str(e)}")
     except Exception as e:
-        return f'{{"error": "Flattening failed: {str(e)}"}}'
+        return error_json(f"Flattening failed: {str(e)}")
 
 
 @tool_handler
@@ -361,9 +362,9 @@ def merge_json(json_string1: str, json_string2: str, deep: bool = True) -> str:
         return json.dumps(merged, indent=2, ensure_ascii=False)
 
     except json.JSONDecodeError as e:
-        return f'{{"error": "Invalid JSON: {str(e)}"}}'
+        return error_json(f"Invalid JSON: {str(e)}")
     except Exception as e:
-        return f'{{"error": "Merge failed: {str(e)}"}}'
+        return error_json(f"Merge failed: {str(e)}")
 
 
 @tool_handler
@@ -416,10 +417,10 @@ def xml_to_json(xml_string: str) -> str:
         return json.dumps(converted, indent=2, ensure_ascii=False)
 
     except ET.ParseError as e:
-        return f'{{"error": "Invalid XML: {str(e)}"}}'
+        return error_json(f"Invalid XML: {str(e)}")
     except Exception as e:
         logger.error(f"XML to JSON conversion failed: {e}")
-        return f'{{"error": "Conversion failed: {str(e)}"}}'
+        return error_json(f"Conversion failed: {str(e)}")
 
 
 @tool_handler

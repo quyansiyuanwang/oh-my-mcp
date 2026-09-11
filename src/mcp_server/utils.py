@@ -9,6 +9,7 @@ Provides:
 - Safe file operations
 """
 
+import json
 import logging
 import re
 import time
@@ -289,6 +290,26 @@ def safe_write_file(
 
 
 # Text utilities
+def error_json(message: str, **extra: Any) -> str:
+    """
+    Build a JSON error response, escaping the message correctly.
+
+    Interpolating paths or exception text directly into a JSON template
+    produces invalid JSON on Windows (backslash escapes) or when the text
+    contains quotes, so all error payloads must go through here.
+
+    Args:
+        message: Error message (will be JSON-escaped)
+        **extra: Additional fields to include in the response object
+
+    Returns:
+        Valid JSON string like {"error": "...", ...}
+    """
+    payload: dict[str, Any] = {"error": message}
+    payload.update(extra)
+    return json.dumps(payload, ensure_ascii=False)
+
+
 def truncate_text(text: str, max_length: int = 1000, suffix: str = "...") -> str:
     """
     Truncate text to maximum length.

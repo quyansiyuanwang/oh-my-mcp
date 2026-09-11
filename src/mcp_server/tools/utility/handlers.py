@@ -22,7 +22,7 @@ from typing import Any, Dict
 from dateutil import parser as date_parser
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import logger
+from mcp_server.utils import error_json, logger
 
 
 @tool_handler
@@ -92,7 +92,7 @@ def generate_hash(text: str, algorithm: str = "sha256", encoding: str = "utf-8")
 
     except Exception as e:
         logger.error(f"Hash generation failed: {e}")
-        return f'{{"error": "Hash generation failed: {str(e)}"}}'
+        return error_json(f"Hash generation failed: {str(e)}")
 
 
 @tool_handler
@@ -137,7 +137,7 @@ def timestamp_to_date(timestamp: float, format: str = "iso", timezone: str = "lo
 
     except Exception as e:
         logger.error(f"Timestamp conversion failed: {e}")
-        return f'{{"error": "Timestamp conversion failed: {str(e)}"}}'
+        return error_json(f"Timestamp conversion failed: {str(e)}")
 
 
 @tool_handler
@@ -155,6 +155,12 @@ def date_to_timestamp(date_string: str, timezone: str = "local") -> str:
     try:
         # Parse date string (supports many formats)
         dt = date_parser.parse(date_string)
+
+        # Honor the timezone argument for naive (timezone-less) input
+        if dt.tzinfo is None and timezone.lower() == "utc":
+            from datetime import timezone as tz
+
+            dt = dt.replace(tzinfo=tz.utc)
 
         # Convert to timestamp
         timestamp = dt.timestamp()
@@ -177,9 +183,7 @@ def date_to_timestamp(date_string: str, timezone: str = "local") -> str:
 
     except Exception as e:
         logger.error(f"Date parsing failed: {e}")
-        return (
-            f'{{"error": "Date parsing failed: {str(e)}. Use ISO format or common date formats."}}'
-        )
+        return error_json(f"Date parsing failed: {str(e)}. Use ISO format or common date formats.")
 
 
 @tool_handler
@@ -234,7 +238,7 @@ def calculate_date_diff(date1: str, date2: str, unit: str = "days") -> str:
 
     except Exception as e:
         logger.error(f"Date difference calculation failed: {e}")
-        return f'{{"error": "Date difference calculation failed: {str(e)}"}}'
+        return error_json(f"Date difference calculation failed: {str(e)}")
 
 
 @tool_handler
@@ -271,7 +275,7 @@ def format_date(date_string: str, format: str = "%Y-%m-%d %H:%M:%S") -> str:
 
     except Exception as e:
         logger.error(f"Date formatting failed: {e}")
-        return f'{{"error": "Date formatting failed: {str(e)}"}}'
+        return error_json(f"Date formatting failed: {str(e)}")
 
 
 @tool_handler
@@ -289,8 +293,11 @@ def calculate_expression(expression: str) -> str:
         import math
         import re
 
-        # Security: Only allow safe characters
-        if not re.match(r"^[0-9+\-*/(). ,pietan\^]+$", expression.lower()):
+        # Security: only allow numbers, operators, whitespace, and identifier
+        # characters; identifiers are then whitelist-checked below so that
+        # documented math functions (sqrt, sin, abs, ...) work while arbitrary
+        # names / attribute access / dunders cannot reach eval().
+        if not re.match(r"^[0-9A-Za-z_+\-*/(). ,\^]+$", expression):
             return '{"error": "Expression contains invalid characters. Only numbers, operators, and basic math functions allowed."}'
 
         # Replace common patterns
@@ -311,6 +318,14 @@ def calculate_expression(expression: str) -> str:
             "e": math.e,
         }
 
+        identifiers = set(re.findall(r"[A-Za-z_][A-Za-z0-9_]*", safe_expr))
+        unknown = identifiers - set(safe_dict)
+        if unknown:
+            return error_json(
+                f"Unknown identifier: {', '.join(sorted(unknown))}. "
+                "Allowed: abs, round, max, min, pow, sqrt, sin, cos, tan, pi, e."
+            )
+
         result = eval(safe_expr, {"__builtins__": {}}, safe_dict)
 
         return json.dumps(
@@ -324,7 +339,7 @@ def calculate_expression(expression: str) -> str:
 
     except Exception as e:
         logger.error(f"Expression evaluation failed: {e}")
-        return f'{{"error": "Evaluation failed: {str(e)}"}}'
+        return error_json(f"Evaluation failed: {str(e)}")
 
 
 @tool_handler
@@ -367,7 +382,7 @@ def generate_random_string(length: int = 16, charset: str = "alphanumeric") -> s
 
     except Exception as e:
         logger.error(f"Random string generation failed: {e}")
-        return f'{{"error": "Generation failed: {str(e)}"}}'
+        return error_json(f"Generation failed: {str(e)}")
 
 
 @tool_handler

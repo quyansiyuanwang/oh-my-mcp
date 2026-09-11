@@ -20,6 +20,7 @@ from bs4 import BeautifulSoup
 from ...utils import (
     NetworkError,
     ValidationError,
+    error_json,
     format_bytes,
     logger,
     retry,
@@ -364,7 +365,7 @@ def parse_html(html: str, selector: str) -> str:
 
     except Exception as e:
         logger.error(f"HTML parsing failed: {e}")
-        return f'{{"error": "Parsing failed: {str(e)}"}}'
+        return error_json(f"Parsing failed: {str(e)}")
 
 
 @tool_handler
@@ -472,7 +473,7 @@ def get_page_links(url: str, timeout: int = 10, absolute: bool = True) -> str:
 
     except Exception as e:
         logger.error(f"Failed to extract links: {e}")
-        return f'{{"error": "Failed to extract links: {str(e)}"}}'
+        return error_json(f"Failed to extract links: {str(e)}")
 
 
 @tool_handler
@@ -488,7 +489,7 @@ def check_url_status(url: str, timeout: int = 10) -> str:
         JSON string with status code and message
     """
     if not _validate_url(url):
-        return f'{{"error": "Invalid URL: {url}"}}'
+        return error_json(f"Invalid URL: {url}")
 
     try:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
@@ -507,7 +508,7 @@ def check_url_status(url: str, timeout: int = 10) -> str:
 
     except requests.RequestException as e:
         logger.error(f"Status check failed for {url}: {e}")
-        return f'{{"error": "Status check failed: {str(e)}"}}'
+        return error_json(f"Status check failed: {str(e)}")
 
 
 @tool_handler
@@ -523,7 +524,7 @@ def get_headers(url: str, timeout: int = 10) -> str:
         JSON string containing HTTP headers
     """
     if not _validate_url(url):
-        return f'{{"error": "Invalid URL: {url}"}}'
+        return error_json(f"Invalid URL: {url}")
 
     try:
         headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
@@ -540,7 +541,7 @@ def get_headers(url: str, timeout: int = 10) -> str:
 
     except requests.RequestException as e:
         logger.error(f"Failed to get headers from {url}: {e}")
-        return f'{{"error": "Failed to get headers: {str(e)}"}}'
+        return error_json(f"Failed to get headers: {str(e)}")
 
 
 @tool_handler
@@ -605,7 +606,7 @@ def parse_url_components(url: str) -> str:
         )
 
     except Exception as e:
-        return f'{{"error": "Failed to parse URL: {str(e)}"}}'
+        return error_json(f"Failed to parse URL: {str(e)}")
 
 
 @tool_handler

@@ -300,8 +300,8 @@ def extract_tar(tar_path: str, extract_to: str = ".") -> str:
                         f"Unsafe path in archive: {member.name} (path traversal attempt)"
                     )
 
-                # 解压
-                tf.extract(member, extract_dir)
+                # 解压（filter="data" 拒绝绝对路径、目录遍历与外部链接，兼容 Python 3.14 默认行为）
+                tf.extract(member, extract_dir, filter="data")
                 extracted_files.append(member.name)
                 total_size += member.size
 

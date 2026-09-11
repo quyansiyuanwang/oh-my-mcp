@@ -15,7 +15,13 @@ import re
 from typing import Any, Dict
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import ValidationError, extract_text_by_regex, logger, truncate_text
+from mcp_server.utils import (
+    ValidationError,
+    error_json,
+    extract_text_by_regex,
+    logger,
+    truncate_text,
+)
 
 
 @tool_handler
@@ -72,7 +78,7 @@ def count_words(text: str, detailed: bool = True) -> str:
 
     except Exception as e:
         logger.error(f"Word count failed: {e}")
-        return f'{{"error": "Word count failed: {str(e)}"}}'
+        return error_json(f"Word count failed: {str(e)}")
 
 
 @tool_handler
@@ -104,7 +110,7 @@ def extract_emails(text: str) -> str:
 
     except Exception as e:
         logger.error(f"Email extraction failed: {e}")
-        return f'{{"error": "Email extraction failed: {str(e)}"}}'
+        return error_json(f"Email extraction failed: {str(e)}")
 
 
 @tool_handler
@@ -135,7 +141,7 @@ def extract_urls(text: str) -> str:
 
     except Exception as e:
         logger.error(f"URL extraction failed: {e}")
-        return f'{{"error": "URL extraction failed: {str(e)}"}}'
+        return error_json(f"URL extraction failed: {str(e)}")
 
 
 @tool_handler
@@ -175,10 +181,10 @@ def regex_match(text: str, pattern: str, flags: str = "") -> str:
         )
 
     except re.error as e:
-        return f'{{"error": "Invalid regex pattern: {str(e)}"}}'
+        return error_json(f"Invalid regex pattern: {str(e)}")
     except Exception as e:
         logger.error(f"Regex match failed: {e}")
-        return f'{{"error": "Regex match failed: {str(e)}"}}'
+        return error_json(f"Regex match failed: {str(e)}")
 
 
 @tool_handler

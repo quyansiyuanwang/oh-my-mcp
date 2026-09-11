@@ -20,6 +20,7 @@ from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import (
     FileOperationError,
     ValidationError,
+    error_json,
     format_bytes,
     format_timestamp,
     logger,
@@ -120,10 +121,10 @@ def list_directory(path: str = ".", pattern: str = "*", recursive: bool = False)
         p = sanitize_path(path)
 
         if not p.exists():
-            return f'{{"error": "Directory not found: {path}"}}'
+            return error_json(f"Directory not found: {path}")
 
         if not p.is_dir():
-            return f'{{"error": "Not a directory: {path}"}}'
+            return error_json(f"Not a directory: {path}")
 
         items = []
 
@@ -169,7 +170,7 @@ def list_directory(path: str = ".", pattern: str = "*", recursive: bool = False)
 
     except Exception as e:
         logger.error(f"Failed to list directory: {e}")
-        return f'{{"error": "Failed to list directory: {str(e)}"}}'
+        return error_json(f"Failed to list directory: {str(e)}")
 
 
 @tool_handler
@@ -195,7 +196,7 @@ def file_exists(path: str) -> str:
         return json.dumps(result, indent=2)
 
     except Exception as e:
-        return f'{{"error": "Failed to check path: {str(e)}"}}'
+        return error_json(f"Failed to check path: {str(e)}")
 
 
 @tool_handler
@@ -213,7 +214,7 @@ def get_file_info(path: str) -> str:
         p = sanitize_path(path)
 
         if not p.exists():
-            return f'{{"error": "Path not found: {path}"}}'
+            return error_json(f"Path not found: {path}")
 
         stat = p.stat()
 
@@ -237,7 +238,7 @@ def get_file_info(path: str) -> str:
 
     except Exception as e:
         logger.error(f"Failed to get file info: {e}")
-        return f'{{"error": "Failed to get file info: {str(e)}"}}'
+        return error_json(f"Failed to get file info: {str(e)}")
 
 
 @tool_handler
@@ -257,10 +258,10 @@ def search_files(directory: str = ".", pattern: str = "*", name_contains: str = 
         p = sanitize_path(directory)
 
         if not p.exists():
-            return f'{{"error": "Directory not found: {directory}"}}'
+            return error_json(f"Directory not found: {directory}")
 
         if not p.is_dir():
-            return f'{{"error": "Not a directory: {directory}"}}'
+            return error_json(f"Not a directory: {directory}")
 
         # Search recursively
         search_pattern = str(p / "**" / pattern)
@@ -304,7 +305,7 @@ def search_files(directory: str = ".", pattern: str = "*", name_contains: str = 
 
     except Exception as e:
         logger.error(f"Failed to search files: {e}")
-        return f'{{"error": "Failed to search files: {str(e)}"}}'
+        return error_json(f"Failed to search files: {str(e)}")
 
 
 @tool_handler
