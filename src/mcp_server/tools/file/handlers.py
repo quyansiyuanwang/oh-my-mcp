@@ -93,7 +93,8 @@ def append_file(path: str, content: str, encoding: str = "utf-8") -> str:
         # Create parent directories if needed
         p.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(p, "a", encoding=encoding) as f:
+        # newline="" appends content verbatim (no newline translation)
+        with open(p, "a", encoding=encoding, newline="") as f:
             f.write(content)
 
         file_size = safe_get_file_size(p)
@@ -391,6 +392,9 @@ def copy_file(source: str, destination: str, overwrite: bool = False) -> str:
 
         if not src.is_file():
             return f"Error: Source is not a file: {source}"
+
+        if dst.exists() and dst.is_dir():
+            return f"Error: Destination is an existing directory: {destination}"
 
         if dst.exists() and not overwrite:
             return f"Error: Destination exists and overwrite=False: {destination}"

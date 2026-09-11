@@ -301,14 +301,14 @@ def flatten_json(json_string: str, separator: str = ".") -> str:
             if isinstance(obj, dict):
                 for k, v in obj.items():
                     new_key = f"{parent_key}{separator}{k}" if parent_key else k
-                    if isinstance(v, (dict, list)):
+                    if isinstance(v, (dict, list)) and v:
                         items.extend(flatten(v, new_key).items())
                     else:
                         items.append((new_key, v))
             elif isinstance(obj, list):
                 for i, v in enumerate(obj):
                     new_key = f"{parent_key}{separator}{i}" if parent_key else str(i)
-                    if isinstance(v, (dict, list)):
+                    if isinstance(v, (dict, list)) and v:
                         items.extend(flatten(v, new_key).items())
                     else:
                         items.append((new_key, v))

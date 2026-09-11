@@ -253,7 +253,9 @@ def safe_read_file(path: str, encoding: str = "utf-8", max_size: int = 10 * 1024
         if file_size > max_size:
             raise FileOperationError(f"File too large: {file_size} bytes (max: {max_size} bytes)")
 
-        with open(p, "r", encoding=encoding) as f:
+        # newline="" keeps line endings exactly as stored (no \r\n <-> \n
+        # translation), so read/write roundtrips are byte-faithful
+        with open(p, "r", encoding=encoding, newline="") as f:
             return f.read()
 
     except FileOperationError:
@@ -286,7 +288,9 @@ def safe_write_file(
         # Create parent directories if needed
         p.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(p, "w", encoding=encoding) as f:
+        # newline="" writes content verbatim (no \n -> os.linesep translation,
+        # which would turn existing \r\n into \r\r\n on Windows)
+        with open(p, "w", encoding=encoding, newline="") as f:
             f.write(content)
 
     except FileOperationError:
