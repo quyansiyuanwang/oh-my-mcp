@@ -252,16 +252,20 @@ def run(check: bool) -> int:
         check,
     )
 
-    # 2. CLAUDE.md — counts line + category bullets
-    update_markdown(
-        ROOT / "CLAUDE.md",
-        {
-            "claude-counts": f"This is a comprehensive Model Context Protocol (MCP) server built with FastMCP that provides **{total} practical tools** across **{len(categories)} categories**:",
-            "claude-bullets": render_claude_bullets(categories),
-        },
-        changed,
-        check,
-    )
+    # 2. CLAUDE.md — counts line + category bullets.
+    # CLAUDE.md is gitignored (local guidance file), so it is only updated
+    # when present; CI checkouts skip it.
+    claude_md = ROOT / "CLAUDE.md"
+    if claude_md.exists():
+        update_markdown(
+            claude_md,
+            {
+                "claude-counts": f"This is a comprehensive Model Context Protocol (MCP) server built with FastMCP that provides **{total} practical tools** across **{len(categories)} categories**:",
+                "claude-bullets": render_claude_bullets(categories),
+            },
+            changed,
+            check,
+        )
 
     # 3. docs/README.md — tool categories section
     update_markdown(
