@@ -13,16 +13,18 @@ A powerful Model Context Protocol (MCP) server with **141 practical tools** acro
 
 oh-my-mcp provides tools for:
 
+<!-- DOCGEN:readme-features:start -->
+- **🌐 Browser Automation** (33 tools): Selenium-based browser automation: navigation, interaction, screenshots, JS execution, console logs, cookies, network monitoring, form filling, multi-tab management
 - **📦 Compression** (5 tools): ZIP/TAR compression and extraction with security features
-- **🌐 Web & Network** (18 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup
-- **📁 File System** (12 tools): Read, write, search files and directories, file comparison
+- **🖥️ Computer Use** (25 tools): AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration
 - **📊 Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
-- **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
+- **📁 File System** (12 tools): Read, write, search files and directories, file comparison
+- **🤖 Subagent AI Orchestration** (6 tools): Delegate subtasks to external AI models with parallel execution and cost tracking
 - **💻 System** (8 tools): System info, CPU/memory monitoring, environment variables
+- **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
-- **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic), parallel execution, conditional branching, persistent config
-- **🌐 Browser Automation** (33 tools): Selenium-based browser control, page navigation, element interaction, screenshots, JavaScript execution, multi-tab management
-- **🖥️ Computer Use** (25 tools): AI desktop control — screen capture (multi-monitor), mouse, keyboard, clipboard, window management, with safety failsafe
+- **🌐 Web & Network** (18 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup
+<!-- DOCGEN:readme-features:end -->
 
 > **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
 
@@ -192,6 +194,19 @@ def your_tool(param: str) -> str:
 ### Testing
 
 Start the server and test tools using an MCP client or the FastMCP testing utilities.
+
+### Documentation Generation
+
+Tool counts and descriptions in the docs are **generated from code** (AST analysis of
+`@tool_handler` docstrings + each plugin's `config.yaml`). After adding, removing, or
+renaming tools — or editing their docstrings / `config.yaml` metadata — run:
+
+```bash
+python scripts/docs/generate_docs.py --write
+```
+
+CI verifies docs are fresh with `--check` and fails if they are out of date. Generated
+fragments live between `<!-- DOCGEN:...:start/end -->` markers; do not edit inside them.
 
 ---
 

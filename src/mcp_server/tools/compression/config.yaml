@@ -1,3 +1,4 @@
 category_name: "Compression"
+emoji: "📦"
 category_description: "ZIP/TAR compression and extraction with security features"
 enabled: true

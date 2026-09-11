@@ -1,3 +1,4 @@
 category_name: "File System"
+emoji: "📁"
 category_description: "Read, write, search files and directories, file comparison"
 enabled: true

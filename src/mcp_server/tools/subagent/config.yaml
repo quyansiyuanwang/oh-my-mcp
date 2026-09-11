@@ -1,3 +1,4 @@
 category_name: "Subagent AI Orchestration"
+emoji: "🤖"
 category_description: "Delegate subtasks to external AI models with parallel execution and cost tracking"
 enabled: true

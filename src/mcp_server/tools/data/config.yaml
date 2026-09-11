@@ -1,3 +1,4 @@
 category_name: "Data Processing"
+emoji: "📊"
 category_description: "JSON, CSV, XML, YAML, TOML parsing and manipulation"
 enabled: true

@@ -1,3 +1,4 @@
 category_name: "Web & Network"
+emoji: "🌐"
 category_description: "Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup"
 enabled: true

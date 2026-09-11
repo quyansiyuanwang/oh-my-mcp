@@ -1,3 +1,4 @@
 category_name: "System"
+emoji: "💻"
 category_description: "System info, CPU/memory monitoring, environment variables"
 enabled: true

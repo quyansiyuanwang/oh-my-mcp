@@ -5,14 +5,18 @@ on:
     branches: [main, master, develop]
     paths:
       - 'src/**/*.py'
+      - 'src/**/*.yaml'
       - 'tests/**/*.py'
+      - 'scripts/docs/**'
       - 'pyproject.toml'
       - '.github/workflows/lint.yml'
   pull_request:
     branches: [main, master]
     paths:
       - 'src/**/*.py'
+      - 'src/**/*.yaml'
       - 'tests/**/*.py'
+      - 'scripts/docs/**'
       - 'pyproject.toml'
       - '.github/workflows/lint.yml'
 
@@ -45,3 +49,6 @@ jobs:
 
       - name: Type check with mypy
         run: uv run mypy src/ --strict
+
+      - name: Check generated docs are up to date
+        run: uv run python scripts/docs/generate_docs.py --check

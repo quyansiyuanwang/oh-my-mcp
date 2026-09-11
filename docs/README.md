@@ -48,16 +48,20 @@
 
 **141 practical tools across 10 categories:**
 
-- **Compression** (5 tools): ZIP/TAR archive operations
-- **Web & Network** (18 tools): Web search, scraping, downloads
-- **File System** (12 tools): File/directory operations
-- **Data Processing** (15 tools): JSON, CSV, XML, YAML
-- **Text Processing** (9 tools): Regex, encoding, extraction
-- **System** (8 tools): System information and monitoring
-- **Utilities** (10 tools): UUID, hashing, datetime
-- **Subagent AI** (6 tools): AI task orchestration with OpenAI and Anthropic
-- **Browser Automation** (33 tools): Selenium-based browser control, navigation, screenshots
-- **Computer Use** (25 tools): AI desktop control — screen capture, mouse, keyboard, clipboard, window management
+<!-- DOCGEN:docs-categories:start -->
+**141 practical tools across 10 categories:**
+
+- **Browser Automation** (33 tools): Selenium-based browser automation
+- **Compression** (5 tools): ZIP/TAR compression and extraction with security features
+- **Computer Use** (25 tools): AI desktop control
+- **Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
+- **File System** (12 tools): Read, write, search files and directories, file comparison
+- **Subagent AI Orchestration** (6 tools): Delegate subtasks to external AI models with parallel execution and cost tracking
+- **System** (8 tools): System info, CPU/memory monitoring, environment variables
+- **Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
+- **Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
+- **Web & Network** (18 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup
+<!-- DOCGEN:docs-categories:end -->
 
 ---
 
