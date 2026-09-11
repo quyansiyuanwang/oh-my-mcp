@@ -139,7 +139,7 @@ def computer_get_monitors() -> str:
     """
     try:
         _check_mss_available()
-        with _lib.mss.mss() as sct:
+        with _lib.mss.MSS() as sct:
             monitors = [{k: v for k, v in m.items() if k != "__handle__"} for m in sct.monitors]
         return json.dumps(
             {"success": True, "count": len(monitors) - 1, "monitors": monitors}, indent=2
@@ -194,11 +194,11 @@ def computer_locate_on_screen(
     Locate an image on the screen and return its center coordinates.
 
     Useful for finding UI elements by a reference screenshot. Confidence
-    matching may require opencv-python to be installed.
+    matching requires opencv-python; without it, exact pixel matching is used.
 
     Args:
         image_path: Path to a small reference PNG to search for
-        confidence: Matching confidence 0-1 (default 0.9)
+        confidence: Matching confidence 0-1 (default 0.9, needs opencv-python)
         grayscale: Match in grayscale for speed (default False)
 
     Returns:
@@ -210,27 +210,35 @@ def computer_locate_on_screen(
         if not ref.is_file():
             raise ValidationError(f"Reference image not found: {image_path}")
 
-        box = _lib.pyautogui.locateOnScreen(str(ref), confidence=confidence, grayscale=grayscale)
+        note = None
+        if _lib._opencv_available:
+            box = _lib.pyautogui.locateOnScreen(
+                str(ref), confidence=confidence, grayscale=grayscale
+            )
+        else:
+            # Exact pixel match; confidence matching needs OpenCV
+            box = _lib.pyautogui.locateOnScreen(str(ref), grayscale=grayscale)
+            note = "OpenCV not installed; used exact pixel matching (confidence ignored). Install opencv-python for fuzzy matching."
         if box is None:
             return json.dumps(
                 {"success": False, "found": False, "message": "Image not found on screen"}
             )
 
         center = _lib.pyautogui.center(box)
-        return json.dumps(
-            {
-                "success": True,
-                "found": True,
-                "center": {"x": center.x, "y": center.y},
-                "box": {
-                    "left": box.left,
-                    "top": box.top,
-                    "width": box.width,
-                    "height": box.height,
-                },
+        result: dict[str, Any] = {
+            "success": True,
+            "found": True,
+            "center": {"x": center.x, "y": center.y},
+            "box": {
+                "left": box.left,
+                "top": box.top,
+                "width": box.width,
+                "height": box.height,
             },
-            indent=2,
-        )
+        }
+        if note:
+            result["note"] = note
+        return json.dumps(result, indent=2)
     except (ValidationError, ComputerUseError) as e:
         logger.warning(f"computer_locate_on_screen failed: {e}")
         return error_json(str(e))
@@ -665,8 +673,9 @@ def computer_resize_window(title: str, width: int, height: int) -> str:
 
     Args:
         title: Substring of the window title (case-insensitive)
-        width: New width in pixels
-        height: New height in pixels
+        width: New outer width in pixels (includes borders/title bar, so the
+            client area will be slightly smaller)
+        height: New outer height in pixels
 
     Returns:
         JSON string confirming the new size

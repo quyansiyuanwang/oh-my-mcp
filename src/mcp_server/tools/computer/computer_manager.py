@@ -32,6 +32,7 @@ __all__ = [
     "_check_mss_available",
     "_check_pyperclip_available",
     "_check_pygetwindow_available",
+    "_opencv_available",
 ]
 
 # Lazy imports to allow graceful errors when libraries are not installed or
@@ -78,6 +79,14 @@ try:
 except Exception:  # pygetwindow raises NotImplementedError on non-Windows
     pass
 
+_opencv_available = False
+try:
+    import cv2  # noqa: F401
+
+    _opencv_available = True
+except Exception:
+    cv2 = None
+
 INSTALL_HINT = (
     "Install with: pip install pyautogui mss pyperclip pygetwindow pillow "
     "or pip install oh-my-mcp[computer]"
@@ -102,6 +111,18 @@ def _check_pyperclip_available() -> None:
 def _check_pygetwindow_available() -> None:
     if not _pygetwindow_available:
         raise ComputerUseError(f"pygetwindow is not installed. {INSTALL_HINT}")
+
+
+def _is_user_visible_window(w: Any) -> bool:
+    """Filter out invisible system windows (empty title, 1x1 placeholder)."""
+    title = (w.title or "").strip()
+    if not title:
+        return False
+    try:
+        box = w.box
+        return bool(box.width > 1 and box.height > 1)
+    except Exception:
+        return False
 
 
 class ComputerManager:
@@ -168,7 +189,7 @@ class ComputerManager:
 
         if monitor > 0:
             _check_mss_available()
-            with mss.mss() as sct:
+            with mss.MSS() as sct:
                 try:
                     mon = sct.monitors[monitor]
                 except IndexError:
@@ -198,9 +219,13 @@ class ComputerManager:
     # -- windows --------------------------------------------------------------
 
     def find_window(self, title: str) -> Any:
-        """Find a window whose title contains `title` (case-insensitive)."""
+        """Find a visible, titled window whose title contains `title` (case-insensitive)."""
         _check_pygetwindow_available()
-        matches = [w for w in gw.getAllWindows() if title.lower() in (w.title or "").lower()]
+        matches = [
+            w
+            for w in gw.getAllWindows()
+            if _is_user_visible_window(w) and title.lower() in (w.title or "").lower()
+        ]
         if not matches:
             raise ComputerUseError(
                 f"No window found with title containing: {title}. "
@@ -213,6 +238,8 @@ class ComputerManager:
         result = []
         for w in gw.getAllWindows():
             t = w.title or ""
+            if not _is_user_visible_window(w):
+                continue
             if title_filter and title_filter.lower() not in t.lower():
                 continue
             try:

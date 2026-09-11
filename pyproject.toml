@@ -111,7 +111,7 @@ disallow_any_unimported = false
 exclude = ["build/", "dist/", "tests/fixtures/"]
 
 [[tool.mypy.overrides]]
-module = ["pyautogui", "mss", "mss.*", "pyperclip", "pygetwindow"]
+module = ["pyautogui", "mss", "mss.*", "pyperclip", "pygetwindow", "cv2"]
 ignore_missing_imports = true
 
 [tool.uv.workspace]

@@ -132,10 +132,8 @@ class MockPyAutoGUI:
         self._record("screenshot", (region,), kw)
         return MockImage()
 
-    def locateOnScreen(
-        self, path: str, confidence: float = 0.9, grayscale: bool = False
-    ) -> MockBox | None:
-        self._record("locateOnScreen", (path,), {"confidence": confidence, "grayscale": grayscale})
+    def locateOnScreen(self, path: str, **kwargs: Any) -> MockBox | None:
+        self._record("locateOnScreen", (path,), kwargs)
         if Path(path).name == "missing-on-screen.png":
             return None
         return MockBox(10, 20, 100, 50)
@@ -170,8 +168,11 @@ class MockMSS:
     def __init__(self) -> None:
         self.handle = MockMSSHandle()
 
-    def mss(self) -> MockMSSHandle:
+    def MSS(self) -> MockMSSHandle:
         return self.handle
+
+    def mss(self) -> MockMSSHandle:
+        return self.MSS()
 
 
 class MockPyperclip:
@@ -190,9 +191,11 @@ class MockWinBox:
 
 
 class MockWindow:
-    def __init__(self, title: str) -> None:
+    def __init__(self, title: str, width: int = 640, height: int = 480) -> None:
         self.title = title
         self.box = MockWinBox()
+        self.box.width = width
+        self.box.height = height
         self.isActive = False
         self.isMinimized = False
         self.isMaximized = False
@@ -213,6 +216,7 @@ class MockGW:
         self.windows = [
             MockWindow("Editor - main.py"),
             MockWindow("Chrome - example.com"),
+            MockWindow("", width=1, height=1),  # invisible system window
         ]
 
     def getAllWindows(self) -> list[MockWindow]:
@@ -354,6 +358,18 @@ class TestScreenInfo:
     def test_locate_on_screen_missing_file(self, pag: MockPyAutoGUI, tmp_path: Path) -> None:
         result = json.loads(T["computer_locate_on_screen"](str(tmp_path / "nope.png")))
         assert "error" in result
+
+    def test_locate_on_screen_without_opencv_uses_exact_match(
+        self, pag: MockPyAutoGUI, tmp_path: Path
+    ) -> None:
+        ref = tmp_path / "ref.png"
+        ref.write_bytes(b"\x89PNG")
+        with patch(f"{LIB}._opencv_available", False):
+            result = json.loads(T["computer_locate_on_screen"](str(ref)))
+        assert result["found"] is True
+        assert "OpenCV not installed" in result["note"]
+        _, _, kwargs = pag.calls[-1]
+        assert "confidence" not in kwargs
 
 
 class TestMouse:
@@ -507,6 +523,12 @@ class TestWindows:
         with patch(f"{LIB}._pygetwindow_available", False):
             result = json.loads(T["computer_list_windows"]())
             assert "pygetwindow is not installed" in result["error"]
+
+    def test_list_windows_filters_invisible(self, gw_mod: MockGW) -> None:
+        result = json.loads(T["computer_list_windows"]())
+        titles = [w["title"] for w in result["windows"]]
+        assert "" not in titles
+        assert result["count"] == 2
 
 
 class TestConfig:
