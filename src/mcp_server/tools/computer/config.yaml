@@ -1,0 +1,13 @@
+category_name: "Computer Use"
+category_description: "AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration"
+enabled: true
+
+# Safety notes:
+#   - pyautogui.FAILSAFE is ON by default: slam the mouse into the top-left
+#     corner to abort an in-progress automation (prevents a runaway agent).
+#   - pyautogui.PAUSE (default 0.1s) inserts a delay after every action.
+#   - Both are adjustable at runtime via computer_config_set.
+#
+# Dependencies: pyautogui, mss, pyperclip, pygetwindow, pillow
+#   pip install pyautogui mss pyperclip pygetwindow pillow
+#   (or pip install oh-my-mcp[computer])

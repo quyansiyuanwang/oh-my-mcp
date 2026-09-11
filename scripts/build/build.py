@@ -298,8 +298,9 @@ def build_executable(onefile: bool = False) -> bool:
         cmd.extend(["--add-data", f"{src}{os.pathsep}{dest}"])
     print()
 
-    # Add exclude modules (to reduce size)
-    excludes = ["tkinter", "matplotlib", "numpy", "pandas", "PIL", "IPython", "jupyter"]
+    # Add exclude modules (to reduce size). PIL/Pillow is required by
+    # computer-use screenshots, so it must NOT be excluded.
+    excludes = ["tkinter", "matplotlib", "numpy", "pandas", "IPython", "jupyter"]
     print(f"[Exclude] Excluding {len(excludes)} unnecessary modules")
     for module in excludes:
         cmd.extend(["--exclude-module", module])

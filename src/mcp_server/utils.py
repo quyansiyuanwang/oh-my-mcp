@@ -98,6 +98,12 @@ class BrowserTimeoutError(BrowserError):
     pass
 
 
+class ComputerUseError(MCPServerError):
+    """Raised when computer use (screen/mouse/keyboard) operations fail."""
+
+    pass
+
+
 # Validation utilities
 def validate_url(url: str) -> bool:
     """

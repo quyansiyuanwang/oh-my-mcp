@@ -1,7 +1,7 @@
 [project]
 name = "oh-my-mcp"
 version = "0.1.0"
-description = "oh-my-mcp - MCP server with 116 practical tools across 9 categories"
+description = "oh-my-mcp - MCP server with 138 practical tools across 10 categories"
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
@@ -40,6 +40,11 @@ dependencies = [
     "pyinstaller>=6.18.0",
     "selenium>=4.15.0",
     "webdriver-manager>=4.0.0",
+    "pyautogui>=0.9.54",
+    "mss>=9.0",
+    "pyperclip>=1.8",
+    "pygetwindow>=0.0.9",
+    "pillow>=10.0",
 ]
 
 [project.urls]
@@ -60,6 +65,13 @@ dev = [
 browser = [
     "selenium>=4.15.0",
     "webdriver-manager>=4.0.0",
+]
+computer = [
+    "pyautogui>=0.9.54",
+    "mss>=9.0",
+    "pyperclip>=1.8",
+    "pygetwindow>=0.0.9",
+    "pillow>=10.0",
 ]
 
 [project.scripts]
@@ -97,6 +109,10 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_any_unimported = false
 exclude = ["build/", "dist/", "tests/fixtures/"]
+
+[[tool.mypy.overrides]]
+module = ["pyautogui", "mss", "mss.*", "pyperclip", "pygetwindow"]
+ignore_missing_imports = true
 
 [tool.uv.workspace]
 members = ["test_uv_project"]

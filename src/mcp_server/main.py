@@ -1,7 +1,7 @@
 """
 oh-my-mcp - MCP Server with Practical Tools
 
-This MCP server provides 116 tools across 9 categories.
+This MCP server provides 138 tools across 10 categories.
 Tool counts and descriptions are dynamically loaded from each plugin.
 
 Author: MCP Server Project
