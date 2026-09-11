@@ -18,7 +18,7 @@ oh-my-mcp/
 │       │   ├── __init__.py
 │       │   └── config.py            # ⚙️ 配置生成器
 │       │
-│       └── 📂 tools/                # 工具插件目录 (9 个类别)
+│       └── 📂 tools/                # 工具插件目录 (10 个类别)
 │           ├── __init__.py          # 🔍 插件自动发现
 │           ├── registry.py          # 📋 @tool_handler 装饰器与 ToolPlugin
 │           ├── search_engine.py     # 🔎 搜索引擎后端
@@ -56,10 +56,15 @@ oh-my-mcp/
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           └── 📂 browser/          # 🌐 浏览器自动化 (33 tools)
+│           ├── 📂 browser/          # 🌐 浏览器自动化 (33 tools)
 │               ├── __init__.py
 │               ├── config.yaml
 │               ├── session_manager.py
+│               └── handlers.py
+│           └── 📂 computer/         # 🖥️ Computer Use (22 tools)
+│               ├── __init__.py
+│               ├── config.yaml
+│               ├── computer_manager.py
 │               └── handlers.py
 │
 ├── 📂 docs/                         # 📚 文档目录

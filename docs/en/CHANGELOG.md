@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Computer Use category** (22 tools): AI-driven desktop control via pyautogui/mss/pyperclip/pygetwindow
+  - Screen capture: `computer_screenshot` (region/monitor, file or base64), `computer_get_screen_size`,
+    `computer_get_monitors`, `computer_get_pixel_color`, `computer_locate_on_screen`
+  - Mouse: move, click, drag, scroll, position
+  - Keyboard: `computer_type_text`, `computer_press_key`, `computer_hotkey`
+  - Clipboard: read/write via pyperclip
+  - Window management: list, focus, info, resize, move
+  - Safety: FAILSAFE on by default, adjustable action pause, `computer_config_get/set`
+  - New guide: `docs/zh/COMPUTER_USE_GUIDE.md`
+
+### Changed
+
+- Tool count 116 -> 138 across 10 categories (README, docs, package description)
+- Build: removed PIL from PyInstaller excludes (required for computer-use screenshots)
+- Added `computer` optional dependency group and core dependencies for desktop control
+
 ## [0.1.1] - 2026-02-11
 
 ### Added

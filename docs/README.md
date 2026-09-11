@@ -14,6 +14,7 @@
 
 **高级功能**
 - [高级搜索](zh/SEARCH_ADVANCED.md) - 多引擎搜索功能
+- [Computer Use 指南](zh/COMPUTER_USE_GUIDE.md) - AI 桌面控制
 
 ### 🇬🇧 [English Documentation](en/)
 
@@ -45,7 +46,7 @@
 
 ## 📊 Tool Categories | 工具分类
 
-**116 practical tools across 9 categories:**
+**138 practical tools across 10 categories:**
 
 - **Compression** (5 tools): ZIP/TAR archive operations
 - **Web & Network** (18 tools): Web search, scraping, downloads
@@ -56,6 +57,7 @@
 - **Utilities** (10 tools): UUID, hashing, datetime
 - **Subagent AI** (6 tools): AI task orchestration with OpenAI and Anthropic
 - **Browser Automation** (33 tools): Selenium-based browser control, navigation, screenshots
+- **Computer Use** (22 tools): AI desktop control — screen capture, mouse, keyboard, clipboard, window management
 
 ---
 
@@ -68,6 +70,7 @@ docs/
 │   ├── CONFIGURATION_GUIDE_CN.md       # 配置指南
 │   ├── SUBAGENT_CONFIG.md              # Subagent 配置
 │   ├── SUBAGENT_GUIDE.md               # Subagent 使用
+│   ├── COMPUTER_USE_GUIDE.md           # Computer Use 指南
 │   └── SEARCH_ADVANCED.md              # 高级搜索
 ├── en/                              # English docs
 │   ├── ARCHITECTURE.md                 # Architecture

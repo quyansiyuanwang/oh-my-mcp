@@ -82,4 +82,74 @@ List contents of a ZIP or TAR archive without extracting.
 
 ---
 
+## 🖥️ Computer Use Tools (22)
+
+### `computer_screenshot`
+Capture the screen/region/monitor, save to file or return base64 PNG.
+
+### `computer_get_screen_size`
+Get the primary display size in pixels.
+
+### `computer_get_monitors`
+List all connected displays with their geometry.
+
+### `computer_get_pixel_color`
+Get the RGB/hex color of a pixel at a coordinate.
+
+### `computer_locate_on_screen`
+Locate a reference image on screen and return its center coordinates.
+
+### `computer_mouse_move`
+Move the mouse cursor (absolute or relative).
+
+### `computer_mouse_click`
+Click left/right/middle button, single or double.
+
+### `computer_mouse_drag`
+Drag from one position to another.
+
+### `computer_mouse_scroll`
+Vertical or horizontal mouse wheel scroll.
+
+### `computer_mouse_get_position`
+Get the current cursor position.
+
+### `computer_type_text`
+Type text into the currently focused window.
+
+### `computer_press_key`
+Press a keyboard key (enter, esc, tab, ...).
+
+### `computer_hotkey`
+Press a hotkey combination (e.g. ctrl+shift+esc).
+
+### `computer_clipboard_read`
+Read the clipboard text content.
+
+### `computer_clipboard_write`
+Write text to the clipboard.
+
+### `computer_list_windows`
+List open windows with title, geometry, and state.
+
+### `computer_focus_window`
+Bring a window to the foreground by title substring.
+
+### `computer_get_window_info`
+Get detailed information about a window.
+
+### `computer_resize_window`
+Resize a window by title substring.
+
+### `computer_move_window`
+Move a window to a new position.
+
+### `computer_config_get`
+Get safety configuration and dependency availability.
+
+### `computer_config_set`
+Update pause interval, failsafe flag, and screenshot directory.
+
+---
+
 For detailed usage, see the main README or category-specific documentation in the docs folder.

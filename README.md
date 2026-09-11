@@ -1,6 +1,6 @@
 # oh-my-mcp
 
-A powerful Model Context Protocol (MCP) server with **116 practical tools** across 9 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+A powerful Model Context Protocol (MCP) server with **138 practical tools** across 10 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
 [![Tests](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml)
@@ -22,6 +22,7 @@ oh-my-mcp provides tools for:
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
 - **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic), parallel execution, conditional branching, persistent config
 - **🌐 Browser Automation** (33 tools): Selenium-based browser control, page navigation, element interaction, screenshots, JavaScript execution, multi-tab management
+- **🖥️ Computer Use** (22 tools): AI desktop control — screen capture (multi-monitor), mouse, keyboard, clipboard, window management, with safety failsafe
 
 > **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
 
@@ -33,6 +34,7 @@ oh-my-mcp provides tools for:
 - **[📦 Build Guide](docs/en/BUILD.md)** - Package for Windows/Linux distribution
 - **[🏛️ Architecture Guide](docs/en/ARCHITECTURE.md)** - System architecture and design
 - **[🧪 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md)** - AI orchestration features
+- **[🖥️ Computer Use Guide](docs/zh/COMPUTER_USE_GUIDE.md)** - AI desktop control (中文)
 
 
 ### ⚡ 快速安装与配置
@@ -145,7 +147,7 @@ oh-my-mcp/
         ├── command_executor.py      # Secure command execution
         ├── cli/
         │   └── config.py            # Configuration generator
-        └── tools/                   # Tool plugins (9 categories)
+        └── tools/                   # Tool plugins (10 categories)
             ├── __init__.py          # Plugin auto-discovery
             ├── registry.py          # @tool_handler & ToolPlugin
             ├── search_engine.py     # Web search backend
@@ -157,7 +159,9 @@ oh-my-mcp/
             ├── text/                # Text Processing tools (9)
             ├── system/              # System tools (8)
             ├── utility/             # Utility tools (10)
-            └── subagent/            # AI Orchestration tools (6)
+            ├── subagent/            # AI Orchestration tools (6)
+            ├── browser/             # Browser Automation tools (33)
+            └── computer/            # Computer Use tools (22)
 ```
 
 ### Adding New Tools

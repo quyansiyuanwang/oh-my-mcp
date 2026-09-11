@@ -39,9 +39,13 @@ oh-my-mcp/
 │   │   ├── subagent/            # AI 编排 (6 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
-│   │   └── browser/             # 浏览器自动化 (33 tools)
+│   │   ├── browser/             # 浏览器自动化 (33 tools)
 │   │       ├── config.yaml
 │   │       ├── session_manager.py
+│   │       └── handlers.py
+│   │   └── computer/            # Computer Use (22 tools)
+│   │       ├── config.yaml
+│   │       ├── computer_manager.py
 │   │       └── handlers.py
 │   └── cli/                     # 命令行工具
 │       └── config.py            # 配置生成器
