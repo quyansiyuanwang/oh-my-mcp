@@ -1,6 +1,6 @@
 # oh-my-mcp
 
-A powerful Model Context Protocol (MCP) server with **138 practical tools** across 10 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+A powerful Model Context Protocol (MCP) server with **141 practical tools** across 10 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
 [![Tests](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml)
@@ -22,7 +22,7 @@ oh-my-mcp provides tools for:
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
 - **🤖 Subagent AI** (6 tools): Delegate subtasks to external AI models (OpenAI/Anthropic), parallel execution, conditional branching, persistent config
 - **🌐 Browser Automation** (33 tools): Selenium-based browser control, page navigation, element interaction, screenshots, JavaScript execution, multi-tab management
-- **🖥️ Computer Use** (22 tools): AI desktop control — screen capture (multi-monitor), mouse, keyboard, clipboard, window management, with safety failsafe
+- **🖥️ Computer Use** (25 tools): AI desktop control — screen capture (multi-monitor), mouse, keyboard, clipboard, window management, with safety failsafe
 
 > **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
 

@@ -43,7 +43,7 @@ oh-my-mcp/
 │   │       ├── config.yaml
 │   │       ├── session_manager.py
 │   │       └── handlers.py
-│   │   └── computer/            # Computer Use (22 tools)
+│   │   └── computer/            # Computer Use (25 tools)
 │   │       ├── config.yaml
 │   │       ├── computer_manager.py
 │   │       └── handlers.py

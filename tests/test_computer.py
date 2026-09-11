@@ -204,6 +204,12 @@ class MockWindow:
     def activate(self) -> None:
         self.actions.append("activate")
 
+    def minimize(self) -> None:
+        self.actions.append("minimize")
+
+    def maximize(self) -> None:
+        self.actions.append("maximize")
+
     def resizeTo(self, w: int, h: int) -> None:
         self.actions.append(f"resize:{w}x{h}")
 
@@ -519,6 +525,29 @@ class TestWindows:
         assert result["x"] == 100
         assert gw_mod.windows[0].actions == ["move:100,50"]
 
+    def test_minimize_and_maximize_window(self, gw_mod: MockGW) -> None:
+        result = json.loads(T["computer_minimize_window"]("editor"))
+        assert result["minimized"] == "Editor - main.py"
+        result = json.loads(T["computer_maximize_window"]("editor"))
+        assert result["maximized"] == "Editor - main.py"
+        assert gw_mod.windows[0].actions == ["minimize", "maximize"]
+
+    def test_minimize_window_not_found(self, gw_mod: MockGW) -> None:
+        result = json.loads(T["computer_minimize_window"]("nonexistent"))
+        assert "error" in result
+
+    def test_wait(self) -> None:
+        import time as time_mod
+
+        start = time_mod.monotonic()
+        result = json.loads(T["computer_wait"](0.2))
+        assert result == {"success": True, "waited": 0.2}
+        assert time_mod.monotonic() - start >= 0.15
+
+    def test_wait_bounds(self) -> None:
+        assert "error" in json.loads(T["computer_wait"](-1))
+        assert "error" in json.loads(T["computer_wait"](61))
+
     def test_windows_unavailable(self) -> None:
         with patch(f"{LIB}._pygetwindow_available", False):
             result = json.loads(T["computer_list_windows"]())
@@ -559,8 +588,8 @@ class TestConfig:
 
 
 class TestRegistration:
-    def test_22_tools_registered(self) -> None:
-        assert len(T) == 22
+    def test_25_tools_registered(self) -> None:
+        assert len(T) == 25
 
     def test_tool_naming(self) -> None:
         assert all(name.startswith("computer_") for name in T)

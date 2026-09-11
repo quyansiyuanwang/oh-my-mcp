@@ -46,7 +46,7 @@
 
 ## 📊 Tool Categories | 工具分类
 
-**138 practical tools across 10 categories:**
+**141 practical tools across 10 categories:**
 
 - **Compression** (5 tools): ZIP/TAR archive operations
 - **Web & Network** (18 tools): Web search, scraping, downloads
@@ -57,7 +57,7 @@
 - **Utilities** (10 tools): UUID, hashing, datetime
 - **Subagent AI** (6 tools): AI task orchestration with OpenAI and Anthropic
 - **Browser Automation** (33 tools): Selenium-based browser control, navigation, screenshots
-- **Computer Use** (22 tools): AI desktop control — screen capture, mouse, keyboard, clipboard, window management
+- **Computer Use** (25 tools): AI desktop control — screen capture, mouse, keyboard, clipboard, window management
 
 ---
 

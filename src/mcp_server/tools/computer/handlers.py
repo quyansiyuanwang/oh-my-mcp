@@ -727,6 +727,79 @@ def computer_move_window(title: str, x: int, y: int) -> str:
         return error_json(f"Failed to move window: {e}")
 
 
+@tool_handler
+def computer_minimize_window(title: str) -> str:
+    """
+    Minimize a window by title substring.
+
+    Args:
+        title: Substring of the window title (case-insensitive)
+
+    Returns:
+        JSON string confirming the minimization
+    """
+    try:
+        window = computer_manager.find_window(title)
+        window.minimize()
+        return json.dumps({"success": True, "minimized": window.title}, indent=2)
+    except ComputerUseError as e:
+        logger.warning(f"computer_minimize_window failed: {e}")
+        return error_json(str(e))
+    except Exception as e:
+        logger.error(f"computer_minimize_window unexpected error: {e}")
+        return error_json(f"Failed to minimize window: {e}")
+
+
+@tool_handler
+def computer_maximize_window(title: str) -> str:
+    """
+    Maximize a window by title substring.
+
+    Args:
+        title: Substring of the window title (case-insensitive)
+
+    Returns:
+        JSON string confirming the maximization
+    """
+    try:
+        window = computer_manager.find_window(title)
+        window.maximize()
+        return json.dumps({"success": True, "maximized": window.title}, indent=2)
+    except ComputerUseError as e:
+        logger.warning(f"computer_maximize_window failed: {e}")
+        return error_json(str(e))
+    except Exception as e:
+        logger.error(f"computer_maximize_window unexpected error: {e}")
+        return error_json(f"Failed to maximize window: {e}")
+
+
+@tool_handler
+def computer_wait(duration: float) -> str:
+    """
+    Wait for a given number of seconds (useful between UI actions while
+    applications render or load).
+
+    Args:
+        duration: Seconds to wait, 0-60
+
+    Returns:
+        JSON string confirming the wait
+    """
+    try:
+        if duration < 0:
+            raise ValidationError("duration must be >= 0")
+        if duration > 60:
+            raise ValidationError("duration must be at most 60 seconds")
+        time.sleep(duration)
+        return json.dumps({"success": True, "waited": duration}, indent=2)
+    except (ValidationError, ComputerUseError) as e:
+        logger.warning(f"computer_wait failed: {e}")
+        return error_json(str(e))
+    except Exception as e:
+        logger.error(f"computer_wait unexpected error: {e}")
+        return error_json(f"Wait failed: {e}")
+
+
 # ---------------------------------------------------------------------------
 # Configuration tools
 # ---------------------------------------------------------------------------

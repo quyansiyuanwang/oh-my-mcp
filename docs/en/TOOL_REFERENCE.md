@@ -82,7 +82,7 @@ List contents of a ZIP or TAR archive without extracting.
 
 ---
 
-## 🖥️ Computer Use Tools (22)
+## 🖥️ Computer Use Tools (25)
 
 ### `computer_screenshot`
 Capture the screen/region/monitor, save to file or return base64 PNG.
@@ -143,6 +143,15 @@ Resize a window by title substring.
 
 ### `computer_move_window`
 Move a window to a new position.
+
+### `computer_minimize_window`
+Minimize a window by title substring.
+
+### `computer_maximize_window`
+Maximize a window by title substring.
+
+### `computer_wait`
+Wait 0-60 seconds between UI actions.
 
 ### `computer_config_get`
 Get safety configuration and dependency availability.
