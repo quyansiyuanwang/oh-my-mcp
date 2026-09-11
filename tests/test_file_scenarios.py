@@ -121,13 +121,15 @@ class TestDirectoryScenario:
         assert rec["count"] == 112  # 10 dirs + 100 files + 1 sub + 1 log
 
     def test_search_case_insensitive_and_pattern(self, tmp_path: Path) -> None:
-        (tmp_path / "Report.TXT").write_text("a")
+        (tmp_path / "Report.txt").write_text("a")
         (tmp_path / "report_final.txt").write_text("b")
         (tmp_path / "other.log").write_text("c")
+        # glob case rules are platform-dependent; same-case names match everywhere
         r = json.loads(T["search_files"](str(tmp_path), pattern="*.txt"))
         assert r["count"] == 2
+        # name_contains matching is implemented case-insensitively by the tool
         r = json.loads(T["search_files"](str(tmp_path), pattern="*", name_contains="REPORT"))
-        assert r["count"] == 2  # case-insensitive contains
+        assert r["count"] == 2
 
     def test_search_empty_directory(self, tmp_path: Path) -> None:
         r = json.loads(T["search_files"](str(tmp_path)))
@@ -143,7 +145,7 @@ class TestErrorAndEdge:
         f = tmp_path / "same.txt"
         f.write_text("same")
         # shutil.copy2 onto identical path must not corrupt the file
-        result = T["copy_file"](str(f), str(f), overwrite=True)
+        T["copy_file"](str(f), str(f), overwrite=True)
         assert f.read_text(encoding="utf-8") == "same"
 
     def test_delete_recreate_cycle(self, tmp_path: Path) -> None:

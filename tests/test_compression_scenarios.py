@@ -176,7 +176,7 @@ class TestFilenamesAndStructure:
         assert listing["file_count"] == 2
 
         out = tmp_path / "out"
-        r = json.loads(T["extract_zip"](str(archive), str(out)))
+        json.loads(T["extract_zip"](str(archive), str(out)))
         # extraction flattens paths into out_dir/<basename> or preserves structure
         # depending on member naming — verify all bytes somewhere
         extracted = "\x00".join(p.read_text(encoding="utf-8") for p in sorted(out.rglob("*.txt")))

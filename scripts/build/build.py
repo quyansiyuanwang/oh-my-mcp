@@ -209,7 +209,7 @@ def get_data_files() -> list[Any]:
     fakeredis_json = site_packages / "fakeredis" / "commands.json"
     if fakeredis_json.exists():
         data_files.append((str(fakeredis_json), "fakeredis"))
-        print(f"  Including fakeredis commands.json")
+        print("  Including fakeredis commands.json")
 
     # Auto-detect and include plugin config.yaml files for tool discovery
     tools_dir = PROJECT_ROOT / "src" / "mcp_server" / "tools"
@@ -310,7 +310,7 @@ def build_executable(onefile: bool = False) -> bool:
     cmd.append("src/mcp_server/main.py")
 
     # Run PyInstaller
-    print(f"\n[Run] Running PyInstaller...\n")
+    print("\n[Run] Running PyInstaller...\n")
     print(f"Command: {' '.join(cmd[:5])} ... (and {len(cmd)-5} more args)\n")
 
     start = time.time()
@@ -340,20 +340,20 @@ def show_build_info():
 
     if onefile_path.exists():
         size_mb = onefile_path.stat().st_size / (1024 * 1024)
-        print(f"[Package] Single executable built:")
+        print("[Package] Single executable built:")
         print(f"   Location: {onefile_path}")
         print(f"   Size: {size_mb:.1f} MB")
         print(f"\n[Usage] Usage: {onefile_path}")
     elif exe_path.exists():
         dir_size = sum(f.stat().st_size for f in exe_path.parent.rglob("*") if f.is_file())
         size_mb = dir_size / (1024 * 1024)
-        print(f"[Package] Directory bundle built:")
+        print("[Package] Directory bundle built:")
         print(f"   Location: {exe_path.parent}")
         print(f"   Executable: {exe_path}")
         print(f"   Total size: {size_mb:.1f} MB")
         print(f"\n[Usage] Usage: {exe_path}")
 
-    print(f"\n[Config] To configure Claude Desktop:")
+    print("\n[Config] To configure Claude Desktop:")
     if plat["is_windows"]:
         config_path = os.path.expanduser("~/AppData/Roaming/Claude/claude_desktop_config.json")
     else:

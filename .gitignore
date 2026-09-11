@@ -53,8 +53,10 @@ test_uv_project/
 Thumbs.db
 nul
 
-# UV lock file (for libraries)
-uv.lock
+# UV lock file MUST be committed: it is an application (deployed binary),
+# and without it CI re-resolves dependencies to newer versions whose
+# stricter linters/rules break the build.
+# uv.lock
 
 # Pyinstaller
 *.spec
