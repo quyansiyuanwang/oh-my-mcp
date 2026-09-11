@@ -10,7 +10,8 @@ Provides tools for:
 import json
 import tarfile
 import zipfile
-from typing import List, Optional
+from pathlib import Path
+from typing import List, Optional, Tuple
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import (
@@ -27,10 +28,13 @@ from mcp_server.utils import (
 @tool_handler
 def compress_zip(files: List[str], output_path: str, compression_level: int = 6) -> str:
     """
-    Create a ZIP archive from files.
+    Create a ZIP archive from files and/or directories.
+
+    Directories are packed recursively with their hierarchy preserved
+    (member paths are prefixed with the directory name).
 
     Args:
-        files: List of file paths to compress
+        files: List of file or directory paths to compress
         output_path: Path for output ZIP file
         compression_level: Compression level 0-9 (default: 6)
 
@@ -48,17 +52,23 @@ def compress_zip(files: List[str], output_path: str, compression_level: int = 6)
         if not 0 <= compression_level <= 9:
             raise ValidationError("Compression level must be 0-9")
 
-        # 验证所有文件存在
+        # 验证所有条目存在；目录递归展开，保留层级
         total_size = 0
-        validated_files = []
+        entries: List[Tuple[Path, str]] = []  # (source_path, arcname)
         for file_path in files:
             p = sanitize_path(file_path)
             if not p.exists():
                 raise FileOperationError(f"File not found: {file_path}")
-            if not p.is_file():
+            if p.is_dir():
+                for f in sorted(p.rglob("*")):
+                    if f.is_file():
+                        entries.append((f, f"{p.name}/{f.relative_to(p).as_posix()}"))
+                        total_size += safe_get_file_size(f)
+            elif p.is_file():
+                entries.append((p, p.name))
+                total_size += safe_get_file_size(p)
+            else:
                 raise FileOperationError(f"Not a file: {file_path}")
-            total_size += safe_get_file_size(p)
-            validated_files.append(p)
 
         # 创建 ZIP
         output = sanitize_path(output_path)
@@ -67,16 +77,15 @@ def compress_zip(files: List[str], output_path: str, compression_level: int = 6)
         with zipfile.ZipFile(
             output, "w", zipfile.ZIP_DEFLATED, compresslevel=compression_level
         ) as zf:
-            for p in validated_files:
-                zf.write(p, p.name)
+            for src, arcname in entries:
+                zf.write(src, arcname)
 
         # 计算压缩率
         compressed_size = safe_get_file_size(output)
         ratio = (1 - compressed_size / total_size) * 100 if total_size > 0 else 0
 
         logger.info(
-            f"Created ZIP archive: {output} ({len(validated_files)} files, "
-            f"{format_bytes(compressed_size)})"
+            f"Created ZIP archive: {output} ({len(entries)} files, {format_bytes(compressed_size)})"
         )
 
         return json.dumps(
@@ -86,7 +95,7 @@ def compress_zip(files: List[str], output_path: str, compression_level: int = 6)
                 "original_size": format_bytes(total_size),
                 "compressed_size": format_bytes(compressed_size),
                 "compression_ratio": f"{ratio:.1f}%",
-                "file_count": len(validated_files),
+                "file_count": len(entries),
             }
         )
 
@@ -184,10 +193,13 @@ def extract_zip(zip_path: str, extract_to: str = ".", password: Optional[str] = 
 @tool_handler
 def compress_tar(files: List[str], output_path: str, compression: str = "gz") -> str:
     """
-    Create a TAR archive from files.
+    Create a TAR archive from files and/or directories.
+
+    Directories are packed recursively with their hierarchy preserved
+    (member paths are prefixed with the directory name).
 
     Args:
-        files: List of file paths to compress
+        files: List of file or directory paths to compress
         output_path: Path for output TAR file
         compression: Compression type - "none", "gz", or "bz2" (default: "gz")
 
@@ -205,17 +217,25 @@ def compress_tar(files: List[str], output_path: str, compression: str = "gz") ->
         if compression not in ["none", "gz", "bz2"]:
             raise ValidationError("Compression must be 'none', 'gz', or 'bz2'")
 
-        # 验证所有文件存在
+        # 验证所有条目存在；目录保持整体（tarfile 会递归打包并保留层级）
         total_size = 0
-        validated_files = []
+        file_count = 0
+        validated_paths: List[Path] = []
         for file_path in files:
             p = sanitize_path(file_path)
             if not p.exists():
                 raise FileOperationError(f"File not found: {file_path}")
-            if not p.is_file():
+            if p.is_dir():
+                for f in sorted(p.rglob("*")):
+                    if f.is_file():
+                        total_size += safe_get_file_size(f)
+                        file_count += 1
+            elif p.is_file():
+                total_size += safe_get_file_size(p)
+                file_count += 1
+            else:
                 raise FileOperationError(f"Not a file: {file_path}")
-            total_size += safe_get_file_size(p)
-            validated_files.append(p)
+            validated_paths.append(p)
 
         # 创建 TAR
         output = sanitize_path(output_path)
@@ -226,16 +246,15 @@ def compress_tar(files: List[str], output_path: str, compression: str = "gz") ->
         tar_mode = mode_map[compression]
 
         with tarfile.open(str(output), tar_mode) as tf:  # type: ignore[call-overload]
-            for p in validated_files:
-                tf.add(p, arcname=p.name)
+            for p in validated_paths:
+                tf.add(str(p), arcname=p.name)
 
         # 计算压缩率
         compressed_size = safe_get_file_size(output)
         ratio = (1 - compressed_size / total_size) * 100 if total_size > 0 else 0
 
         logger.info(
-            f"Created TAR archive: {output} ({len(validated_files)} files, "
-            f"{format_bytes(compressed_size)})"
+            f"Created TAR archive: {output} ({file_count} files, {format_bytes(compressed_size)})"
         )
 
         return json.dumps(
@@ -246,7 +265,7 @@ def compress_tar(files: List[str], output_path: str, compression: str = "gz") ->
                 "compressed_size": format_bytes(compressed_size),
                 "compression_ratio": f"{ratio:.1f}%",
                 "compression_type": compression,
-                "file_count": len(validated_files),
+                "file_count": file_count,
             }
         )
 
