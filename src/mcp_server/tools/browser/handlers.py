@@ -1632,7 +1632,9 @@ def browser_config_get(key: str = "") -> str:
     """
     try:
         # function-level import keeps tests' patching of the source binding effective
-        from .browser_config import get_browser_config  # pylint: disable=import-outside-toplevel,redefined-outer-name
+        from .browser_config import (
+            get_browser_config,  # pylint: disable=import-outside-toplevel,redefined-outer-name
+        )
 
         config = get_browser_config()
 
@@ -1720,7 +1722,9 @@ def browser_config_reset() -> str:
         JSON格式的操作结果
     """
     try:
-        from .browser_config import get_browser_config  # pylint: disable=import-outside-toplevel,redefined-outer-name
+        from .browser_config import (
+            get_browser_config,  # pylint: disable=import-outside-toplevel,redefined-outer-name
+        )
 
         config = get_browser_config()
         config.reset_config()
