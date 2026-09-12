@@ -1,6 +1,6 @@
 [project]
 name = "oh-my-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "oh-my-mcp - MCP server with 151 practical tools across 11 categories"
 readme = "README.md"
 requires-python = ">=3.12"

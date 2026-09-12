@@ -10,6 +10,8 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-12
+
 ### 新增
 
 - `file_hash`(流式计算,已验证 9MB+ 文件)与 `read_file_lines`(大文件分页读取)—— File System 现为 16 个工具

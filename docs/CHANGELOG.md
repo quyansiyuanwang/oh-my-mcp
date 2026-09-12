@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-12
+
 ### Added
 
 - `file_hash` (streamed, 9MB+ files verified) and `read_file_lines` (paged reading for arbitrarily large files) — File System, now 16 tools
