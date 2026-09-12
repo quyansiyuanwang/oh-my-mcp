@@ -1,5 +1,7 @@
 # 架构概述
 
+[English](ARCHITECTURE.md) | 中文
+
 本文档描述 MCP Server 的架构设计和实现细节。
 
 ## 项目结构

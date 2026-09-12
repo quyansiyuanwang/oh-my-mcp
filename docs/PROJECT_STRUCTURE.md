@@ -1,6 +1,6 @@
 # Project Structure
 
-English | [中文](../zh/PROJECT_STRUCTURE.md)
+English | [中文](PROJECT_STRUCTURE.zh.md)
 
 oh-my-mcp — an MCP server with **141 tools across 10 categories**.
 

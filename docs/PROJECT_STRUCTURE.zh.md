@@ -1,5 +1,7 @@
 # MCP Server 项目结构
 
+[English](PROJECT_STRUCTURE.md) | 中文
+
 本文档详细说明 MCP Server 的项目组织结构。
 
 ## 📁 目录结构
@@ -249,15 +251,13 @@ python scripts/build/build.py --onefile
 
 ### 文档类型
 
-| 文档                     | 用途     | 位置       |
-| ------------------------ | -------- | ---------- |
-| README.md                | 项目概览 | 根目录     |
-| CLAUDE.md                | 开发指南 | 根目录     |
-| docs/en/ARCHITECTURE.md  | 架构设计 | docs/en/   |
-| docs/en/BUILD.md         | 构建指南 | docs/en/   |
-| docs/en/INSTALLATION.md  | 安装说明 | docs/en/   |
-| docs/zh/SETUP_GUIDE.md   | 配置向导 | docs/zh/   |
-| docs/zh/SUBAGENT_GUIDE.md| AI 功能  | docs/zh/   |
+| 文档                          | 用途     | 位置            |
+| ----------------------------- | -------- | --------------- |
+| README.md / README.zh.md      | 项目概览 | 根目录          |
+| CLAUDE.md                     | 开发指南 | 根目录(本地) |
+| docs/X.md                     | 英文文档 | docs/(默认语言)|
+| docs/X.zh.md                  | 中文文档 | docs/           |
+| docs/TOOL_REFERENCE*.md       | 工具参考 | 自动生成        |
 
 ## 🧪 测试结构
 
@@ -340,9 +340,9 @@ tests/
 
 ## 📚 相关文档
 
-- [README.md](../../README.md) - 项目主文档
-- [ARCHITECTURE.md](ARCHITECTURE.md) - 架构设计
-- [BUILD.md](BUILD.md) - 构建指南
+- [README.md](../README.zh.md) - 项目主文档
+- [ARCHITECTURE.md](ARCHITECTURE.zh.md) - 架构设计
+- [BUILD.md](BUILD.zh.md) - 构建指南
 - [docs/README.md](../README.md) - 文档索引
 
 ---

@@ -1,11 +1,15 @@
-# MCP Server Tool Reference
+# MCP 服务器工具参考
 
-This document provides a detailed reference for all tools available in the MCP server, organized by category. For usage examples and API details, see the main README or category-specific documentation.
+[English](TOOL_REFERENCE.md) | 中文
 
----
+**146 个工具,11 个类别** | 工具描述取自代码 docstring(英文为单一事实源)。
+
+[English](TOOL_REFERENCE.md) | 中文
 
 <!-- DOCGEN:tool-reference:start -->
-## 🌐 Browser Automation Tools (33)
+## 🌐 浏览器自动化 (工具) (33)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `browser_open`
 Open a new browser session and navigate to a URL.
@@ -240,7 +244,9 @@ browser_config_reset()
 
 ---
 
-## 📦 Compression Tools (5)
+## 📦 压缩工具 (工具) (5)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `compress_zip`
 Create a ZIP archive from files and/or directories.
@@ -279,7 +285,9 @@ list_archive_contents(archive_path: str)
 
 ---
 
-## 🖥️ Computer Use Tools (25)
+## 🖥️ 桌面控制 (工具) (25)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `computer_screenshot`
 Capture the screen and return it as a saved PNG file or base64-encoded PNG.
@@ -458,7 +466,9 @@ computer_config_set(pause: float | None = None, failsafe: bool | None = None, sc
 
 ---
 
-## 📊 Data Processing Tools (15)
+## 📊 数据处理 (工具) (15)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `parse_json`
 Parse and validate a JSON string.
@@ -567,7 +577,9 @@ toml_to_json(toml_string: str, indent: int = 2)
 
 ---
 
-## ⚡ Command Execution Tools (4)
+## ⚡ 命令执行 (工具) (4)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `run_command`
 Execute an allowlisted command with sanitized arguments (no shell).
@@ -599,7 +611,9 @@ remove_allowed_commands(commands: list[str])
 
 ---
 
-## 📁 File System Tools (13)
+## 📁 文件系统 (工具) (13)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `read_file`
 Read the contents of a file.
@@ -694,7 +708,9 @@ grep_files(directory: str = '.', pattern: str = '*', text: str = '', regex: str 
 
 ---
 
-## 🤖 Subagent AI Orchestration Tools (6)
+## 🤖 Subagent AI 编排 (工具) (6)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `subagent_call`
 Call an external AI model to handle a subtask.
@@ -740,7 +756,9 @@ subagent_config_list()
 
 ---
 
-## 💻 System Tools (8)
+## 💻 系统信息 (工具) (8)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `get_system_info`
 Get comprehensive system information.
@@ -800,7 +818,9 @@ get_process_info()
 
 ---
 
-## 📝 Text Processing Tools (9)
+## 📝 文本处理 (工具) (9)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `count_words`
 Count words and provide text statistics.
@@ -867,7 +887,9 @@ calculate_text_similarity(text1: str, text2: str, method: str = 'levenshtein')
 
 ---
 
-## 🛠️ Utilities Tools (10)
+## 🛠️ 实用工具 (工具) (10)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `generate_uuid`
 Generate a UUID.
@@ -941,7 +963,9 @@ check_password_strength(password: str)
 
 ---
 
-## 🌐 Web & Network Tools (18)
+## 🌐 网络与搜索 (工具) (18)
+
+> 工具描述取自代码 docstring(英文为单一事实源)。
 
 ### `web_search`
 Search the web using multiple search engines with智能 fallback.
@@ -1071,6 +1095,3 @@ dns_lookup(hostname: str, record_type: str = 'A')
 
 
 <!-- DOCGEN:tool-reference:end -->
----
-
-For detailed usage, see the main README or category-specific documentation in the docs folder.

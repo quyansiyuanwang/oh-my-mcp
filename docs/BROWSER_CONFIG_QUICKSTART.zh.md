@@ -1,5 +1,7 @@
 # 浏览器配置快速开始
 
+[English](BROWSER_CONFIG_QUICKSTART.md) | 中文
+
 ## 一分钟快速配置
 
 如果您遇到浏览器驱动下载问题（尤其是在中国大陆），运行配置向导：
@@ -110,4 +112,4 @@ browser_config_set("default_browser", "edge")
 
 ## 更多信息
 
-详细配置指南：[BROWSER_CONFIG_GUIDE.md](BROWSER_CONFIG_GUIDE.md)
+详细配置指南：[BROWSER_CONFIG.zh.md](BROWSER_CONFIG.zh.md)

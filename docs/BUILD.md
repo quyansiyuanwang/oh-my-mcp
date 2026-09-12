@@ -1,6 +1,6 @@
 # Build Guide
 
-English | [中文](../zh/BUILD.md)
+English | [中文](BUILD.zh.md)
 
 Package oh-my-mcp into a standalone executable with PyInstaller. The packaged
 binary contains **all 141 tools across 10 categories** — plugin directories and

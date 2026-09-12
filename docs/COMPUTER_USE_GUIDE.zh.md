@@ -1,5 +1,7 @@
 # Computer Use 使用指南 | AI 桌面控制
 
+[English](COMPUTER_USE_GUIDE.md) | 中文
+
 oh-my-mcp 的 **Computer Use** 类别让 AI 可以安全地接管电脑:截屏观察屏幕、控制鼠标键盘、操作剪贴板和管理窗口,共 **146 个工具**。
 
 ## 目录

@@ -1,6 +1,6 @@
 # Architecture Overview
 
-English | [中文](../zh/ARCHITECTURE.md)
+English | [中文](ARCHITECTURE.zh.md)
 
 This document describes the architecture and design of oh-my-mcp, a FastMCP-based
 MCP server providing 141 tools across 10 plugin categories.

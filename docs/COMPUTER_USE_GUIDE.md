@@ -1,6 +1,6 @@
 # Computer Use Guide | AI Desktop Control
 
-English | [中文](../zh/COMPUTER_USE_GUIDE.md)
+English | [中文](COMPUTER_USE_GUIDE.zh.md)
 
 The **Computer Use** category lets an AI safely take over a computer: observe
 the screen, control mouse and keyboard, use the clipboard and manage windows —

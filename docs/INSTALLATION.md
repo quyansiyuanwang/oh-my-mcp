@@ -1,6 +1,6 @@
 # Installation Guide
 
-English | [中文](../zh/INSTALLATION.md)
+English | [中文](INSTALLATION.zh.md)
 
 ## Requirements
 

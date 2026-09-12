@@ -1,5 +1,7 @@
 # MCP 服务器快速配置指南
 
+[English](CONFIGURATION.md) | 中文
+
 ## 🚀 三种快速配置方法
 
 ### 方法 1：自动安装到 Claude Desktop（推荐）⭐

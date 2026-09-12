@@ -1,5 +1,7 @@
 # 安装指南
 
+[English](INSTALLATION.md) | 中文
+
 本指南将帮助您安装和配置 MCP Server。
 
 ## 系统要求
@@ -117,5 +119,5 @@ pip install oh-my-mcp
 ## 下一步
 
 - 查看[示例代码](../../examples/)学习常见用例
-- 阅读[设置指南](../zh/SETUP_GUIDE.md)了解配置向导
-- 参考[架构文档](ARCHITECTURE.md)了解系统设计
+- 阅读[设置指南](SETUP_GUIDE.zh.md)了解配置向导
+- 参考[架构文档](ARCHITECTURE.zh.md)了解系统设计

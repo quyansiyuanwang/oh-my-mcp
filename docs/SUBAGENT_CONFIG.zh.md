@@ -1,5 +1,7 @@
 # Subagent 配置管理指南
 
+[English](SUBAGENT_CONFIG.md) | 中文
+
 本文档详细介绍如何使用 Subagent 的持久化配置管理功能。
 
 ## 📋 目录
@@ -451,5 +453,5 @@ Subagent 的配置管理系统提供了：
 
 **相关文档:**
 
-- [Subagent 使用指南](./SUBAGENT_GUIDE.md)
-- [API 参考文档](./SUBAGENT_API.md)
+- [Subagent 使用指南](SUBAGENT_GUIDE.zh.md)
+- [API 参考文档](SUBAGENT_GUIDE.zh.md)

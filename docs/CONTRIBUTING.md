@@ -1,6 +1,6 @@
 # Contributing to oh-my-mcp
 
-English | [中文](../zh/CONTRIBUTING.md)
+English | [中文](CONTRIBUTING.zh.md)
 
 Thanks for your interest in contributing! This project is an MCP server with
 141 tools across 10 plugin categories.
@@ -48,8 +48,8 @@ uv run pytest tests/ -v
    (`category_name`, `emoji`, `category_description`, `enabled`), an
    `__init__.py` exposing `register_tools(mcp)`, and `handlers.py`.
 2. The plugin is discovered automatically — no changes to `main.py`.
-3. Update the docs trees (`docs/zh/ARCHITECTURE.md`,
-   `docs/zh/PROJECT_STRUCTURE.md`) and run the doc generator.
+3. Update the docs trees (`docs/ARCHITECTURE.zh.md`,
+   `docs/PROJECT_STRUCTURE.zh.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_STRUCTURE.md`) and run the doc generator.
 
 ## Commit style
 
@@ -59,4 +59,4 @@ Conventional Commits (`feat:`, `fix:`, `docs:`, `test:`, `chore:`, `ci:`).
 
 - Keep each PR focused; split unrelated changes.
 - All CI checks must pass (lint incl. docs freshness, test matrix).
-- Update `docs/en/CHANGELOG.md` under **Unreleased**.
+- Update `docs/CHANGELOG.md` (and `docs/CHANGELOG.zh.md`) under **Unreleased**.

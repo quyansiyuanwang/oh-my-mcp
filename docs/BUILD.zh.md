@@ -1,5 +1,7 @@
 # MCP Server Build Guide
 
+[English](BUILD.md) | 中文
+
 本文档说明如何在 Windows 和 Linux 上打包 MCP Server。
 
 ## 📋 前提条件

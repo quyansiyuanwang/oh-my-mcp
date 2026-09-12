@@ -1,5 +1,7 @@
 # MCP Server 配置指南
 
+[English](SETUP_GUIDE.md) | 中文
+
 本指南介绍如何使用 `configure.py` 脚本快速配置 MCP 服务器环境。
 
 ## 快速开始
@@ -368,8 +370,8 @@ uv run configure.py
    ```
 
 3. **学习更多**
-   - [Subagent 使用指南](./SUBAGENT_GUIDE.md)
-   - [配置指南（中文）](./CONFIGURATION_GUIDE_CN.md)
+   - [Subagent 使用指南](SUBAGENT_GUIDE.zh.md)
+   - [配置指南（中文）](./CONFIGURATION.zh.md)
    - [示例代码](../examples/)
 
 4. **在 Claude Desktop 中使用**
@@ -461,10 +463,10 @@ uv run configure.py --no-color
 ## 相关文档
 
 - [主 README](../README.md)
-- [安装指南](./INSTALLATION.md)
-- [Subagent 配置指南](./SUBAGENT_CONFIG.md)
-- [Subagent 使用指南](./SUBAGENT_GUIDE.md)
-- [配置指南（中文）](./CONFIGURATION_GUIDE_CN.md)
+- [安装指南](INSTALLATION.zh.md)
+- [Subagent 配置指南](SUBAGENT_CONFIG.zh.md)
+- [Subagent 使用指南](SUBAGENT_GUIDE.zh.md)
+- [配置指南（中文）](./CONFIGURATION.zh.md)
 
 ## 支持
 
