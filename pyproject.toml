@@ -140,6 +140,7 @@ members = ["test_uv_project"]
 [dependency-groups]
 dev = [
     "isort>=7.0.0",
+    "typer>=0.12",  # build-time only: mcp.cli imports it during PyInstaller collection
     "mypy>=1.19.1",
     "pyinstaller>=6.18.0",
     "pylint>=4.0.8",
