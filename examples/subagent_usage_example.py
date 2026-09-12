@@ -422,8 +422,8 @@ def main():
     print("\n" + "=" * 60)
     print("✨ Examples completed!")
     print("=" * 60)
-    print("\nFor more information, see docs/SUBAGENT_GUIDE.md")
-    print("For configuration help, see docs/SUBAGENT_CONFIG.md")
+    print("\nFor more information, see docs/SUBAGENT_GUIDE.zh.md")
+    print("For configuration help, see docs/SUBAGENT_CONFIG.zh.md")
     print("\n📚 Documentation: https://github.com/quyansiyuanwang/oh-my-mcp")
 
 

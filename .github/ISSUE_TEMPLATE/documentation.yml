@@ -14,7 +14,7 @@ body:
     attributes:
       label: Documentation Location | 文档位置
       description: Which document needs improvement? | 哪个文档需要改进？
-      placeholder: e.g., README.md, docs/BUILD.md, examples/README.md | 例如：README.md，docs/BUILD.md，examples/README.md
+      placeholder: e.g., README.md, docs/BUILD.zh.md, examples/README.md | 例如：README.md，docs/BUILD.zh.md，examples/README.md
     validations:
       required: true
 

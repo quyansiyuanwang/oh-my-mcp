@@ -489,8 +489,8 @@ def show_next_steps():
     print("2. Configure the MCP server to your needs:")
     print(step_2_details)
     print("3. Learn more:")
-    print(f"   • Subagent Guide: {Colors.OKCYAN}docs/SUBAGENT_GUIDE.md{Colors.ENDC}")
-    print(f"   • Configuration Guide: {Colors.OKCYAN}docs/CONFIGURATION_GUIDE_CN.md{Colors.ENDC}")
+    print(f"   • Subagent Guide: {Colors.OKCYAN}docs/SUBAGENT_GUIDE.zh.md{Colors.ENDC}")
+    print(f"   • Configuration Guide: {Colors.OKCYAN}docs/CONFIGURATION.zh.md{Colors.ENDC}")
     print(f"   • Examples: {Colors.OKCYAN}examples/{Colors.ENDC}\n")
 
     print("4. If you configured Claude Desktop:")

@@ -1,6 +1,9 @@
 # oh-my-mcp
 
-A powerful Model Context Protocol (MCP) server with **141 practical tools** across 10 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
+English | [中文](README.zh.md)
+
+A powerful Model Context Protocol (MCP) server with **146 practical tools**
+across 11 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
 [![Tests](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/tests.yml)
@@ -29,117 +32,71 @@ oh-my-mcp provides tools for:
 
 ## 📚 Documentation
 
-The full index lives in **[docs/README.md](docs/README.md)**. Highlights:
+The full index lives in **[docs/README.md](docs/README.md)** — every topic is
+available in English (`X.md`, default) and Chinese (`X.zh.md`). Highlights:
 
-| Document | English | 中文 |
-|---|---|---|
-| Installation | [docs/en/INSTALLATION.md](docs/en/INSTALLATION.md) | [docs/zh/INSTALLATION.md](docs/zh/INSTALLATION.md) |
-| Tool Reference (all 141 tools) | [docs/en/TOOL_REFERENCE.md](docs/en/TOOL_REFERENCE.md) | — |
-| Computer Use Guide | [docs/en/COMPUTER_USE_GUIDE.md](docs/en/COMPUTER_USE_GUIDE.md) | [docs/zh/COMPUTER_USE_GUIDE.md](docs/zh/COMPUTER_USE_GUIDE.md) |
-| Setup Wizard Guide | — | [docs/zh/SETUP_GUIDE.md](docs/zh/SETUP_GUIDE.md) |
-| Build Guide | [docs/en/BUILD.md](docs/en/BUILD.md) | [docs/zh/BUILD.md](docs/zh/BUILD.md) |
-| Architecture | [docs/en/ARCHITECTURE.md](docs/en/ARCHITECTURE.md) | [docs/zh/ARCHITECTURE.md](docs/zh/ARCHITECTURE.md) |
-| Project Structure | [docs/en/PROJECT_STRUCTURE.md](docs/en/PROJECT_STRUCTURE.md) | [docs/zh/PROJECT_STRUCTURE.md](docs/zh/PROJECT_STRUCTURE.md) |
-| Subagent Guide | — | [docs/zh/SUBAGENT_GUIDE.md](docs/zh/SUBAGENT_GUIDE.md) |
-| Contributing | [docs/en/CONTRIBUTING.md](docs/en/CONTRIBUTING.md) | [docs/zh/CONTRIBUTING.md](docs/zh/CONTRIBUTING.md) |
-| Changelog | [docs/en/CHANGELOG.md](docs/en/CHANGELOG.md) | — |
+| Document | |
+|---|---|
+| Installation | [INSTALLATION.md](docs/INSTALLATION.md) / [中文](docs/INSTALLATION.zh.md) |
+| Tool Reference (all 146 tools) | [TOOL_REFERENCE.md](docs/TOOL_REFERENCE.md) / [中文](docs/TOOL_REFERENCE.zh.md) |
+| Computer Use Guide | [COMPUTER_USE_GUIDE.md](docs/COMPUTER_USE_GUIDE.md) / [中文](docs/COMPUTER_USE_GUIDE.zh.md) |
+| Setup Guide (Claude Desktop) | [SETUP_GUIDE.md](docs/SETUP_GUIDE.md) / [中文](docs/SETUP_GUIDE.zh.md) |
+| Command Execution | [CONFIGURATION.md](docs/CONFIGURATION.md) · see Tool Reference |
+| Build Guide | [BUILD.md](docs/BUILD.md) / [中文](docs/BUILD.zh.md) |
+| Architecture | [ARCHITECTURE.md](docs/ARCHITECTURE.md) / [中文](docs/ARCHITECTURE.zh.md) |
+| Subagent Guide | [SUBAGENT_GUIDE.md](docs/SUBAGENT_GUIDE.md) / [中文](docs/SUBAGENT_GUIDE.zh.md) |
+| Contributing | [CONTRIBUTING.md](docs/CONTRIBUTING.md) / [中文](docs/CONTRIBUTING.zh.md) |
+| Changelog | [CHANGELOG.md](docs/CHANGELOG.md) / [中文](docs/CHANGELOG.zh.md) |
 
 Tool counts and descriptions in the docs are generated from code — see
 [Documentation Generation](#documentation-generation).
 
-
-### ⚡ 快速安装与配置
-
-1. 安装依赖并开发模式安装：
-
-  ```bash
-  pip install -e .
-  ```
-
-2. 运行交互式配置向导（推荐）：
-
-  ```bash
-  uv run configure.py
-  ```
-
-  或直接为Claude Desktop生成配置：
-
-  ```bash
-  python -m mcp_server.cli.config --claude
-  ```
-
-  或启动HTTP配置服务：
-
-  ```bash
-  python -m mcp_server.cli.config --http-server --port 8765
-  ```
-
-  详细配置说明见：[docs/zh/SETUP_GUIDE.md](docs/zh/SETUP_GUIDE.md)
-
-3. 启动MCP服务：
-
-  ```bash
-  python -m mcp_server.main
-  ```
-
-  启动后可通过Claude Desktop或MCP客户端连接使用。
-
 ## 📦 Installation
 
-### Prerequisites
+```bash
+git clone https://github.com/quyansiyuanwang/oh-my-mcp.git
+cd oh-my-mcp
+pip install -e .            # or: uv sync --all-extras
+```
 
-- Python 3.12 or higher
-- pip package manager
+Configure Claude Desktop:
 
+```bash
+python -m mcp_server.cli.config --claude
+```
 
----
+Start the server:
 
+```bash
+python -m mcp_server.main
+```
 
----
-
-## 📚 Tool Reference
-
-For the full list of tools, usage examples, and API details, see [docs/en/TOOL_REFERENCE.md](docs/en/TOOL_REFERENCE.md).
+Details: [Installation Guide](docs/INSTALLATION.md) and
+[Setup Guide](docs/SETUP_GUIDE.md).
 
 ## 🔧 Configuration
 
 ### Logging
 
-Logs are configured in `mcp_server/utils.py`. You can adjust:
-
-- Log level (INFO, DEBUG, WARNING, ERROR)
-- Output destinations (console, file)
-- Log format
-
-### File Size Limits
-
-File operations have safety limits:
-
-- `read_file`: 10MB max file size
-- `safe_write_file`: Creates parent directories automatically
+Logs are configured in `mcp_server/utils.py` — level, destinations and format.
 
 ### Security Features
 
-- **Path validation**: Prevents path traversal attacks
-- **Safe evaluation**: Math expressions only allow safe operations
-- **Masked values**: Sensitive environment variables are masked
-- **Confirmation required**: File deletion requires `confirm=True`
-- **Retry logic**: Network operations retry up to 3 times
-
----
+- **Path validation**: prevents path traversal attacks
+- **Safe evaluation**: math expressions only allow whitelisted operations
+- **Masked values**: sensitive environment variables are masked
+- **Confirmation required**: file deletion requires `confirm=True`
+- **Allowlisted execution**: commands only run after explicit trust
+- **Retry logic**: network operations retry up to 3 times
 
 ## 🛡️ Error Handling
 
-All tools include comprehensive error handling:
+All tools return JSON with descriptive messages instead of raising:
 
-- **ValidationError**: Invalid input parameters
-- **NetworkError**: Network request failures
-- **FileOperationError**: File system errors
-- **DataProcessingError**: Data parsing/conversion errors
-
-Errors are returned as JSON with descriptive messages.
-
----
+- **ValidationError** — invalid input parameters
+- **NetworkError** — network request failures
+- **FileOperationError** — file system errors
+- **DataProcessingError** — data parsing/conversion errors
 
 ## 📝 Development
 
@@ -147,38 +104,20 @@ Errors are returned as JSON with descriptive messages.
 
 ```
 oh-my-mcp/
-├── pyproject.toml               # Dependencies
+├── pyproject.toml               # Dependencies & tool config
 ├── configure.py                 # Interactive setup wizard
-├── README.md                    # Documentation
 └── src/
     └── mcp_server/
-        ├── __init__.py              # Package init
-        ├── main.py                  # Server entry point
-        ├── utils.py                 # Infrastructure & utilities
-        ├── command_executor.py      # Secure command execution
-        ├── cli/
-        │   └── config.py            # Configuration generator
-        └── tools/                   # Tool plugins (11 categories)
-            ├── __init__.py          # Plugin auto-discovery
-            ├── registry.py          # @tool_handler & ToolPlugin
-            ├── search_engine.py     # Web search backend
-            ├── subagent_config.py   # Subagent config manager
-            ├── compression/         # Compression tools (5)
-            ├── web/                 # Web & Network tools (18)
-            ├── file/                # File System tools (13)
-            ├── data/                # Data Processing tools (15)
-            ├── text/                # Text Processing tools (9)
-            ├── system/              # System tools (8)
-            ├── utility/             # Utility tools (10)
-            ├── subagent/            # AI Orchestration tools (6)
-            ├── browser/             # Browser Automation tools (33)
-            ├── computer/            # Computer Use tools (25)
-            └── execution/           # Command Execution tools (4)
+        ├── main.py              # Server entry point
+        ├── utils.py             # Infrastructure & utilities
+        ├── command_executor.py  # Secure command execution
+        ├── cli/config.py        # Configuration generator
+        └── tools/               # Tool plugins (11 categories, auto-discovered)
 ```
 
-### Adding New Tools
+Full layout: [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md).
 
-Create a new tool in the appropriate plugin's `handlers.py`:
+### Adding New Tools
 
 ```python
 from mcp_server.tools.registry import tool_handler
@@ -193,101 +132,36 @@ def your_tool(param: str) -> str:
     Returns:
         Return value description
     """
-    try:
-        # Your implementation
-        return result
-    except Exception as e:
-        logger.error(f"Tool failed: {e}")
-        return f"Error: {str(e)}"
+    ...
 ```
-
-### Testing
-
-Start the server and test tools using an MCP client or the FastMCP testing utilities.
 
 ### Documentation Generation
 
-Tool counts and descriptions in the docs are **generated from code** (AST analysis of
-`@tool_handler` docstrings + each plugin's `config.yaml`). After adding, removing, or
-renaming tools — or editing their docstrings / `config.yaml` metadata — run:
+Tool counts and descriptions in the docs are **generated from code** (AST
+analysis of `@tool_handler` docstrings + each plugin's `config.yaml`). After
+adding, removing, or renaming tools run:
 
 ```bash
 python scripts/docs/generate_docs.py --write
 ```
 
-CI verifies docs are fresh with `--check` and fails if they are out of date. Generated
-fragments live between `<!-- DOCGEN:...:start/end -->` markers; do not edit inside them.
-
----
+CI verifies docs are fresh with `--check` and fails if they are out of date.
+Generated fragments live between `<!-- DOCGEN:...:start/end -->` markers; do
+not edit inside them.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Areas for improvement:
-
-- Additional tool categories
-- Enhanced error handling
-- Performance optimizations
-- More comprehensive tests
-- Additional external API integrations
-
----
+See [CONTRIBUTING.md](docs/CONTRIBUTING.md). Client configuration details:
+[SETUP_GUIDE.md](docs/SETUP_GUIDE.md).
 
 ## 📄 License
 
 This project is provided as-is for educational and practical use.
 
----
-
 ## 🔗 Links
 
 - [FastMCP Documentation](https://github.com/jlowin/fastmcp)
 - [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
-- [DuckDuckGo Search](https://pypi.org/project/duckduckgo-search/)
-
----
-
-## 🔧 Configuration Management
-
-### Configuration Generator Tool
-
-The `python -m mcp_server.cli.config` command provides multiple ways to configure MCP clients:
-
-```bash
-# Quick install to Claude Desktop
-python -m mcp_server.cli.config --claude
-
-# Run HTTP server on custom port
-python -m mcp_server.cli.config --http-server --port 9000
-
-# Generate config file with custom server name
-python -m mcp_server.cli.config --server-name my-tools --output config.json
-
-# Show configuration in console
-python -m mcp_server.cli.config --show-config
-```
-
-### Configuration Server Endpoints
-
-When running with `--http-server`:
-
-| Endpoint      | Description                          |
-| ------------- | ------------------------------------ |
-| `GET /config` | Returns MCP configuration JSON       |
-| `GET /info`   | Returns server information and paths |
-| `GET /health` | Health check endpoint                |
-
-Example usage:
-
-```bash
-# Start server on port 8765
-python -m mcp_server.cli.config --http-server
-
-# Get configuration
-curl http://localhost:8765/config
-
-# Get server info
-curl http://localhost:8765/info
-```
 
 ---
 

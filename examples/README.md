@@ -122,11 +122,11 @@ python examples/browser_config_wizard.py
 - 需要使用代理访问网络
 - 中国大陆等有网络限制的环境
 
-详细说明参见：[浏览器配置指南](../docs/zh/BROWSER_CONFIG_GUIDE.md)
+详细说明参见：[浏览器配置指南](../docs/BROWSER_CONFIG.zh.md)
 
 ## 更多资源
 
 - [完整文档](../docs/)
-- [Subagent 指南](../docs/zh/SUBAGENT_GUIDE.md)
-- [浏览器配置指南](../docs/zh/BROWSER_CONFIG_GUIDE.md)
-- [架构文档](../docs/en/ARCHITECTURE.md)
+- [Subagent 指南](../docs/SUBAGENT_GUIDE.zh.md)
+- [浏览器配置指南](../docs/BROWSER_CONFIG.zh.md)
+- [架构文档](../docs/ARCHITECTURE.md)
