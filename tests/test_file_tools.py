@@ -3,8 +3,9 @@
 
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).parent))
 from mcp_server.tools import file
@@ -12,7 +13,7 @@ from mcp_server.tools import file
 
 class MockMCP:
     def __init__(self) -> None:
-        self.tools: Dict[str, Callable[..., Any]] = {}
+        self.tools: dict[str, Callable[..., Any]] = {}
 
     def tool(self) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:

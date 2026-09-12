@@ -13,9 +13,10 @@ import json
 import logging
 import re
 import time
+from collections.abc import Callable
 from functools import wraps
 from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any
 from urllib.parse import urlparse
 
 # Configure logging
@@ -177,7 +178,7 @@ def retry(
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            last_exception: Optional[Exception] = None
+            last_exception: Exception | None = None
             for attempt in range(max_attempts):
                 try:
                     return func(*args, **kwargs)
@@ -231,7 +232,7 @@ def safe_read_file(path: str, encoding: str = "utf-8", max_size: int = 10 * 1024
 
         # newline="" keeps line endings exactly as stored (no \r\n <-> \n
         # translation), so read/write roundtrips are byte-faithful
-        with open(p, "r", encoding=encoding, newline="") as f:
+        with open(p, encoding=encoding, newline="") as f:
             return f.read()
 
     except FileOperationError:

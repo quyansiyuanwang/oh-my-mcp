@@ -5,9 +5,9 @@ Pytest configuration and shared fixtures for MCP server tests.
 import random
 import string
 import tempfile
+from collections.abc import Generator
 from datetime import datetime
 from pathlib import Path
-from typing import Generator
 
 import pytest
 

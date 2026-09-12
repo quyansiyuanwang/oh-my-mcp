@@ -4,8 +4,9 @@
 import json
 import os
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 from unittest.mock import Mock, patch
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -24,7 +25,7 @@ class MockMCP:
     """Mock MCP server for testing"""
 
     def __init__(self) -> None:
-        self.tools: Dict[str, Callable[..., Any]] = {}
+        self.tools: dict[str, Callable[..., Any]] = {}
 
     def tool(self) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -391,7 +392,7 @@ def test_error_handling() -> None:
     with patch.dict(os.environ, {}, clear=True):
         try:
             OpenAIClient()  # Should raise ValidationError
-            assert False, "Should raise ValidationError"
+            raise AssertionError("Should raise ValidationError")
         except Exception as e:
             print(f"   Missing API key error: {type(e).__name__}")
             assert "OPENAI_API_KEY" in str(e)

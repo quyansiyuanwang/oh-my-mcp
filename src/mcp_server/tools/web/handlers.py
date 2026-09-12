@@ -11,7 +11,7 @@ Provides tools for:
 """
 
 import json
-from typing import Any, Optional
+from typing import Any
 from urllib.parse import urljoin, urlparse
 
 import requests
@@ -366,7 +366,7 @@ def parse_html(html: str, selector: str) -> str:
 
     except Exception as e:
         logger.error(f"HTML parsing failed: {e}")
-        return error_json(f"Parsing failed: {str(e)}")
+        return error_json(f"Parsing failed: {e!s}")
 
 
 @tool_handler
@@ -433,7 +433,7 @@ def get_page_title(url: str, timeout: int = 10) -> str:
 
     except Exception as e:
         logger.error(f"Failed to get page title: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -474,7 +474,7 @@ def get_page_links(url: str, timeout: int = 10, absolute: bool = True) -> str:
 
     except Exception as e:
         logger.error(f"Failed to extract links: {e}")
-        return error_json(f"Failed to extract links: {str(e)}")
+        return error_json(f"Failed to extract links: {e!s}")
 
 
 @tool_handler
@@ -509,7 +509,7 @@ def check_url_status(url: str, timeout: int = 10) -> str:
 
     except requests.RequestException as e:
         logger.error(f"Status check failed for {url}: {e}")
-        return error_json(f"Status check failed: {str(e)}")
+        return error_json(f"Status check failed: {e!s}")
 
 
 @tool_handler
@@ -542,7 +542,7 @@ def get_headers(url: str, timeout: int = 10) -> str:
 
     except requests.RequestException as e:
         logger.error(f"Failed to get headers from {url}: {e}")
-        return error_json(f"Failed to get headers: {str(e)}")
+        return error_json(f"Failed to get headers: {e!s}")
 
 
 @tool_handler
@@ -607,7 +607,7 @@ def parse_url_components(url: str) -> str:
         )
 
     except Exception as e:
-        return error_json(f"Failed to parse URL: {str(e)}")
+        return error_json(f"Failed to parse URL: {e!s}")
 
 
 @tool_handler
@@ -615,7 +615,7 @@ def http_request(
     url: str,
     method: str = "GET",
     headers: str = "{}",
-    body: Optional[str] = None,
+    body: str | None = None,
     timeout: int = 10,
 ) -> str:
     """
@@ -687,7 +687,7 @@ def http_request(
 
     except requests.RequestException as e:
         logger.error(f"HTTP request failed: {e}")
-        return json.dumps({"error": f"Request failed: {str(e)}"})
+        return json.dumps({"error": f"Request failed: {e!s}"})
     except ValidationError as e:
         logger.error(f"Validation error: {e}")
         return json.dumps({"error": str(e)})

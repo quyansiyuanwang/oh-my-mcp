@@ -13,8 +13,8 @@ import json
 import os
 import platform
 import sys
-from datetime import datetime
-from typing import Any, Dict
+from datetime import UTC, datetime
+from typing import Any
 
 import psutil
 
@@ -62,7 +62,7 @@ def get_system_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get system info: {e}")
-        return error_json(f"Failed to get system info: {str(e)}")
+        return error_json(f"Failed to get system info: {e!s}")
 
 
 @tool_handler
@@ -97,7 +97,7 @@ def get_cpu_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get CPU info: {e}")
-        return error_json(f"Failed to get CPU info: {str(e)}")
+        return error_json(f"Failed to get CPU info: {e!s}")
 
 
 @tool_handler
@@ -136,7 +136,7 @@ def get_memory_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get memory info: {e}")
-        return error_json(f"Failed to get memory info: {str(e)}")
+        return error_json(f"Failed to get memory info: {e!s}")
 
 
 @tool_handler
@@ -191,7 +191,7 @@ def get_disk_info(path: str = "/") -> str:
 
     except Exception as e:
         logger.error(f"Failed to get disk info: {e}")
-        return error_json(f"Failed to get disk info: {str(e)}")
+        return error_json(f"Failed to get disk info: {e!s}")
 
 
 @tool_handler
@@ -213,7 +213,7 @@ def get_env_variable(name: str, default: str = "") -> str:
 
     except Exception as e:
         logger.error(f"Failed to get env variable: {e}")
-        return error_json(f"Failed to get env variable: {str(e)}")
+        return error_json(f"Failed to get env variable: {e!s}")
 
 
 @tool_handler
@@ -257,7 +257,7 @@ def list_env_variables(filter_pattern: str = "") -> str:
 
     except Exception as e:
         logger.error(f"Failed to list env variables: {e}")
-        return error_json(f"Failed to list env variables: {str(e)}")
+        return error_json(f"Failed to list env variables: {e!s}")
 
 
 @tool_handler
@@ -273,14 +273,10 @@ def get_current_time(timezone: str = "local", format: str = "iso") -> str:
         Current time in requested format
     """
     try:
-        from datetime import timezone as tz
 
-        if timezone.lower() == "utc":
-            now = datetime.now(tz.utc)
-        else:
-            now = datetime.now()
+        now = datetime.now(UTC) if timezone.lower() == "utc" else datetime.now()
 
-        result: Dict[str, Any] = {"timezone": timezone}
+        result: dict[str, Any] = {"timezone": timezone}
 
         if format == "iso":
             result["time"] = now.isoformat()
@@ -303,7 +299,7 @@ def get_current_time(timezone: str = "local", format: str = "iso") -> str:
 
     except Exception as e:
         logger.error(f"Failed to get current time: {e}")
-        return error_json(f"Failed to get current time: {str(e)}")
+        return error_json(f"Failed to get current time: {e!s}")
 
 
 @tool_handler
@@ -339,4 +335,4 @@ def get_process_info() -> str:
 
     except Exception as e:
         logger.error(f"Failed to get process info: {e}")
-        return error_json(f"Failed to get process info: {str(e)}")
+        return error_json(f"Failed to get process info: {e!s}")

@@ -5,15 +5,16 @@ This module provides the infrastructure for automatic tool discovery and registr
 """
 
 import importlib
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 import yaml
 
 from mcp_server.utils import logger
 
 # Global registry for tool handlers
-_TOOL_REGISTRY: Dict[str, List[Callable[..., Any]]] = {}
+_TOOL_REGISTRY: dict[str, list[Callable[..., Any]]] = {}
 
 
 def tool_handler(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -41,7 +42,7 @@ class ToolPlugin:
     Represents a single tool plugin with its configuration and handlers.
     """
 
-    def __init__(self, plugin_dir: Path, config: Dict[str, Any]):
+    def __init__(self, plugin_dir: Path, config: dict[str, Any]):
         """
         Initialize a tool plugin.
 
@@ -54,8 +55,8 @@ class ToolPlugin:
         self.category_name = config.get("category_name", "Unknown")
         self.category_description = config.get("category_description", "")
         self.enabled = config.get("enabled", True)
-        self.tools: List[Callable[..., Any]] = []
-        self._handlers_module: Optional[Any] = None
+        self.tools: list[Callable[..., Any]] = []
+        self._handlers_module: Any | None = None
 
     def load_handlers(self) -> None:
         """
@@ -94,7 +95,7 @@ class ToolPlugin:
             logger.debug(f"Registered tool: {tool_func.__name__}")
 
 
-def load_plugin_config(plugin_dir: Path) -> Dict[str, Any]:
+def load_plugin_config(plugin_dir: Path) -> dict[str, Any]:
     """
     Load and parse the plugin configuration file.
 
@@ -114,7 +115,7 @@ def load_plugin_config(plugin_dir: Path) -> Dict[str, Any]:
         raise FileNotFoundError(f"Config file not found: {config_path}")
 
     try:
-        with open(config_path, "r", encoding="utf-8") as f:
+        with open(config_path, encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
         if not isinstance(config, dict):
@@ -127,7 +128,7 @@ def load_plugin_config(plugin_dir: Path) -> Dict[str, Any]:
         raise
 
 
-def get_plugin_tools(module: Any) -> List[Callable[..., Any]]:
+def get_plugin_tools(module: Any) -> list[Callable[..., Any]]:
     """
     Extract all tool handler functions from a module.
 

@@ -37,7 +37,7 @@ class TestExoticFilenames:
         for n in names:
             assert (
                 T["read_file"](str(tmp_path / n))
-                == dict(zip(names, [f"内容 {i}" for i in range(len(names))]))[n]
+                == dict(zip(names, [f"内容 {i}" for i in range(len(names))], strict=False))[n]
             )
 
     def test_names_with_spaces_and_dots(self, tmp_path: Path) -> None:

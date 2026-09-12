@@ -15,7 +15,7 @@ import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 import requests
 
@@ -41,7 +41,7 @@ TOOLS = [
 class OpenAIClient:
     """OpenAI API 客户端"""
 
-    def __init__(self, api_key: Optional[str] = None, api_base: Optional[str] = None):
+    def __init__(self, api_key: str | None = None, api_base: str | None = None):
         """
         初始化 OpenAI 客户端
 
@@ -60,11 +60,11 @@ class OpenAIClient:
     def call(
         self,
         model: str,
-        messages: List[Dict[str, str]],
-        max_tokens: Optional[int] = None,
+        messages: list[dict[str, str]],
+        max_tokens: int | None = None,
         temperature: float = 0.7,
         timeout: int = 300,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         调用 OpenAI Chat Completion API
 
@@ -84,7 +84,7 @@ class OpenAIClient:
         url = f"{self.api_base}/chat/completions"
         headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
 
-        payload: Dict[str, Any] = {"model": model, "messages": messages, "temperature": temperature}
+        payload: dict[str, Any] = {"model": model, "messages": messages, "temperature": temperature}
 
         if max_tokens:
             payload["max_tokens"] = max_tokens
@@ -94,7 +94,7 @@ class OpenAIClient:
             response = requests.post(url, headers=headers, json=payload, timeout=timeout)
             response.raise_for_status()
 
-            data: Dict[str, Any] = response.json()
+            data: dict[str, Any] = response.json()
             logger.info(f"OpenAI API success: {data.get('usage', {})}")
             return data
 
@@ -109,13 +109,13 @@ class OpenAIClient:
                 f"OpenAI API error: {e.response.status_code} - {e.response.text}"
             ) from e
         except Exception as e:
-            raise NetworkError(f"OpenAI API call failed: {str(e)}") from e
+            raise NetworkError(f"OpenAI API call failed: {e!s}") from e
 
 
 class AnthropicClient:
     """Anthropic Claude API 客户端"""
 
-    def __init__(self, api_key: Optional[str] = None, api_base: Optional[str] = None):
+    def __init__(self, api_key: str | None = None, api_base: str | None = None):
         """
         初始化 Anthropic 客户端
 
@@ -134,11 +134,11 @@ class AnthropicClient:
     def call(
         self,
         model: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         max_tokens: int = 4096,
         temperature: float = 0.7,
         timeout: int = 300,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         调用 Anthropic Messages API
 
@@ -163,7 +163,7 @@ class AnthropicClient:
         }
 
         # 转换消息格式: 提取 system 消息
-        system_message: Optional[str] = None
+        system_message: str | None = None
         user_messages: list[dict[str, str]] = []
 
         for msg in messages:
@@ -218,7 +218,7 @@ class AnthropicClient:
                 f"Anthropic API error: {e.response.status_code} - {e.response.text}"
             ) from e
         except Exception as e:
-            raise NetworkError(f"Anthropic API call failed: {str(e)}") from e
+            raise NetworkError(f"Anthropic API call failed: {e!s}") from e
 
 
 class SubagentManager:
@@ -240,8 +240,8 @@ class SubagentManager:
         if self._initialized:
             return
 
-        self.openai_client: Optional[OpenAIClient] = None
-        self.anthropic_client: Optional[AnthropicClient] = None
+        self.openai_client: OpenAIClient | None = None
+        self.anthropic_client: AnthropicClient | None = None
         self._initialized = True
 
         logger.info("SubagentManager initialized")
@@ -262,11 +262,11 @@ class SubagentManager:
         self,
         provider: str,
         model: str,
-        messages: List[Dict[str, str]],
-        max_tokens: Optional[int] = None,
+        messages: list[dict[str, str]],
+        max_tokens: int | None = None,
         temperature: float = 0.7,
         timeout: int = 300,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         统一的 AI 调用接口
 
@@ -346,7 +346,7 @@ class SubagentOrchestrator:
     def __init__(self, manager: SubagentManager):
         self.manager = manager
 
-    def execute_parallel(self, tasks: List[Dict[str, Any]], max_workers: int = 3) -> Dict[str, Any]:
+    def execute_parallel(self, tasks: list[dict[str, Any]], max_workers: int = 3) -> dict[str, Any]:
         """
         并行执行多个 AI 任务
 
@@ -437,7 +437,7 @@ class SubagentOrchestrator:
 
 
 # 全局单例
-_manager: Optional[SubagentManager] = None
+_manager: SubagentManager | None = None
 _manager_lock = Lock()
 
 
@@ -456,7 +456,7 @@ def subagent_call(
     provider: str,
     model: str,
     messages: str,
-    max_tokens: Optional[int] = None,
+    max_tokens: int | None = None,
     temperature: float = 0.7,
 ) -> str:
     """
@@ -485,7 +485,7 @@ def subagent_call(
             messages_list = json.loads(messages)
         except json.JSONDecodeError as e:
             return json.dumps(
-                {"error": f"Invalid JSON in messages parameter: {str(e)}", "status": "failed"}
+                {"error": f"Invalid JSON in messages parameter: {e!s}", "status": "failed"}
             )
 
         manager = get_subagent_manager()
@@ -534,7 +534,7 @@ def subagent_parallel(tasks: str, max_workers: int = 3) -> str:
             tasks_list = json.loads(tasks)
         except json.JSONDecodeError as e:
             return json.dumps(
-                {"error": f"Invalid JSON in tasks parameter: {str(e)}", "status": "failed"}
+                {"error": f"Invalid JSON in tasks parameter: {e!s}", "status": "failed"}
             )
 
         if not isinstance(tasks_list, list):
@@ -586,7 +586,7 @@ def subagent_conditional(condition_task: str, true_task: str, false_task: str) -
             f_task = json.loads(false_task)
         except json.JSONDecodeError as e:
             return json.dumps(
-                {"error": f"Invalid JSON in task parameters: {str(e)}", "status": "failed"}
+                {"error": f"Invalid JSON in task parameters: {e!s}", "status": "failed"}
             )
 
         manager = get_subagent_manager()
@@ -667,7 +667,7 @@ def subagent_conditional(condition_task: str, true_task: str, false_task: str) -
 
 
 @tool_handler
-def subagent_config_set(provider: str, api_key: str, api_base: Optional[str] = None) -> str:
+def subagent_config_set(provider: str, api_key: str, api_base: str | None = None) -> str:
     """
     设置 Subagent 提供商的 API 配置（持久化保存）
 

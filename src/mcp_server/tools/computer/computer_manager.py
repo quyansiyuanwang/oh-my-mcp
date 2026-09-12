@@ -15,7 +15,7 @@ mirroring the browser module's session_manager pattern.
 import base64
 import io
 import time
-from typing import Any, Optional
+from typing import Any
 
 from mcp_server.utils import ComputerUseError, logger
 
@@ -23,16 +23,16 @@ from mcp_server.utils import ComputerUseError, logger
 # so tests can patch them in one place.
 __all__ = [
     "ComputerManager",
-    "computer_manager",
-    "pyautogui",
-    "mss",
-    "pyperclip",
-    "gw",
-    "_check_pyautogui_available",
     "_check_mss_available",
-    "_check_pyperclip_available",
+    "_check_pyautogui_available",
     "_check_pygetwindow_available",
+    "_check_pyperclip_available",
     "_opencv_available",
+    "computer_manager",
+    "gw",
+    "mss",
+    "pyautogui",
+    "pyperclip",
 ]
 
 # Lazy imports to allow graceful errors when libraries are not installed or
@@ -81,7 +81,7 @@ except Exception:  # pygetwindow raises NotImplementedError on non-Windows
 
 _opencv_available = False
 try:
-    import cv2  # noqa: F401  # pylint: disable=import-error,unused-import  # pyright: ignore[reportMissingImports]
+    import cv2  # pylint: disable=import-error,unused-import  # pyright: ignore[reportMissingImports]
 
     _opencv_available = True
 except Exception:
@@ -164,9 +164,9 @@ class ComputerManager:
 
     def set_config(
         self,
-        pause: Optional[float] = None,
-        failsafe: Optional[bool] = None,
-        screenshot_dir: Optional[str] = None,
+        pause: float | None = None,
+        failsafe: bool | None = None,
+        screenshot_dir: str | None = None,
     ) -> dict[str, Any]:
         """Update safety configuration and return the new state."""
         if pause is not None:
@@ -183,7 +183,7 @@ class ComputerManager:
 
     # -- screen capture -----------------------------------------------------
 
-    def capture_image(self, region: Optional[list[int]] = None, monitor: int = 0) -> Any:
+    def capture_image(self, region: list[int] | None = None, monitor: int = 0) -> Any:
         """
         Capture the screen as a PIL Image.
 

@@ -7,7 +7,6 @@ Each tool module is a self-contained plugin with its own configuration.
 
 import sys
 from pathlib import Path
-from typing import List
 
 from mcp_server.utils import logger
 
@@ -23,7 +22,7 @@ def _get_tools_dir() -> Path:
     return Path(__file__).parent
 
 
-def discover_tool_plugins() -> List[Path]:
+def discover_tool_plugins() -> list[Path]:
     """
     Discover all tool plugin directories.
 
@@ -51,7 +50,7 @@ def discover_tool_plugins() -> List[Path]:
     return plugin_dirs
 
 
-def load_all_plugins() -> List[ToolPlugin]:
+def load_all_plugins() -> list[ToolPlugin]:
     """
     Load all enabled tool plugins.
 
@@ -91,4 +90,4 @@ def load_all_plugins() -> List[ToolPlugin]:
     return plugins
 
 
-__all__ = ["load_all_plugins", "ToolPlugin"]
+__all__ = ["ToolPlugin", "load_all_plugins"]

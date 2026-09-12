@@ -7,7 +7,8 @@ Tool counts and descriptions are dynamically loaded from each plugin.
 Author: MCP Server Project
 """
 
-import sys
+# Import tomllib for Python 3.11+ or fall back to tomli
+import tomllib
 from pathlib import Path
 from typing import Any
 
@@ -15,15 +16,6 @@ from fastmcp import FastMCP
 
 from mcp_server.tools import load_all_plugins
 from mcp_server.utils import logger
-
-# Import tomllib for Python 3.11+ or fall back to tomli
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    try:
-        import tomli as tomllib
-    except ImportError:
-        tomllib = None  # type: ignore
 
 
 def get_version() -> str:

@@ -4,9 +4,9 @@
 import json
 import subprocess
 import sys
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -17,7 +17,7 @@ from mcp_server.tools import execution
 
 class MockMCP:
     def __init__(self) -> None:
-        self.tools: Dict[str, Callable[..., Any]] = {}
+        self.tools: dict[str, Callable[..., Any]] = {}
 
     def tool(self) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:

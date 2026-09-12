@@ -6,8 +6,9 @@ Uses mocking to test browser tools without requiring actual browsers.
 
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -22,7 +23,7 @@ class MockMCP:
     """Mock MCP server for testing."""
 
     def __init__(self) -> None:
-        self.tools: Dict[str, Callable[..., Any]] = {}
+        self.tools: dict[str, Callable[..., Any]] = {}
 
     def tool(self) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -688,19 +689,21 @@ class TestChromeToEdgeFallback:
         manager = BrowserSessionManager()
 
         mock_driver = MockWebDriver()
-        with patch.object(
-            manager, "_create_chrome_driver", side_effect=BrowserError("Chrome failed")
+        with (
+            patch.object(
+                manager, "_create_chrome_driver", side_effect=BrowserError("Chrome failed")
+            ),
+            patch.object(manager, "_create_edge_driver", return_value=mock_driver),
         ):
-            with patch.object(manager, "_create_edge_driver", return_value=mock_driver):
-                session_id = manager.create_session(browser="chrome")
+            session_id = manager.create_session(browser="chrome")
 
-                # Should succeed via Edge fallback
-                assert session_id is not None
-                session_config = manager._session_configs[session_id]
-                assert session_config["browser"] == "edge"
+            # Should succeed via Edge fallback
+            assert session_id is not None
+            session_config = manager._session_configs[session_id]
+            assert session_config["browser"] == "edge"
 
-                # Cleanup
-                manager.close_session(session_id)
+            # Cleanup
+            manager.close_session(session_id)
 
     def test_edge_direct_no_fallback(self):
         """Test that Edge request goes directly to Edge without fallback logic."""

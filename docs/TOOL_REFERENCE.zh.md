@@ -252,21 +252,21 @@ browser_config_reset()
 Create a ZIP archive from files and/or directories.
 
 ```python
-compress_zip(files: List[str], output_path: str, compression_level: int = 6)
+compress_zip(files: list[str], output_path: str, compression_level: int = 6)
 ```
 
 ### `extract_zip`
 Extract a ZIP archive.
 
 ```python
-extract_zip(zip_path: str, extract_to: str = '.', password: Optional[str] = None)
+extract_zip(zip_path: str, extract_to: str = '.', password: str | None = None)
 ```
 
 ### `compress_tar`
 Create a TAR archive from files and/or directories.
 
 ```python
-compress_tar(files: List[str], output_path: str, compression: str = 'gz')
+compress_tar(files: list[str], output_path: str, compression: str = 'gz')
 ```
 
 ### `extract_tar`
@@ -716,7 +716,7 @@ grep_files(directory: str = '.', pattern: str = '*', text: str = '', regex: str 
 Call an external AI model to handle a subtask.
 
 ```python
-subagent_call(provider: str, model: str, messages: str, max_tokens: Optional[int] = None, temperature: float = 0.7)
+subagent_call(provider: str, model: str, messages: str, max_tokens: int | None = None, temperature: float = 0.7)
 ```
 
 ### `subagent_parallel`
@@ -737,7 +737,7 @@ subagent_conditional(condition_task: str, true_task: str, false_task: str)
 设置 Subagent 提供商的 API 配置（持久化保存）
 
 ```python
-subagent_config_set(provider: str, api_key: str, api_base: Optional[str] = None)
+subagent_config_set(provider: str, api_key: str, api_base: str | None = None)
 ```
 
 ### `subagent_config_get`
@@ -1076,7 +1076,7 @@ parse_url_components(url: str)
 Make HTTP request with custom headers and body.
 
 ```python
-http_request(url: str, method: str = 'GET', headers: str = '{}', body: Optional[str] = None, timeout: int = 10)
+http_request(url: str, method: str = 'GET', headers: str = '{}', body: str | None = None, timeout: int = 10)
 ```
 
 ### `get_network_info`

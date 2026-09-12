@@ -11,7 +11,6 @@ import json
 import tarfile
 import zipfile
 from pathlib import Path
-from typing import List, Optional, Tuple
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import (
@@ -26,7 +25,7 @@ from mcp_server.utils import (
 
 
 @tool_handler
-def compress_zip(files: List[str], output_path: str, compression_level: int = 6) -> str:
+def compress_zip(files: list[str], output_path: str, compression_level: int = 6) -> str:
     """
     Create a ZIP archive from files and/or directories.
 
@@ -54,7 +53,7 @@ def compress_zip(files: List[str], output_path: str, compression_level: int = 6)
 
         # 验证所有条目存在；目录递归展开，保留层级
         total_size = 0
-        entries: List[Tuple[Path, str]] = []  # (source_path, arcname)
+        entries: list[tuple[Path, str]] = []  # (source_path, arcname)
         for file_path in files:
             p = sanitize_path(file_path)
             if not p.exists():
@@ -108,7 +107,7 @@ def compress_zip(files: List[str], output_path: str, compression_level: int = 6)
 
 
 @tool_handler
-def extract_zip(zip_path: str, extract_to: str = ".", password: Optional[str] = None) -> str:
+def extract_zip(zip_path: str, extract_to: str = ".", password: str | None = None) -> str:
     """
     Extract a ZIP archive.
 
@@ -191,7 +190,7 @@ def extract_zip(zip_path: str, extract_to: str = ".", password: Optional[str] = 
 
 
 @tool_handler
-def compress_tar(files: List[str], output_path: str, compression: str = "gz") -> str:
+def compress_tar(files: list[str], output_path: str, compression: str = "gz") -> str:
     """
     Create a TAR archive from files and/or directories.
 
@@ -220,7 +219,7 @@ def compress_tar(files: List[str], output_path: str, compression: str = "gz") ->
         # 验证所有条目存在；目录保持整体（tarfile 会递归打包并保留层级）
         total_size = 0
         file_count = 0
-        validated_paths: List[Path] = []
+        validated_paths: list[Path] = []
         for file_path in files:
             p = sanitize_path(file_path)
             if not p.exists():

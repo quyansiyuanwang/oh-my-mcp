@@ -12,7 +12,7 @@ Provides tools for:
 import base64
 import json
 import re
-from typing import Any, Dict
+from typing import Any
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import (
@@ -44,7 +44,7 @@ def count_words(text: str, detailed: bool = True) -> str:
         char_count_no_spaces = len(text.replace(" ", ""))
         line_count = len(text.splitlines())
 
-        result: Dict[str, Any] = {
+        result: dict[str, Any] = {
             "word_count": word_count,
             "character_count": char_count,
             "character_count_no_spaces": char_count_no_spaces,
@@ -78,7 +78,7 @@ def count_words(text: str, detailed: bool = True) -> str:
 
     except Exception as e:
         logger.error(f"Word count failed: {e}")
-        return error_json(f"Word count failed: {str(e)}")
+        return error_json(f"Word count failed: {e!s}")
 
 
 @tool_handler
@@ -110,7 +110,7 @@ def extract_emails(text: str) -> str:
 
     except Exception as e:
         logger.error(f"Email extraction failed: {e}")
-        return error_json(f"Email extraction failed: {str(e)}")
+        return error_json(f"Email extraction failed: {e!s}")
 
 
 @tool_handler
@@ -144,7 +144,7 @@ def extract_urls(text: str) -> str:
 
     except Exception as e:
         logger.error(f"URL extraction failed: {e}")
-        return error_json(f"URL extraction failed: {str(e)}")
+        return error_json(f"URL extraction failed: {e!s}")
 
 
 @tool_handler
@@ -184,10 +184,10 @@ def regex_match(text: str, pattern: str, flags: str = "") -> str:
         )
 
     except re.error as e:
-        return error_json(f"Invalid regex pattern: {str(e)}")
+        return error_json(f"Invalid regex pattern: {e!s}")
     except Exception as e:
         logger.error(f"Regex match failed: {e}")
-        return error_json(f"Regex match failed: {str(e)}")
+        return error_json(f"Regex match failed: {e!s}")
 
 
 @tool_handler
@@ -218,10 +218,10 @@ def regex_replace(text: str, pattern: str, replacement: str, flags: str = "") ->
         return result
 
     except re.error as e:
-        return f"Error: Invalid regex pattern: {str(e)}"
+        return f"Error: Invalid regex pattern: {e!s}"
     except Exception as e:
         logger.error(f"Regex replace failed: {e}")
-        return f"Error: Regex replace failed: {str(e)}"
+        return f"Error: Regex replace failed: {e!s}"
 
 
 @tool_handler
@@ -266,7 +266,7 @@ def text_summary(text: str, max_length: int = 500, method: str = "truncate") -> 
 
     except Exception as e:
         logger.error(f"Text summary failed: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -286,7 +286,7 @@ def encode_base64(text: str, encoding: str = "utf-8") -> str:
         return encoded
     except Exception as e:
         logger.error(f"Base64 encoding failed: {e}")
-        return f"Error: Encoding failed: {str(e)}"
+        return f"Error: Encoding failed: {e!s}"
 
 
 @tool_handler
@@ -306,7 +306,7 @@ def decode_base64(encoded: str, encoding: str = "utf-8") -> str:
         return decoded
     except Exception as e:
         logger.error(f"Base64 decoding failed: {e}")
-        return f"Error: Decoding failed: {str(e)}"
+        return f"Error: Decoding failed: {e!s}"
 
 
 @tool_handler

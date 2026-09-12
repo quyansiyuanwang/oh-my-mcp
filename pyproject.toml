@@ -92,6 +92,26 @@ target-version = ["py312"]
 line-length = 100
 target-version = "py312"
 
+[tool.ruff.lint]
+# Explicit rule selection so new ruff releases cannot silently change what CI enforces.
+select = [
+  "E4", "E7", "E9",  # pycodestyle errors
+  "F",               # pyflakes
+  "I",               # import order (mirrors the isort CI step)
+  "UP",              # pyupgrade
+  "B",               # flake8-bugbear
+  "SIM",             # flake8-simplify
+  "RUF",             # ruff-specific
+]
+ignore = [
+  "BLE001",          # defensive broad catches ARE the error-handling design
+  "DTZ005", "DTZ006",  # naive local datetimes are intended tool semantics
+  "S110",            # try-except-pass used for optional probing
+  "RUF012",          # mutable class defaults (validator allowlist sets)
+  "RUF001", "RUF002", "RUF003",  # full-width punctuation in Chinese comments/strings
+  "SIM117",          # nested with-statements keep patched context managers readable
+]
+
 [tool.isort]
 profile = "black"
 line_length = 100

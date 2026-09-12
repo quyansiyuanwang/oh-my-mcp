@@ -16,7 +16,7 @@ import urllib.parse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timedelta
 from threading import Lock
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from bs4 import BeautifulSoup
@@ -47,9 +47,7 @@ class SearchCache:
         data = f"{engine}:{query}:{json.dumps(params, sort_keys=True)}"
         return hashlib.md5(data.encode()).hexdigest()
 
-    def get(
-        self, query: str, engine: str, params: dict[str, Any]
-    ) -> Optional[list[dict[str, Any]]]:
+    def get(self, query: str, engine: str, params: dict[str, Any]) -> list[dict[str, Any]] | None:
         """获取缓存的搜索结果"""
         key = self._generate_key(query, engine, params)
 
@@ -165,7 +163,7 @@ class RateLimiter:
             wait_until = oldest + self.window_seconds
             return max(0.0, wait_until - now)
 
-    def reset(self, key: Optional[str] = None) -> None:
+    def reset(self, key: str | None = None) -> None:
         """重置限流器"""
         with self.lock:
             if key:
@@ -362,8 +360,8 @@ class GoogleEngine(SearchEngine):
                     if title_elem and link_elem:
                         results.append(
                             {
-                                "title": title_elem.get_text(),
-                                "link": link_elem.get("href", ""),
+                                "title": str(title_elem.get_text()),
+                                "link": str(link_elem.get("href", "")),
                                 "snippet": snippet_elem.get_text() if snippet_elem else "",
                                 "engine": self.name,
                             }
@@ -445,7 +443,7 @@ class BaiduEngine(SearchEngine):
 
                 if title_elem and link_elem:
                     title = title_elem.get_text().strip()
-                    href = link_elem.get("href", "")
+                    href = str(link_elem.get("href", ""))
                     link = str(href) if href else ""
 
                     # 百度链接可能是重定向链接，需要提取真实URL
@@ -520,7 +518,7 @@ class SearchManager:
         self,
         query: str,
         max_results: int = 10,
-        engines: Optional[list[str]] = None,
+        engines: list[str] | None = None,
         parallel: bool = False,
         use_cache: bool = True,
         is_news: bool = False,
@@ -603,7 +601,7 @@ class SearchManager:
                         break
 
                 except Exception as e:
-                    errors.append(f"{engine_name}: {str(e)}")
+                    errors.append(f"{engine_name}: {e!s}")
                     logger.error(f"{engine_name} search error: {e}")
 
         # 去重
@@ -700,11 +698,10 @@ class SearchManager:
             url_normalized = url.split("?")[0].rstrip("/")  # 移除查询参数和尾部斜杠
 
             # 检查 URL 和标题是否已存在
-            if url_normalized and url_normalized not in seen_urls:
-                if title not in seen_titles:
-                    seen_urls.add(url_normalized)
-                    seen_titles.add(title)
-                    unique_results.append(result)
+            if url_normalized and url_normalized not in seen_urls and title not in seen_titles:
+                seen_urls.add(url_normalized)
+                seen_titles.add(title)
+                unique_results.append(result)
 
         logger.info(f"Deduplicated: {len(results)} -> {len(unique_results)} results")
         return unique_results
@@ -733,7 +730,7 @@ class SearchManager:
 
 
 # 全局搜索管理器实例
-_search_manager: Optional[SearchManager] = None
+_search_manager: SearchManager | None = None
 
 
 def get_search_manager() -> SearchManager:

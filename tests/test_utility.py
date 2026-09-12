@@ -2,8 +2,9 @@
 """测试新增的MCP工具"""
 
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 
 # 添加项目路径
 sys.path.insert(0, str(Path(__file__).parent))
@@ -15,7 +16,7 @@ class MockMCP:
     """模拟MCP服务器用于测试"""
 
     def __init__(self) -> None:
-        self.tools: Dict[str, Callable[..., Any]] = {}
+        self.tools: dict[str, Callable[..., Any]] = {}
 
     def tool(self) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:

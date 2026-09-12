@@ -11,7 +11,7 @@ import os
 import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 
 def get_python_executable() -> str:
@@ -31,8 +31,8 @@ def get_server_path() -> str:
 
 def generate_mcp_config(
     server_name: str = "oh-my-mcp",
-    python_path: Optional[str] = None,
-    server_path: Optional[str] = None,
+    python_path: str | None = None,
+    server_path: str | None = None,
 ) -> dict[str, Any]:
     """
     Generate MCP configuration for Claude Desktop and other clients.
@@ -72,7 +72,7 @@ def save_config(config: dict[str, Any], output_path: str = "mcp_config.json") ->
     return output_path
 
 
-def get_claude_config_path() -> Optional[Path]:
+def get_claude_config_path() -> Path | None:
     """Get the Claude Desktop configuration path."""
     if sys.platform == "win32":
         # Windows
@@ -97,7 +97,7 @@ def merge_with_existing_config(
     """Merge new MCP server config with existing configuration."""
     try:
         if existing_config_path.exists():
-            with open(existing_config_path, "r", encoding="utf-8") as f:
+            with open(existing_config_path, encoding="utf-8") as f:
                 existing: dict[str, Any] = json.load(f)
 
             # Merge mcpServers

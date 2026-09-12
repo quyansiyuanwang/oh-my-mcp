@@ -13,9 +13,8 @@ Provides tools for:
 import csv
 import io
 import json
-import sys
 import xml.etree.ElementTree as ET
-from typing import Any, Dict
+from typing import Any
 
 from mcp_server.tools.registry import tool_handler
 from mcp_server.utils import error_json, logger
@@ -24,16 +23,10 @@ from mcp_server.utils import error_json, logger
 try:
     import yaml
 except ImportError:
-    yaml = None  # type: ignore[assignment]  # noqa: F841
+    yaml = None  # type: ignore[assignment]
 
-# Import TOML support (Python 3.11+ has built-in tomllib)
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    try:
-        import tomli as tomllib
-    except ImportError:
-        tomllib = None  # type: ignore[assignment]
+# tomllib is stdlib on the supported Python versions (>= 3.12)
+import tomllib
 
 
 @tool_handler
@@ -52,7 +45,7 @@ def parse_json(json_string: str) -> str:
         return json.dumps(data, indent=2, ensure_ascii=False)
     except json.JSONDecodeError as e:
         logger.error(f"JSON parsing failed: {e}")
-        return error_json(f"Invalid JSON: {str(e)}")
+        return error_json(f"Invalid JSON: {e!s}")
 
 
 @tool_handler
@@ -72,7 +65,7 @@ def format_json(json_string: str, indent: int = 2, sort_keys: bool = False) -> s
         data = json.loads(json_string)
         return json.dumps(data, indent=indent, sort_keys=sort_keys, ensure_ascii=False)
     except json.JSONDecodeError as e:
-        return error_json(f"Invalid JSON: {str(e)}")
+        return error_json(f"Invalid JSON: {e!s}")
 
 
 @tool_handler
@@ -112,9 +105,9 @@ def json_query(json_string: str, path: str) -> str:
         return json.dumps({"path": path, "value": current}, indent=2, ensure_ascii=False)
 
     except json.JSONDecodeError as e:
-        return error_json(f"Invalid JSON: {str(e)}")
+        return error_json(f"Invalid JSON: {e!s}")
     except Exception as e:
-        return error_json(f"Query failed: {str(e)}")
+        return error_json(f"Query failed: {e!s}")
 
 
 @tool_handler
@@ -152,7 +145,7 @@ def csv_to_json(csv_string: str, delimiter: str = ",", has_header: bool = True) 
 
     except Exception as e:
         logger.error(f"CSV to JSON conversion failed: {e}")
-        return error_json(f"Conversion failed: {str(e)}")
+        return error_json(f"Conversion failed: {e!s}")
 
 
 @tool_handler
@@ -195,10 +188,10 @@ def json_to_csv(json_string: str) -> str:
         return output.getvalue()
 
     except json.JSONDecodeError as e:
-        return f"Error: Invalid JSON: {str(e)}"
+        return f"Error: Invalid JSON: {e!s}"
     except Exception as e:
         logger.error(f"JSON to CSV conversion failed: {e}")
-        return f"Error: Conversion failed: {str(e)}"
+        return f"Error: Conversion failed: {e!s}"
 
 
 @tool_handler
@@ -229,7 +222,7 @@ def parse_csv(csv_string: str, delimiter: str = ",") -> str:
 
     except Exception as e:
         logger.error(f"CSV parsing failed: {e}")
-        return error_json(f"CSV parsing failed: {str(e)}")
+        return error_json(f"CSV parsing failed: {e!s}")
 
 
 @tool_handler
@@ -246,7 +239,7 @@ def validate_json_schema(json_string: str) -> str:
     try:
         data = json.loads(json_string)
 
-        def analyze_structure(obj: Any, depth: int = 0) -> Dict[str, Any]:
+        def analyze_structure(obj: Any, depth: int = 0) -> dict[str, Any]:
             if isinstance(obj, dict):
                 return {"type": "object", "keys": len(obj), "depth": depth}
             if isinstance(obj, list):
@@ -295,7 +288,7 @@ def flatten_json(json_string: str, separator: str = ".") -> str:
     try:
         data = json.loads(json_string)
 
-        def flatten(obj: Any, parent_key: str = "") -> Dict[str, Any]:
+        def flatten(obj: Any, parent_key: str = "") -> dict[str, Any]:
             items: list[tuple[str, Any]] = []
             if isinstance(obj, dict):
                 for k, v in obj.items():
@@ -319,9 +312,9 @@ def flatten_json(json_string: str, separator: str = ".") -> str:
         return json.dumps(flattened, indent=2, ensure_ascii=False)
 
     except json.JSONDecodeError as e:
-        return error_json(f"Invalid JSON: {str(e)}")
+        return error_json(f"Invalid JSON: {e!s}")
     except Exception as e:
-        return error_json(f"Flattening failed: {str(e)}")
+        return error_json(f"Flattening failed: {e!s}")
 
 
 @tool_handler
@@ -344,7 +337,7 @@ def merge_json(json_string1: str, json_string2: str, deep: bool = True) -> str:
         if not isinstance(data1, dict) or not isinstance(data2, dict):
             return '{"error": "Both JSON inputs must be objects"}'
 
-        def deep_merge(dict1: Dict[str, Any], dict2: Dict[str, Any]) -> Dict[str, Any]:
+        def deep_merge(dict1: dict[str, Any], dict2: dict[str, Any]) -> dict[str, Any]:
             result = dict1.copy()
             for key, value in dict2.items():
                 if key in result and isinstance(result[key], dict) and isinstance(value, dict):
@@ -353,17 +346,14 @@ def merge_json(json_string1: str, json_string2: str, deep: bool = True) -> str:
                     result[key] = value
             return result
 
-        if deep:
-            merged = deep_merge(data1, data2)
-        else:
-            merged = {**data1, **data2}
+        merged = deep_merge(data1, data2) if deep else {**data1, **data2}
 
         return json.dumps(merged, indent=2, ensure_ascii=False)
 
     except json.JSONDecodeError as e:
-        return error_json(f"Invalid JSON: {str(e)}")
+        return error_json(f"Invalid JSON: {e!s}")
     except Exception as e:
-        return error_json(f"Merge failed: {str(e)}")
+        return error_json(f"Merge failed: {e!s}")
 
 
 @tool_handler
@@ -381,7 +371,7 @@ def xml_to_json(xml_string: str) -> str:
         root = ET.fromstring(xml_string)
 
         def element_to_dict(element: ET.Element) -> Any:
-            result: Dict[str, Any] = {}
+            result: dict[str, Any] = {}
 
             # Add attributes
             if element.attrib:
@@ -392,7 +382,7 @@ def xml_to_json(xml_string: str) -> str:
                 result["text"] = element.text.strip()
 
             # Add children
-            children: Dict[str, Any] = {}
+            children: dict[str, Any] = {}
             for child in element:
                 child_data = element_to_dict(child)
                 if child.tag in children:
@@ -416,10 +406,10 @@ def xml_to_json(xml_string: str) -> str:
         return json.dumps(converted, indent=2, ensure_ascii=False)
 
     except ET.ParseError as e:
-        return error_json(f"Invalid XML: {str(e)}")
+        return error_json(f"Invalid XML: {e!s}")
     except Exception as e:
         logger.error(f"XML to JSON conversion failed: {e}")
-        return error_json(f"Conversion failed: {str(e)}")
+        return error_json(f"Conversion failed: {e!s}")
 
 
 @tool_handler
@@ -441,10 +431,10 @@ def parse_yaml(yaml_string: str) -> str:
         return json.dumps(data, indent=2, ensure_ascii=False)
     except yaml.YAMLError as e:
         logger.error(f"YAML parsing failed: {e}")
-        return json.dumps({"error": f"Invalid YAML: {str(e)}"})
+        return json.dumps({"error": f"Invalid YAML: {e!s}"})
     except Exception as e:
         logger.error(f"YAML parsing error: {e}")
-        return json.dumps({"error": f"Parsing failed: {str(e)}"})
+        return json.dumps({"error": f"Parsing failed: {e!s}"})
 
 
 @tool_handler
@@ -467,10 +457,10 @@ def yaml_to_json(yaml_string: str, indent: int = 2) -> str:
         return json.dumps(data, indent=indent, ensure_ascii=False)
     except yaml.YAMLError as e:
         logger.error(f"YAML to JSON conversion failed: {e}")
-        return json.dumps({"error": f"Invalid YAML: {str(e)}"})
+        return json.dumps({"error": f"Invalid YAML: {e!s}"})
     except Exception as e:
         logger.error(f"Conversion error: {e}")
-        return json.dumps({"error": f"Conversion failed: {str(e)}"})
+        return json.dumps({"error": f"Conversion failed: {e!s}"})
 
 
 @tool_handler
@@ -493,10 +483,10 @@ def json_to_yaml(json_string: str) -> str:
         return result
     except json.JSONDecodeError as e:
         logger.error(f"JSON parsing failed: {e}")
-        return f"Error: Invalid JSON: {str(e)}"
+        return f"Error: Invalid JSON: {e!s}"
     except Exception as e:
         logger.error(f"JSON to YAML conversion failed: {e}")
-        return f"Error: Conversion failed: {str(e)}"
+        return f"Error: Conversion failed: {e!s}"
 
 
 @tool_handler
@@ -510,17 +500,12 @@ def parse_toml(toml_string: str) -> str:
     Returns:
         JSON string representation of TOML data
     """
-    if tomllib is None:
-        return json.dumps(
-            {"error": "TOML support not available. Install tomli or use Python 3.11+."}
-        )
-
     try:
         data = tomllib.loads(toml_string)
         return json.dumps(data, indent=2, ensure_ascii=False)
     except Exception as e:
         logger.error(f"TOML parsing failed: {e}")
-        return json.dumps({"error": f"Invalid TOML: {str(e)}"})
+        return json.dumps({"error": f"Invalid TOML: {e!s}"})
 
 
 @tool_handler
@@ -535,14 +520,9 @@ def toml_to_json(toml_string: str, indent: int = 2) -> str:
     Returns:
         Formatted JSON string
     """
-    if tomllib is None:
-        return json.dumps(
-            {"error": "TOML support not available. Install tomli or use Python 3.11+."}
-        )
-
     try:
         data = tomllib.loads(toml_string)
         return json.dumps(data, indent=indent, ensure_ascii=False)
     except Exception as e:
         logger.error(f"TOML to JSON conversion failed: {e}")
-        return json.dumps({"error": f"Invalid TOML: {str(e)}"})
+        return json.dumps({"error": f"Invalid TOML: {e!s}"})

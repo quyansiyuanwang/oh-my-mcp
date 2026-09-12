@@ -9,7 +9,7 @@ import atexit
 import json
 import os
 import uuid
-from typing import Any, Dict, List
+from typing import Any
 
 from mcp_server.utils import (
     BrowserError,
@@ -148,11 +148,11 @@ class BrowserSessionManager:
     """
 
     def __init__(self) -> None:
-        self._sessions: Dict[str, Any] = {}  # session_id -> WebDriver
-        self._session_configs: Dict[str, Dict[str, Any]] = {}  # session_id -> config
-        self._console_logs: Dict[str, List[Dict[str, Any]]] = {}  # session_id -> logs
-        self._network_logs: Dict[str, List[Dict[str, Any]]] = {}  # session_id -> logs
-        self._network_enabled: Dict[str, bool] = {}  # session_id -> enabled
+        self._sessions: dict[str, Any] = {}  # session_id -> WebDriver
+        self._session_configs: dict[str, dict[str, Any]] = {}  # session_id -> config
+        self._console_logs: dict[str, list[dict[str, Any]]] = {}  # session_id -> logs
+        self._network_logs: dict[str, list[dict[str, Any]]] = {}  # session_id -> logs
+        self._network_enabled: dict[str, bool] = {}  # session_id -> enabled
 
         # Register cleanup on exit
         atexit.register(self.close_all_sessions)
@@ -271,7 +271,7 @@ class BrowserSessionManager:
             logger.error(f"Failed to create browser session: {e}")
             raise BrowserError(f"Failed to create browser session: {e}") from e
 
-    def _create_chrome_driver(
+    def _create_chrome_driver(  # pylint: disable=not-callable
         self,
         headless: bool,
         window_size: tuple[int, int],
@@ -287,6 +287,7 @@ class BrowserSessionManager:
             or ChromeDriverManager is None
         ):
             raise BrowserError("Selenium is not installed.")
+        wd = webdriver
         options = ChromeOptions()
 
         # Common options
@@ -324,18 +325,18 @@ class BrowserSessionManager:
         if driver_path:
             logger.info(f"Using configured ChromeDriver path: {driver_path}")
             service = ChromeService(executable_path=driver_path)
-            return webdriver.Chrome(service=service, options=options)
+            return wd.Chrome(service=service, options=options)
 
         # Strategy 2: Selenium Manager (Selenium 4.6+, auto-downloads matching driver)
         try:
-            return webdriver.Chrome(options=options)
+            return wd.Chrome(options=options)
         except Exception as e:
             logger.warning(f"Selenium Manager failed for Chrome: {e}")
 
         # Strategy 3: webdriver-manager fallback
         try:
             service = ChromeService(ChromeDriverManager().install())
-            return webdriver.Chrome(service=service, options=options)
+            return wd.Chrome(service=service, options=options)
         except Exception as e:
             logger.warning(f"webdriver-manager also failed for Chrome: {e}")
 
@@ -349,7 +350,7 @@ class BrowserSessionManager:
             "https://googlechromelabs.github.io/chrome-for-testing/"
         )
 
-    def _create_edge_driver(
+    def _create_edge_driver(  # pylint: disable=not-callable
         self,
         headless: bool,
         window_size: tuple[int, int],
@@ -365,6 +366,7 @@ class BrowserSessionManager:
             or EdgeChromiumDriverManager is None
         ):
             raise BrowserError("Selenium is not installed.")
+        we = webdriver
         options = EdgeOptions()
 
         # Common options
@@ -402,18 +404,18 @@ class BrowserSessionManager:
         if driver_path:
             logger.info(f"Using configured EdgeDriver path: {driver_path}")
             service = EdgeService(executable_path=driver_path)
-            return webdriver.Edge(service=service, options=options)
+            return we.Edge(service=service, options=options)
 
         # Strategy 2: Selenium Manager (Selenium 4.6+, auto-downloads matching driver)
         try:
-            return webdriver.Edge(options=options)
+            return we.Edge(options=options)
         except Exception as e:
             logger.warning(f"Selenium Manager failed for Edge: {e}")
 
         # Strategy 3: webdriver-manager fallback
         try:
             service = EdgeService(EdgeChromiumDriverManager().install())
-            return webdriver.Edge(service=service, options=options)
+            return we.Edge(service=service, options=options)
         except Exception as e:
             logger.warning(f"webdriver-manager also failed for Edge: {e}")
 
@@ -491,7 +493,7 @@ class BrowserSessionManager:
         if session_ids:
             logger.info(f"Closed {len(session_ids)} browser session(s)")
 
-    def list_sessions(self) -> List[Dict[str, Any]]:
+    def list_sessions(self) -> list[dict[str, Any]]:
         """
         List all active browser sessions with their info.
 
@@ -524,7 +526,7 @@ class BrowserSessionManager:
 
         return sessions
 
-    def get_console_logs(self, session_id: str, level: str = "all") -> List[Dict[str, Any]]:
+    def get_console_logs(self, session_id: str, level: str = "all") -> list[dict[str, Any]]:
         """
         Get browser console logs for a session.
 
@@ -592,7 +594,7 @@ class BrowserSessionManager:
         filter_url: str = "",
         filter_method: str = "",
         limit: int = 50,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Get captured network request logs.
 

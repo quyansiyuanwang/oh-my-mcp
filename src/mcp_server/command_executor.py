@@ -13,7 +13,7 @@ Provides secure command execution with:
 import re
 import subprocess
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from .utils import (
     COMMAND_TIMEOUT_DEFAULT,
@@ -90,7 +90,7 @@ class CommandValidator:
             # Check for dangerous characters
             for char in cls.DANGEROUS_CHARS:
                 if char in arg:
-                    return False, f"Dangerous character in argument {i}: {repr(char)}"
+                    return False, f"Dangerous character in argument {i}: {char!r}"
 
             # Check for dangerous patterns
             for pattern in cls.DANGEROUS_PATTERNS:
@@ -145,7 +145,7 @@ class CommandExecutor:
 
         return shutil.which(command) is not None
 
-    def _validate_working_directory(self, cwd: Optional[str]) -> Path:
+    def _validate_working_directory(self, cwd: str | None) -> Path:
         """
         Validate and resolve working directory.
 
@@ -184,7 +184,7 @@ class CommandExecutor:
         self,
         command: str,
         args: list[str],
-        cwd: Optional[str] = None,
+        cwd: str | None = None,
         timeout: int = COMMAND_TIMEOUT_DEFAULT,
     ) -> dict[str, Any]:
         """
@@ -239,7 +239,7 @@ class CommandExecutor:
             working_dir = self._validate_working_directory(cwd)
 
             # Build full command
-            full_command = [command] + args
+            full_command = [command, *args]
 
             # Log command execution (audit)
             logger.info(f"Executing command: {command} with {len(args)} args in {working_dir}")

@@ -126,11 +126,11 @@ def _signature(node: ast.FunctionDef) -> str:
             piece += f" = {ast.unparse(default)}"
         return piece
 
-    for arg, default in zip(pos, defaults):
+    for arg, default in zip(pos, defaults, strict=False):
         parts.append(render(arg, default))
     if args.vararg:
         parts.append(f"*{args.vararg.arg}")
-    for arg, default in zip(args.kwonlyargs, args.kw_defaults):
+    for arg, default in zip(args.kwonlyargs, args.kw_defaults, strict=False):
         parts.append(render(arg, default))
     if args.kwarg:
         parts.append(f"**{args.kwarg.arg}")

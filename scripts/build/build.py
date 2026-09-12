@@ -19,11 +19,10 @@ import re
 import shutil
 import subprocess
 import sys
-from pathlib import Path
 import time
-from typing import Any
-
 import tomllib  # Python 3.11+
+from pathlib import Path
+from typing import Any
 
 # Change to project root directory (two levels up from this script)
 SCRIPT_DIR = Path(__file__).resolve().parent

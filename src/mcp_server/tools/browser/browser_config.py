@@ -7,7 +7,7 @@
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ...utils import logger
 
@@ -18,7 +18,7 @@ class BrowserConfig:
     DEFAULT_CONFIG_DIR = ".oh-my-mcp"
     DEFAULT_CONFIG_FILE = "browser_config.json"
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """
         初始化配置管理器
 
@@ -33,7 +33,7 @@ class BrowserConfig:
         else:
             self.config_path = Path(config_path)
 
-        self._config: Dict[str, Any] = {}
+        self._config: dict[str, Any] = {}
         self._load_config()
 
     def _load_config(self) -> None:
@@ -43,7 +43,7 @@ class BrowserConfig:
 
         if self.config_path.exists():
             try:
-                with open(self.config_path, "r", encoding="utf-8") as f:
+                with open(self.config_path, encoding="utf-8") as f:
                     self._config = json.load(f)
                 logger.info(f"Loaded browser configuration from {self.config_path}")
             except Exception as e:
@@ -106,7 +106,7 @@ class BrowserConfig:
                         f"Failed to migrate old browser config from {old_config_path}: {e}"
                     )
 
-    def get_chrome_driver_path(self) -> Optional[str]:
+    def get_chrome_driver_path(self) -> str | None:
         """
         获取 ChromeDriver 路径
 
@@ -125,7 +125,7 @@ class BrowserConfig:
         chrome_path = driver_paths.get("chrome")
         return str(chrome_path) if chrome_path else None
 
-    def get_edge_driver_path(self) -> Optional[str]:
+    def get_edge_driver_path(self) -> str | None:
         """
         获取 EdgeDriver 路径
 
@@ -162,7 +162,7 @@ class BrowserConfig:
         """
         return bool(self._config.get("default_headless", False))
 
-    def get_proxy(self) -> Optional[str]:
+    def get_proxy(self) -> str | None:
         """
         获取代理服务器配置
 
@@ -193,7 +193,7 @@ class BrowserConfig:
         """
         return bool(self._config.get("auto_fallback", True))
 
-    def get_screenshot_dir(self) -> Optional[str]:
+    def get_screenshot_dir(self) -> str | None:
         """
         获取截图保存目录
 
@@ -202,7 +202,7 @@ class BrowserConfig:
         """
         return self._config.get("screenshot_dir")
 
-    def get_screenshot_dir_path(self) -> Optional[Path]:
+    def get_screenshot_dir_path(self) -> Path | None:
         """
         获取截图保存目录的 Path 对象
 
@@ -299,7 +299,7 @@ class BrowserConfig:
         self._save_config()
         logger.info(f"Screenshot directory set to: {path}")
 
-    def get_all_settings(self) -> Dict[str, Any]:
+    def get_all_settings(self) -> dict[str, Any]:
         """
         获取所有配置设置
 
@@ -326,7 +326,7 @@ class BrowserConfig:
 
 
 # 全局配置实例（单例模式）
-_browser_config: Optional[BrowserConfig] = None
+_browser_config: BrowserConfig | None = None
 
 
 def get_browser_config() -> BrowserConfig:

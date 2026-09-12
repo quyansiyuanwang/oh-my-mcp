@@ -7,7 +7,7 @@ Subagent 配置管理模块
 import json
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 from ..utils import logger
 
@@ -18,7 +18,7 @@ class SubagentConfig:
     DEFAULT_CONFIG_DIR = ".oh-my-mcp"
     DEFAULT_CONFIG_FILE = "subagent_config.json"
 
-    def __init__(self, config_path: Optional[str] = None):
+    def __init__(self, config_path: str | None = None):
         """
         初始化配置管理器
 
@@ -33,7 +33,7 @@ class SubagentConfig:
         else:
             self.config_path = Path(config_path)
 
-        self._config: Dict[str, Any] = {}
+        self._config: dict[str, Any] = {}
         self._load_config()
 
     def _load_config(self) -> None:
@@ -43,7 +43,7 @@ class SubagentConfig:
 
         if self.config_path.exists():
             try:
-                with open(self.config_path, "r", encoding="utf-8") as f:
+                with open(self.config_path, encoding="utf-8") as f:
                     self._config = json.load(f)
                 logger.info(f"Loaded configuration from {self.config_path}")
             except Exception as e:
@@ -102,7 +102,7 @@ class SubagentConfig:
                 except Exception as e:
                     logger.warning(f"Failed to migrate old config from {old_config_path}: {e}")
 
-    def get_api_key(self, provider: str) -> Optional[str]:
+    def get_api_key(self, provider: str) -> str | None:
         """
         获取指定提供商的 API 密钥
 
@@ -129,7 +129,7 @@ class SubagentConfig:
 
         # 然后检查配置文件
         api_keys = self._config.get("api_keys", {})
-        result: Optional[str] = api_keys.get(provider.lower())
+        result: str | None = api_keys.get(provider.lower())
         return result
 
     def get_enable_subagent(self) -> bool:
@@ -165,7 +165,7 @@ class SubagentConfig:
         self._save_config()
         logger.info(f"Set enable_subagent to {enabled}")
 
-    def get_api_base(self, provider: str) -> Optional[str]:
+    def get_api_base(self, provider: str) -> str | None:
         """
         获取指定提供商的 API 基础 URL
 
@@ -198,7 +198,7 @@ class SubagentConfig:
 
         # 然后检查配置文件
         api_bases = self._config.get("api_bases", {})
-        config_value: Optional[str] = api_bases.get(provider.lower())
+        config_value: str | None = api_bases.get(provider.lower())
         if config_value:
             return config_value
 
@@ -247,14 +247,14 @@ class SubagentConfig:
             self._save_config()
             logger.info(f"Removed API key for {provider}")
 
-    def list_providers(self) -> Dict[str, Dict[str, str | None]]:
+    def list_providers(self) -> dict[str, dict[str, str | None]]:
         """
         列出所有已配置的提供商
 
         Returns:
             提供商配置字典
         """
-        result: Dict[str, Dict[str, str | None]] = {}
+        result: dict[str, dict[str, str | None]] = {}
 
         for provider in ["openai", "anthropic"]:
             api_key = self.get_api_key(provider)
@@ -294,7 +294,7 @@ class SubagentConfig:
 
 
 # 全局配置实例
-_global_config: Optional[SubagentConfig] = None
+_global_config: SubagentConfig | None = None
 
 
 def get_config() -> SubagentConfig:
@@ -305,7 +305,7 @@ def get_config() -> SubagentConfig:
     return _global_config
 
 
-def init_config(config_path: Optional[str] = None) -> SubagentConfig:
+def init_config(config_path: str | None = None) -> SubagentConfig:
     """
     初始化配置
 

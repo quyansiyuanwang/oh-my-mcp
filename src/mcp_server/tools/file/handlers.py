@@ -48,7 +48,7 @@ def read_file(path: str, encoding: str = "utf-8") -> str:
         return safe_read_file(path, encoding=encoding)
     except FileOperationError as e:
         logger.error(f"Failed to read file: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -72,7 +72,7 @@ def write_file(path: str, content: str, encoding: str = "utf-8", overwrite: bool
         return f"File written successfully to {path} ({format_bytes(file_size)})"
     except FileOperationError as e:
         logger.error(f"Failed to write file: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -103,7 +103,7 @@ def append_file(path: str, content: str, encoding: str = "utf-8") -> str:
 
     except Exception as e:
         logger.error(f"Failed to append to file: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -172,7 +172,7 @@ def list_directory(path: str = ".", pattern: str = "*", recursive: bool = False)
 
     except Exception as e:
         logger.error(f"Failed to list directory: {e}")
-        return error_json(f"Failed to list directory: {str(e)}")
+        return error_json(f"Failed to list directory: {e!s}")
 
 
 @tool_handler
@@ -198,7 +198,7 @@ def file_exists(path: str) -> str:
         return json.dumps(result, indent=2)
 
     except Exception as e:
-        return error_json(f"Failed to check path: {str(e)}")
+        return error_json(f"Failed to check path: {e!s}")
 
 
 @tool_handler
@@ -240,7 +240,7 @@ def get_file_info(path: str) -> str:
 
     except Exception as e:
         logger.error(f"Failed to get file info: {e}")
-        return error_json(f"Failed to get file info: {str(e)}")
+        return error_json(f"Failed to get file info: {e!s}")
 
 
 @tool_handler
@@ -307,7 +307,7 @@ def search_files(directory: str = ".", pattern: str = "*", name_contains: str = 
 
     except Exception as e:
         logger.error(f"Failed to search files: {e}")
-        return error_json(f"Failed to search files: {str(e)}")
+        return error_json(f"Failed to search files: {e!s}")
 
 
 @tool_handler
@@ -335,7 +335,7 @@ def create_directory(path: str, parents: bool = True) -> str:
 
     except Exception as e:
         logger.error(f"Failed to create directory: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -367,7 +367,7 @@ def delete_file(path: str, confirm: bool = False) -> str:
 
     except Exception as e:
         logger.error(f"Failed to delete file: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler
@@ -409,7 +409,7 @@ def copy_file(source: str, destination: str, overwrite: bool = False) -> str:
 
     except Exception as e:
         logger.error(f"Failed to copy file: {e}")
-        return f"Error: {str(e)}"
+        return f"Error: {e!s}"
 
 
 @tool_handler

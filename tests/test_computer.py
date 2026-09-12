@@ -9,9 +9,9 @@ the real screen (and runs on headless CI).
 import base64
 import json
 import sys
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from pathlib import Path
-from typing import Any, Callable, Dict
+from typing import Any
 from unittest.mock import patch
 
 import pytest
@@ -24,7 +24,7 @@ LIB = "mcp_server.tools.computer.computer_manager"
 
 class MockMCP:
     def __init__(self) -> None:
-        self.tools: Dict[str, Callable[..., Any]] = {}
+        self.tools: dict[str, Callable[..., Any]] = {}
 
     def tool(self) -> Callable[[Callable[..., Any]], Callable[..., Any]]:
         def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
@@ -58,7 +58,7 @@ class MockImage:
         self.size = (width, height)
         self.saved_to: str | None = None
 
-    def save(self, path: Any, format: str = "PNG") -> None:  # noqa: ARG002
+    def save(self, path: Any, format: str = "PNG") -> None:
         data = b"\x89PNG-mock-data"
         if hasattr(path, "write"):
             path.write(data)
