@@ -98,19 +98,18 @@ class OpenAIClient:
             logger.info(f"OpenAI API success: {data.get('usage', {})}")
             return data
 
-        except requests.exceptions.Timeout:
-            raise NetworkError(f"OpenAI API timeout after {timeout}s")
+        except requests.exceptions.Timeout as e:
+            raise NetworkError(f"OpenAI API timeout after {timeout}s") from e
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:
-                raise ValidationError("Invalid OpenAI API key")
-            elif e.response.status_code == 429:
-                raise NetworkError("OpenAI API rate limit exceeded")
-            else:
-                raise NetworkError(
-                    f"OpenAI API error: {e.response.status_code} - {e.response.text}"
-                )
+                raise ValidationError("Invalid OpenAI API key") from e
+            if e.response.status_code == 429:
+                raise NetworkError("OpenAI API rate limit exceeded") from e
+            raise NetworkError(
+                f"OpenAI API error: {e.response.status_code} - {e.response.text}"
+            ) from e
         except Exception as e:
-            raise NetworkError(f"OpenAI API call failed: {str(e)}")
+            raise NetworkError(f"OpenAI API call failed: {str(e)}") from e
 
 
 class AnthropicClient:
@@ -208,19 +207,18 @@ class AnthropicClient:
             logger.info(f"Anthropic API success: {converted['usage']}")
             return converted
 
-        except requests.exceptions.Timeout:
-            raise NetworkError(f"Anthropic API timeout after {timeout}s")
+        except requests.exceptions.Timeout as e:
+            raise NetworkError(f"Anthropic API timeout after {timeout}s") from e
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:
-                raise ValidationError("Invalid Anthropic API key")
-            elif e.response.status_code == 429:
-                raise NetworkError("Anthropic API rate limit exceeded")
-            else:
-                raise NetworkError(
-                    f"Anthropic API error: {e.response.status_code} - {e.response.text}"
-                )
+                raise ValidationError("Invalid Anthropic API key") from e
+            if e.response.status_code == 429:
+                raise NetworkError("Anthropic API rate limit exceeded") from e
+            raise NetworkError(
+                f"Anthropic API error: {e.response.status_code} - {e.response.text}"
+            ) from e
         except Exception as e:
-            raise NetworkError(f"Anthropic API call failed: {str(e)}")
+            raise NetworkError(f"Anthropic API call failed: {str(e)}") from e
 
 
 class SubagentManager:

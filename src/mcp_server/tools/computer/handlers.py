@@ -93,8 +93,8 @@ def computer_screenshot(
         if region:
             try:
                 region_list = [int(v) for v in json.loads(region)]
-            except (json.JSONDecodeError, TypeError, ValueError):
-                raise ValidationError('region must be a JSON list like "[0, 0, 800, 600]"')
+            except (json.JSONDecodeError, TypeError, ValueError) as e:
+                raise ValidationError('region must be a JSON list like "[0, 0, 800, 600]"') from e
 
         image = computer_manager.capture_image(region=region_list, monitor=monitor)
         payload = _save_or_encode(image, save_path, filename)
@@ -174,7 +174,7 @@ def computer_get_pixel_color(x: int, y: int) -> str:
                 "x": x,
                 "y": y,
                 "rgb": rgb,
-                "hex": "#%02x%02x%02x" % tuple(rgb),
+                "hex": f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}",
             },
             indent=2,
         )
@@ -211,14 +211,17 @@ def computer_locate_on_screen(
             raise ValidationError(f"Reference image not found: {image_path}")
 
         note = None
-        if _lib._opencv_available:
+        if _lib.opencv_available():
             box = _lib.pyautogui.locateOnScreen(
                 str(ref), confidence=confidence, grayscale=grayscale
             )
         else:
             # Exact pixel match; confidence matching needs OpenCV
             box = _lib.pyautogui.locateOnScreen(str(ref), grayscale=grayscale)
-            note = "OpenCV not installed; used exact pixel matching (confidence ignored). Install opencv-python for fuzzy matching."
+            note = (
+                "OpenCV not installed; used exact pixel matching (confidence ignored). "
+                "Install opencv-python for fuzzy matching."
+            )
         if box is None:
             return json.dumps(
                 {"success": False, "found": False, "message": "Image not found on screen"}

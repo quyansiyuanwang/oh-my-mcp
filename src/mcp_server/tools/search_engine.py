@@ -62,11 +62,10 @@ class SearchCache:
                     logger.info(f"Cache hit for {engine}:{query}")
                     result_list: list[dict[str, Any]] = entry["results"]
                     return result_list
-                else:
-                    # 删除过期条目
-                    del self.cache[key]
-                    self.misses += 1
-                    logger.info(f"Cache expired for {engine}:{query}")
+                # 删除过期条目
+                del self.cache[key]
+                self.misses += 1
+                logger.info(f"Cache expired for {engine}:{query}")
             else:
                 self.misses += 1
 
@@ -396,8 +395,14 @@ class BaiduEngine(SearchEngine):
                 search_url = f"https://www.baidu.com/s?wd={encoded_query}&rn={max_results}"
 
             headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+                "User-Agent": (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+                ),
+                "Accept": (
+                    "text/html,application/xhtml+xml,application/xml;q=0.9,"
+                    "image/avif,image/webp,image/apng,*/*;q=0.8"
+                ),
                 "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
                 "Accept-Encoding": "gzip, deflate, br",
                 "Referer": "https://www.baidu.com/",

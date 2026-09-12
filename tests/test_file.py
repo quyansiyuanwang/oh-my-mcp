@@ -33,8 +33,8 @@ def test_file_diff_tools() -> None:
     file1 = Path("test_old.txt")
     file2 = Path("test_new.txt")
 
-    file1.write_text("Line 1\nLine 2\nLine 3\nLine 4\n")
-    file2.write_text("Line 1\nLine 2 modified\nLine 3\nLine 5\n")
+    file1.write_text("Line 1\nLine 2\nLine 3\nLine 4\n", encoding="utf-8")
+    file2.write_text("Line 1\nLine 2 modified\nLine 3\nLine 5\n", encoding="utf-8")
 
     print("\n1. Testing diff_files:")
     result = mcp.tools["diff_files"](str(file1), str(file2), 3, "unified")

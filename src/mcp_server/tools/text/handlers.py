@@ -126,7 +126,10 @@ def extract_urls(text: str) -> str:
     """
     try:
         # Regex pattern for URLs
-        url_pattern = r"https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]*)"
+        url_pattern = (
+            r"https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}"
+            r"\b(?:[-a-zA-Z0-9()@:%_\+.~#?&/=]*)"
+        )
         urls = extract_text_by_regex(text, url_pattern)
 
         # Remove duplicates while preserving order
@@ -258,9 +261,8 @@ def text_summary(text: str, max_length: int = 500, method: str = "truncate") -> 
                 result += "..."
 
             return result
-        else:
-            # Simple truncation
-            return truncate_text(text, max_length)
+        # Simple truncation
+        return truncate_text(text, max_length)
 
     except Exception as e:
         logger.error(f"Text summary failed: {e}")
@@ -339,7 +341,8 @@ def calculate_text_similarity(text1: str, text2: str, method: str = "levenshtein
             # Levenshtein 距离算法（编辑距离）
             def levenshtein_distance(s1: str, s2: str) -> int:
                 if len(s1) < len(s2):
-                    return levenshtein_distance(s2, s1)
+                    # deliberately swapped to keep the shorter string inner
+                    return levenshtein_distance(s2, s1)  # pylint: disable=arguments-out-of-order
                 if len(s2) == 0:
                     return len(s1)
 
@@ -373,37 +376,37 @@ def calculate_text_similarity(text1: str, text2: str, method: str = "levenshtein
                 indent=2,
             )
 
-        else:  # jaccard
-            # Jaccard 相似度（基于集合）
-            def jaccard_similarity(s1: str, s2: str) -> float:
-                # 转换为单词集合
-                set1 = set(s1.lower().split())
-                set2 = set(s2.lower().split())
+        # Jaccard similarity (word-set based)
+        # Jaccard 相似度（基于集合）
+        def jaccard_similarity(s1: str, s2: str) -> float:
+            # 转换为单词集合
+            set1 = set(s1.lower().split())
+            set2 = set(s2.lower().split())
 
-                if not set1 and not set2:
-                    return 1.0
-                if not set1 or not set2:
-                    return 0.0
+            if not set1 and not set2:
+                return 1.0
+            if not set1 or not set2:
+                return 0.0
 
-                intersection = len(set1.intersection(set2))
-                union = len(set1.union(set2))
+            intersection = len(set1.intersection(set2))
+            union = len(set1.union(set2))
 
-                return intersection / union if union > 0 else 0.0
+            return intersection / union if union > 0 else 0.0
 
-            similarity = jaccard_similarity(text1, text2)
+        similarity = jaccard_similarity(text1, text2)
 
-            logger.info(f"Jaccard similarity: {similarity:.3f}")
+        logger.info(f"Jaccard similarity: {similarity:.3f}")
 
-            return json.dumps(
-                {
-                    "success": True,
-                    "method": "jaccard",
-                    "similarity": round(similarity, 4),
-                    "text1_length": len(text1),
-                    "text2_length": len(text2),
-                },
-                indent=2,
-            )
+        return json.dumps(
+            {
+                "success": True,
+                "method": "jaccard",
+                "similarity": round(similarity, 4),
+                "text1_length": len(text1),
+                "text2_length": len(text2),
+            },
+            indent=2,
+        )
 
     except ValidationError as e:
         logger.error(f"Text similarity calculation failed: {e}")

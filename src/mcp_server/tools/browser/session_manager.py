@@ -25,9 +25,12 @@ try:
 
     _config_available = True
 except ImportError:
+    get_browser_config = None  # type: ignore[assignment]
     _config_available = False
 
-# Lazy imports for selenium to allow graceful error when not installed
+# Lazy imports for selenium to allow graceful error when not installed.
+# Names are bound to None on failure so static analyzers see a defined
+# (optional) binding; call sites narrow with explicit None checks.
 _selenium_available = False
 try:
     from selenium import webdriver
@@ -40,7 +43,14 @@ try:
 
     _selenium_available = True
 except ImportError:
-    pass
+    webdriver = None  # type: ignore[assignment]
+    ChromeOptions = None  # type: ignore  # pyright: ignore[reportAttributeAccessIssue]
+    ChromeService = None  # type: ignore  # pyright: ignore[reportAttributeAccessIssue]
+    EdgeOptions = None  # type: ignore  # pyright: ignore[reportAttributeAccessIssue]
+    EdgeService = None  # type: ignore  # pyright: ignore[reportAttributeAccessIssue]
+    ChromeDriverManager = None  # type: ignore  # pyright: ignore[reportAttributeAccessIssue]
+    EdgeChromiumDriverManager = None  # type: ignore  # pyright: ignore[reportAttributeAccessIssue]
+    _selenium_available = False
 
 # Dangerous URL schemes that should be blocked
 BLOCKED_SCHEMES = {"file", "chrome", "chrome-extension", "javascript", "data", "about", "blob"}
@@ -123,7 +133,7 @@ def _resolve_selector(by: str) -> str:
     by_lower = by.lower().strip()
     if by_lower not in SELECTOR_MAP:
         raise ValidationError(
-            f"Unknown selector type '{by}'. " f"Supported types: {', '.join(SELECTOR_MAP.keys())}"
+            f"Unknown selector type '{by}'. Supported types: {', '.join(SELECTOR_MAP.keys())}"
         )
     return SELECTOR_MAP[by_lower]
 
@@ -195,10 +205,10 @@ class BrowserSessionManager:
         try:
             width_str, height_str = window_size.split("x")
             width, height = int(width_str), int(height_str)
-        except (ValueError, AttributeError):
+        except (ValueError, AttributeError) as e:
             raise ValidationError(
                 f"Invalid window_size format '{window_size}'. Expected 'WxH' (e.g., '1920x1080')"
-            )
+            ) from e
 
         session_id = str(uuid.uuid4())
 
@@ -253,7 +263,7 @@ class BrowserSessionManager:
             self._network_enabled[session_id] = False
 
             logger.info(
-                f"Created browser session {session_id} " f"(browser={browser}, headless={headless})"
+                f"Created browser session {session_id} (browser={browser}, headless={headless})"
             )
             return session_id
 
@@ -270,6 +280,13 @@ class BrowserSessionManager:
         extra_args: str,
     ) -> Any:
         """Create a Chrome WebDriver instance."""
+        if (
+            webdriver is None
+            or ChromeOptions is None
+            or ChromeService is None
+            or ChromeDriverManager is None
+        ):
+            raise BrowserError("Selenium is not installed.")
         options = ChromeOptions()
 
         # Common options
@@ -299,9 +316,8 @@ class BrowserSessionManager:
 
         # Strategy 1: Use custom driver path from config/environment
         driver_path = None
-        if _config_available:
-            browser_conf = get_browser_config()
-            driver_path = browser_conf.get_chrome_driver_path()
+        if _config_available and get_browser_config is not None:
+            driver_path = get_browser_config().get_chrome_driver_path()
         else:
             driver_path = os.environ.get("CHROME_DRIVER_PATH", "").strip()
 
@@ -342,6 +358,13 @@ class BrowserSessionManager:
         extra_args: str,
     ) -> Any:
         """Create an Edge WebDriver instance."""
+        if (
+            webdriver is None
+            or EdgeOptions is None
+            or EdgeService is None
+            or EdgeChromiumDriverManager is None
+        ):
+            raise BrowserError("Selenium is not installed.")
         options = EdgeOptions()
 
         # Common options
@@ -371,9 +394,8 @@ class BrowserSessionManager:
 
         # Strategy 1: Use custom driver path from config/environment
         driver_path = None
-        if _config_available:
-            browser_conf = get_browser_config()
-            driver_path = browser_conf.get_edge_driver_path()
+        if _config_available and get_browser_config is not None:
+            driver_path = get_browser_config().get_edge_driver_path()
         else:
             driver_path = os.environ.get("EDGE_DRIVER_PATH", "").strip()
 

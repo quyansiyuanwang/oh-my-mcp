@@ -35,73 +35,49 @@ logger = logging.getLogger(__name__)
 class MCPServerError(Exception):
     """Base exception for MCP server errors."""
 
-    pass
-
 
 class ValidationError(MCPServerError):
     """Raised when input validation fails."""
-
-    pass
 
 
 class NetworkError(MCPServerError):
     """Raised when network operations fail."""
 
-    pass
-
 
 class FileOperationError(MCPServerError):
     """Raised when file operations fail."""
-
-    pass
 
 
 class DataProcessingError(MCPServerError):
     """Raised when data processing fails."""
 
-    pass
-
 
 class CommandExecutionError(MCPServerError):
     """Raised when command execution fails."""
-
-    pass
 
 
 class CommandValidationError(ValidationError):
     """Raised when command validation fails."""
 
-    pass
-
 
 class CommandTimeoutError(CommandExecutionError):
     """Raised when command execution times out."""
-
-    pass
 
 
 class SecurityError(MCPServerError):
     """Raised when security validation fails."""
 
-    pass
-
 
 class BrowserError(MCPServerError):
     """Raised when browser automation operations fail."""
-
-    pass
 
 
 class BrowserTimeoutError(BrowserError):
     """Raised when browser operations time out."""
 
-    pass
-
 
 class ComputerUseError(MCPServerError):
     """Raised when computer use (screen/mouse/keyboard) operations fail."""
-
-    pass
 
 
 # Validation utilities

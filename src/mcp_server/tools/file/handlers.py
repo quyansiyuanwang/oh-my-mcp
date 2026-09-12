@@ -327,8 +327,7 @@ def create_directory(path: str, parents: bool = True) -> str:
         if p.exists():
             if p.is_dir():
                 return f"Directory already exists: {path}"
-            else:
-                return f"Error: Path exists but is not a directory: {path}"
+            return f"Error: Path exists but is not a directory: {path}"
 
         p.mkdir(parents=parents, exist_ok=True)
         return f"Directory created successfully: {path}"
@@ -473,7 +472,7 @@ def diff_files(
         added = sum(1 for line in diff if line.startswith("+") and not line.startswith("+++"))
         removed = sum(1 for line in diff if line.startswith("-") and not line.startswith("---"))
 
-        diff_text = "".join(diff)
+        diff_output = "".join(diff)
 
         logger.info(f"Compared files: {file1} vs {file2} (+{added}, -{removed})")
 
@@ -486,7 +485,7 @@ def diff_files(
                 "lines_added": added,
                 "lines_removed": removed,
                 "total_changes": added + removed,
-                "diff": diff_text,
+                "diff": diff_output,
             },
             ensure_ascii=False,
         )
@@ -533,7 +532,7 @@ def diff_text(text1: str, text2: str, format: str = "unified") -> str:
         added = sum(1 for line in diff if line.startswith("+") and not line.startswith("+++"))
         removed = sum(1 for line in diff if line.startswith("-") and not line.startswith("---"))
 
-        diff_text = "".join(diff)
+        diff_output = "".join(diff)
 
         logger.info(f"Compared text strings (+{added}, -{removed})")
 
@@ -544,7 +543,7 @@ def diff_text(text1: str, text2: str, format: str = "unified") -> str:
                 "lines_added": added,
                 "lines_removed": removed,
                 "total_changes": added + removed,
-                "diff": diff_text,
+                "diff": diff_output,
             },
             ensure_ascii=False,
         )

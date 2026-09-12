@@ -106,8 +106,7 @@ def merge_with_existing_config(
 
             existing["mcpServers"].update(new_config["mcpServers"])
             return existing
-        else:
-            return new_config
+        return new_config
     except Exception as e:
         print(f"Warning: Could not read existing config: {e}")
         return new_config
@@ -118,7 +117,7 @@ class ConfigHTTPHandler(BaseHTTPRequestHandler):
 
     def do_GET(self) -> None:
         """Handle GET requests."""
-        if self.path == "/config" or self.path == "/":
+        if self.path in ("/config", "/"):
             config = generate_mcp_config()
 
             self.send_response(200)

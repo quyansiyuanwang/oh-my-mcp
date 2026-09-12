@@ -249,19 +249,18 @@ def validate_json_schema(json_string: str) -> str:
         def analyze_structure(obj: Any, depth: int = 0) -> Dict[str, Any]:
             if isinstance(obj, dict):
                 return {"type": "object", "keys": len(obj), "depth": depth}
-            elif isinstance(obj, list):
+            if isinstance(obj, list):
                 return {"type": "array", "length": len(obj), "depth": depth}
-            elif isinstance(obj, str):
+            if isinstance(obj, str):
                 return {"type": "string", "length": len(obj)}
-            elif isinstance(obj, bool):
+            if isinstance(obj, bool):
                 # bool 是 int 的子类，必须先于 int/float 检查
                 return {"type": "boolean"}
-            elif isinstance(obj, (int, float)):
+            if isinstance(obj, (int, float)):
                 return {"type": "number", "value_type": type(obj).__name__}
-            elif obj is None:
+            if obj is None:
                 return {"type": "null"}
-            else:
-                return {"type": "unknown"}
+            return {"type": "unknown"}
 
         structure = analyze_structure(data)
 

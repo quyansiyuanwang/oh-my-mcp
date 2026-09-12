@@ -75,7 +75,6 @@ class TestDirectoryOps:
         types = {item["name"]: item["type"] for item in result["items"]}
         assert types["a.txt"] == "file"
         assert types["sub"] == "directory"
-        assert "size_bytes" in result["items"][0] or True
 
     def test_list_directory_recursive(self, tmp_path: Path) -> None:
         (tmp_path / "top.txt").write_text("x")

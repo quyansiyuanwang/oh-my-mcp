@@ -639,7 +639,7 @@ def browser_wait_for(
             wait.until(EC.invisibility_of_element_located((by_type, selector)))
         else:
             raise ValidationError(
-                f"Invalid condition: {condition}. " f"Use: present, visible, clickable, gone"
+                f"Invalid condition: {condition}. Use: present, visible, clickable, gone"
             )
 
         return json.dumps(
@@ -772,20 +772,19 @@ def browser_screenshot(
                 indent=2,
                 ensure_ascii=False,
             )
-        else:
-            # Return base64 encoded
-            b64_data = base64.b64encode(screenshot_data).decode("utf-8")
-            return json.dumps(
-                {
-                    "success": True,
-                    "session_id": session_id,
-                    "format": "png",
-                    "size_bytes": len(screenshot_data),
-                    "base64": b64_data,
-                },
-                indent=2,
-                ensure_ascii=False,
-            )
+        # Return base64 encoded
+        b64_data = base64.b64encode(screenshot_data).decode("utf-8")
+        return json.dumps(
+            {
+                "success": True,
+                "session_id": session_id,
+                "format": "png",
+                "size_bytes": len(screenshot_data),
+                "base64": b64_data,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
 
     except BrowserError as e:
         return json.dumps({"error": str(e)})
@@ -1142,7 +1141,7 @@ def browser_fill_form(session_id: str, form_data: str, by: str = "css") -> str:
         try:
             fields = json.loads(form_data)
         except json.JSONDecodeError as e:
-            raise ValidationError(f"Invalid form_data JSON: {e}")
+            raise ValidationError(f"Invalid form_data JSON: {e}") from e
 
         if not isinstance(fields, dict):
             raise ValidationError("form_data must be a JSON object")
@@ -1632,7 +1631,8 @@ def browser_config_get(key: str = "") -> str:
         JSON格式的配置信息
     """
     try:
-        from .browser_config import get_browser_config
+        # function-level import keeps tests' patching of the source binding effective
+        from .browser_config import get_browser_config  # pylint: disable=import-outside-toplevel,redefined-outer-name
 
         config = get_browser_config()
 
@@ -1720,7 +1720,7 @@ def browser_config_reset() -> str:
         JSON格式的操作结果
     """
     try:
-        from .browser_config import get_browser_config
+        from .browser_config import get_browser_config  # pylint: disable=import-outside-toplevel,redefined-outer-name
 
         config = get_browser_config()
         config.reset_config()

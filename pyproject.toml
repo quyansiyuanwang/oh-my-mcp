@@ -122,8 +122,83 @@ dev = [
     "isort>=7.0.0",
     "mypy>=1.19.1",
     "pyinstaller>=6.18.0",
+    "pylint>=4.0.8",
+    "pyright>=1.1.414",
     "types-psutil>=7.2.2.20260130",
     "types-python-dateutil>=2.9.0.20260124",
     "types-pyyaml>=6.0.12.20250915",
     "types-requests>=2.32.4.20260107",
+]
+
+[tool.pyright]
+typeCheckingMode = "standard"
+include = ["src", "tests"]
+pythonVersion = "3.12"
+
+[tool.pylint.main]
+py-version = "3.12"
+ignore-paths = ["build", "dist", "tests/fixtures"]
+
+[tool.pylint.format]
+max-line-length = 120
+max-module-lines = 2000
+
+[tool.pylint.design]
+max-args = 12
+max-positional-arguments = 12
+max-locals = 26
+max-branches = 25
+max-statements = 65
+max-returns = 8
+max-nested-blocks = 7
+max-public-methods = 25
+
+[tool.pylint.basic]
+# Intentional names: module-level singletons, optional-dependency flags,
+# MCP tool parameters mirroring external APIs, and local constants.
+good-names-rgxs = [
+    "_global_config",
+    "_browser_config",
+    "_search_manager",
+    "_manager",
+    "_config_available",
+    "_selenium_available",
+    "cv2",
+    "pubDate",
+    "do_GET",
+    "MAX_DIFF_SIZE",
+    "MAX_TEXT_LENGTH",
+    "MAX_RESPONSE_SIZE",
+    # mock classes mirror the camelCase APIs of pyautogui/pygetwindow
+    "FAILSAFE",
+    "PAUSE",
+    "moveTo",
+    "moveRel",
+    "dragTo",
+    "locateOnScreen",
+    "MSS",
+    "isActive",
+    "isMinimized",
+    "isMaximized",
+    "resizeTo",
+    "getAllWindows",
+]
+
+[tool.pylint."messages control"]
+disable = [
+  # Project design decisions:
+  "logging-fstring-interpolation",  # W1203: f-string logging is the project style
+  "broad-exception-caught",         # W0718: handlers deliberately never raise to the transport
+  "import-outside-toplevel",        # C0415: lazy imports for optional dependencies
+  "duplicate-code",                 # R0801: plugin handlers intentionally share structure
+  "redefined-builtin",              # W0622: `format` is part of the public MCP tool API
+  "global-statement",               # W0603: module-level singletons (managers, registry)
+  "too-few-public-methods",
+  # pytest conventions (tests/):
+  "missing-function-docstring",     # test names document themselves
+  "missing-class-docstring",        # test/mock classes
+  "redefined-outer-name",           # fixture/shared mock names across modules
+  "unused-argument",                # fixture arguments and patched signatures
+  "wrong-import-position",          # sys.path bootstrap in test files
+  "protected-access",               # tests reach into mocks/manager internals
 ]

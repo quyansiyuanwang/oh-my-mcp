@@ -361,8 +361,16 @@ def run(check: bool) -> int:
         ("docs/zh/CONFIGURATION_GUIDE_CN.md", r"\d+ practical tools", "{total} practical tools"),
         ("docs/zh/COMPUTER_USE_GUIDE.md", r"共 \*\*\d+ 个工具\*\*", "共 **{total} 个工具**"),
         ("docs/en/COMPUTER_USE_GUIDE.md", r"\d+ tools\*\* in total", "{total} tools** in total"),
-        ("README.md", r"Tool plugins \(\d+ categories\)", f"Tool plugins ({len(categories)} categories)"),
-        ("CLAUDE.md", r"Tool plugins \(\d+ categories\)", f"Tool plugins ({len(categories)} categories)"),
+        (
+            "README.md",
+            r"Tool plugins \(\d+ categories\)",
+            f"Tool plugins ({len(categories)} categories)",
+        ),
+        (
+            "CLAUDE.md",
+            r"Tool plugins \(\d+ categories\)",
+            f"Tool plugins ({len(categories)} categories)",
+        ),
     ]:
         path = ROOT / rel
         if not path.exists():

@@ -43,7 +43,10 @@ def _fetch_webpage_helper(url: str, timeout: int = 10) -> str:
 
     try:
         headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            "User-Agent": (
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+            )
         }
         response = requests.get(url, headers=headers, timeout=timeout)
         response.raise_for_status()
@@ -100,16 +103,15 @@ def web_search(query: str, max_results: int = 10) -> str:
             ensure_ascii=False,
             indent=2,
         )
-    else:
-        return json.dumps(
-            {
-                "results": [],
-                "message": "No results found",
-                "error": result.get("error"),
-                "errors": result.get("errors"),
-            },
-            ensure_ascii=False,
-        )
+    return json.dumps(
+        {
+            "results": [],
+            "message": "No results found",
+            "error": result.get("error"),
+            "errors": result.get("errors"),
+        },
+        ensure_ascii=False,
+    )
 
 
 @tool_handler
@@ -219,16 +221,15 @@ def web_search_news(query: str, max_results: int = 10) -> str:
             ensure_ascii=False,
             indent=2,
         )
-    else:
-        return json.dumps(
-            {
-                "results": [],
-                "message": "No news results found",
-                "error": result.get("error"),
-                "errors": result.get("errors"),
-            },
-            ensure_ascii=False,
-        )
+    return json.dumps(
+        {
+            "results": [],
+            "message": "No news results found",
+            "error": result.get("error"),
+            "errors": result.get("errors"),
+        },
+        ensure_ascii=False,
+    )
 
 
 @tool_handler
@@ -638,8 +639,8 @@ def http_request(
         # 解析 headers
         try:
             headers_dict = json.loads(headers)
-        except json.JSONDecodeError:
-            raise ValidationError("Headers must be valid JSON")
+        except json.JSONDecodeError as e:
+            raise ValidationError("Headers must be valid JSON") from e
 
         # 验证 method
         method = method.upper()
@@ -784,7 +785,10 @@ def dns_lookup(hostname: str, record_type: str = "A") -> str:
         else:
             return json.dumps(
                 {
-                    "error": f"Record type {record_type} not supported. Use A or AAAA. For MX/NS/TXT, use specialized DNS tools."
+                    "error": (
+                        f"Record type {record_type} not supported. "
+                        "Use A or AAAA. For MX/NS/TXT, use specialized DNS tools."
+                    )
                 }
             )
 

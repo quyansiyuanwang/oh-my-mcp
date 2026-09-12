@@ -16,11 +16,11 @@ from .registry import ToolPlugin, load_plugin_config
 
 def _get_tools_dir() -> Path:
     """Get the tools directory, handling both normal and frozen (PyInstaller) modes."""
-    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+    meipass = getattr(sys, "_MEIPASS", None)
+    if getattr(sys, "frozen", False) and meipass:
         # Running as a PyInstaller bundle
-        return Path(sys._MEIPASS) / "mcp_server" / "tools"
-    else:
-        return Path(__file__).parent
+        return Path(meipass) / "mcp_server" / "tools"
+    return Path(__file__).parent
 
 
 def discover_tool_plugins() -> List[Path]:

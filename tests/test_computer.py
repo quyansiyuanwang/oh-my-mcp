@@ -9,6 +9,7 @@ the real screen (and runs on headless CI).
 import base64
 import json
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 from typing import Any, Callable, Dict
 from unittest.mock import patch
@@ -230,7 +231,7 @@ class MockGW:
 
 
 @pytest.fixture
-def pag() -> MockPyAutoGUI:
+def pag() -> Iterator[MockPyAutoGUI]:
     mock = MockPyAutoGUI()
     with (
         patch(f"{LIB}.pyautogui", mock),
@@ -240,21 +241,21 @@ def pag() -> MockPyAutoGUI:
 
 
 @pytest.fixture
-def mss_mod() -> MockMSS:
+def mss_mod() -> Iterator[MockMSS]:
     mock = MockMSS()
     with patch(f"{LIB}.mss", mock), patch(f"{LIB}._mss_available", True):
         yield mock
 
 
 @pytest.fixture
-def clip() -> MockPyperclip:
+def clip() -> Iterator[MockPyperclip]:
     mock = MockPyperclip()
     with patch(f"{LIB}.pyperclip", mock), patch(f"{LIB}._pyperclip_available", True):
         yield mock
 
 
 @pytest.fixture
-def gw_mod() -> MockGW:
+def gw_mod() -> Iterator[MockGW]:
     mock = MockGW()
     with patch(f"{LIB}.gw", mock), patch(f"{LIB}._pygetwindow_available", True):
         yield mock

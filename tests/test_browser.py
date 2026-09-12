@@ -135,7 +135,7 @@ class MockSwitchTo:
 
 
 # Patch the switch_to property
-MockWebDriver.switch_to = property(lambda self: MockSwitchTo(self))
+MockWebDriver.switch_to = property(MockSwitchTo)  # pyright: ignore[reportAttributeAccessIssue]
 
 
 @pytest.fixture
@@ -742,7 +742,6 @@ class TestBrowserConfig:
     def test_browser_config_set(self, mock_mcp):
         """Test setting browser configuration."""
         import tempfile
-        from pathlib import Path
 
         # Use temp config file for testing
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:
@@ -768,7 +767,6 @@ class TestBrowserConfig:
     def test_browser_config_reset(self, mock_mcp):
         """Test resetting browser configuration."""
         import tempfile
-        from pathlib import Path
 
         # Use temp config file for testing
         with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp:

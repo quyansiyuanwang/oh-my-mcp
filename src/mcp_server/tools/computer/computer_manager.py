@@ -81,7 +81,7 @@ except Exception:  # pygetwindow raises NotImplementedError on non-Windows
 
 _opencv_available = False
 try:
-    import cv2  # noqa: F401
+    import cv2  # noqa: F401  # pylint: disable=import-error,unused-import  # pyright: ignore[reportMissingImports]
 
     _opencv_available = True
 except Exception:
@@ -106,6 +106,11 @@ def _check_mss_available() -> None:
 def _check_pyperclip_available() -> None:
     if not _pyperclip_available:
         raise ComputerUseError(f"pyperclip is not installed. {INSTALL_HINT}")
+
+
+def opencv_available() -> bool:
+    """Return True when OpenCV (cv2) is importable for fuzzy image matching."""
+    return bool(_opencv_available)
 
 
 def _check_pygetwindow_available() -> None:
@@ -144,6 +149,7 @@ class ComputerManager:
     # -- configuration ------------------------------------------------------
 
     def get_config(self) -> dict[str, Any]:
+        """Return the current safety configuration and dependency availability."""
         config: dict[str, Any] = {
             "screenshot_dir": self.screenshot_dir,
             "pyautogui_available": _pyautogui_available,
@@ -162,6 +168,7 @@ class ComputerManager:
         failsafe: Optional[bool] = None,
         screenshot_dir: Optional[str] = None,
     ) -> dict[str, Any]:
+        """Update safety configuration and return the new state."""
         if pause is not None:
             if pause < 0:
                 raise ComputerUseError("pause must be >= 0")
@@ -192,11 +199,11 @@ class ComputerManager:
             with mss.MSS() as sct:
                 try:
                     mon = sct.monitors[monitor]
-                except IndexError:
+                except IndexError as e:
                     raise ComputerUseError(
                         f"Monitor index {monitor} out of range. "
                         f"Available monitors: {len(sct.monitors) - 1}"
-                    )
+                    ) from e
                 shot = sct.grab(mon)
                 from PIL import Image
 
@@ -212,6 +219,7 @@ class ComputerManager:
         return pyautogui.screenshot(**kwargs)
 
     def image_to_base64(self, image: Any) -> str:
+        """Encode a PIL image as a base64 PNG string."""
         buffer = io.BytesIO()
         image.save(buffer, format="PNG")
         return base64.b64encode(buffer.getvalue()).decode("ascii")
@@ -234,6 +242,11 @@ class ComputerManager:
         return matches[0]
 
     def list_windows(self, title_filter: str = "") -> list[dict[str, Any]]:
+        """List visible windows with title, geometry and state.
+
+        Args:
+            title_filter: Optional case-insensitive title substring filter.
+        """
         _check_pygetwindow_available()
         result = []
         for w in gw.getAllWindows():

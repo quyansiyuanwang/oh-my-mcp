@@ -298,7 +298,10 @@ def calculate_expression(expression: str) -> str:
         # documented math functions (sqrt, sin, abs, ...) work while arbitrary
         # names / attribute access / dunders cannot reach eval().
         if not re.match(r"^[0-9A-Za-z_+\-*/(). ,\^]+$", expression):
-            return '{"error": "Expression contains invalid characters. Only numbers, operators, and basic math functions allowed."}'
+            return (
+                '{"error": "Expression contains invalid characters. '
+                'Only numbers, operators, and basic math functions allowed."}'
+            )
 
         # Replace common patterns
         safe_expr = expression.replace("^", "**")
@@ -326,7 +329,9 @@ def calculate_expression(expression: str) -> str:
                 "Allowed: abs, round, max, min, pow, sqrt, sin, cos, tan, pi, e."
             )
 
-        result = eval(safe_expr, {"__builtins__": {}}, safe_dict)
+        # eval is intentional here: identifiers are whitelisted above and
+        # builtins are stripped, so the expression cannot escape the sandbox.
+        result = eval(safe_expr, {"__builtins__": {}}, safe_dict)  # pylint: disable=eval-used
 
         return json.dumps(
             {

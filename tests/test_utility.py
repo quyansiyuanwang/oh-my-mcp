@@ -37,8 +37,8 @@ def test_compression_tools() -> None:
     # 创建测试文件
     test_file1 = Path("test1.txt")
     test_file2 = Path("test2.txt")
-    test_file1.write_text("Hello World from file 1")
-    test_file2.write_text("Hello World from file 2")
+    test_file1.write_text("Hello World from file 1", encoding="utf-8")
+    test_file2.write_text("Hello World from file 2", encoding="utf-8")
 
     # 1. 测试 compress_zip
     print("\n1. 测试 compress_zip:")

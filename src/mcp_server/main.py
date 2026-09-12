@@ -13,6 +13,9 @@ from typing import Any
 
 from fastmcp import FastMCP
 
+from mcp_server.tools import load_all_plugins
+from mcp_server.utils import logger
+
 # Import tomllib for Python 3.11+ or fall back to tomli
 if sys.version_info >= (3, 11):
     import tomllib
@@ -21,9 +24,6 @@ else:
         import tomli as tomllib
     except ImportError:
         tomllib = None  # type: ignore
-
-from mcp_server.tools import load_all_plugins
-from mcp_server.utils import logger
 
 
 def get_version() -> str:
@@ -35,8 +35,8 @@ def get_version() -> str:
         pyproject_path = Path(__file__).parent.parent.parent / "pyproject.toml"
         with open(pyproject_path, "rb") as f:
             data = tomllib.load(f)
-            version: str = data.get("project", {}).get("version", "0.1.0")
-            return version
+            project_version: str = data.get("project", {}).get("version", "0.1.0")
+            return project_version
     except Exception:
         return "0.1.0"
 
@@ -51,12 +51,15 @@ logger.info(f"Starting oh-my-mcp v{version}")
 logger.info("=" * 60)
 
 # Load and register all tool plugins
-plugins = load_all_plugins()
-logger.info(f"Discovered {len(plugins)} tool plugins")
+startup_plugins = load_all_plugins()
+logger.info(f"Discovered {len(startup_plugins)} tool plugins")
 
-for plugin in plugins:
-    logger.info(f"Registering {plugin.category_name} plugin ({len(plugin.tools)} tools)...")
-    plugin.register_to_mcp(mcp)
+for startup_plugin in startup_plugins:
+    logger.info(
+        f"Registering {startup_plugin.category_name} plugin "
+        f"({len(startup_plugin.tools)} tools)..."
+    )
+    startup_plugin.register_to_mcp(mcp)
 
 
 # Helper functions for resources

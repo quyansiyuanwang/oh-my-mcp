@@ -147,10 +147,10 @@ def extract_zip(zip_path: str, extract_to: str = ".", password: Optional[str] = 
                 member_path = extract_dir / member
                 try:
                     member_path.resolve().relative_to(extract_dir.resolve())
-                except ValueError:
+                except ValueError as e:
                     raise ValidationError(
                         f"Unsafe path in archive: {member} (path traversal attempt)"
-                    )
+                    ) from e
 
                 # 解压文件
                 zf.extract(member, extract_dir, pwd=pwd_bytes)
@@ -314,10 +314,10 @@ def extract_tar(tar_path: str, extract_to: str = ".") -> str:
                 member_path = extract_dir / member.name
                 try:
                     member_path.resolve().relative_to(extract_dir.resolve())
-                except ValueError:
+                except ValueError as e:
                     raise ValidationError(
                         f"Unsafe path in archive: {member.name} (path traversal attempt)"
-                    )
+                    ) from e
 
                 # 解压（filter="data" 拒绝绝对路径、目录遍历与外部链接，兼容 Python 3.14 默认行为）
                 tf.extract(member, extract_dir, filter="data")

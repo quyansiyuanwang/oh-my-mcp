@@ -252,6 +252,7 @@ class CommandExecutor:
                 capture_output=True,
                 text=True,
                 timeout=timeout,
+                check=False,
                 shell=False,  # CRITICAL: Never use shell=True
                 stdin=subprocess.DEVNULL,  # Close stdin to prevent hanging
             )
