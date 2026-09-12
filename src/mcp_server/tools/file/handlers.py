@@ -736,3 +736,116 @@ def move_path(source: str, destination: str, overwrite: bool = False) -> str:
     except Exception as e:
         logger.error(f"Failed to move {source}: {e}")
         return f"Error: {e!s}"
+
+
+@tool_handler
+def file_hash(path: str, algorithm: str = "sha256") -> str:
+    """
+    Compute the hash of a file (streamed, supports large files).
+
+    Args:
+        path: Path to the file
+        algorithm: md5, sha1, sha256, or sha512 (default sha256)
+
+    Returns:
+        JSON string with the hexadecimal digest and file size
+    """
+    try:
+        supported = ("md5", "sha1", "sha256", "sha512")
+        algo = algorithm.lower()
+        if algo not in supported:
+            raise ValidationError(
+                f"Unsupported algorithm: {algorithm}. Use one of: {', '.join(supported)}"
+            )
+        f = sanitize_path(path)
+        if not f.exists():
+            raise FileOperationError(f"File not found: {path}")
+        if not f.is_file():
+            raise FileOperationError(f"Not a file: {path}")
+
+        import hashlib
+
+        hasher = hashlib.new(algo)
+        size = 0
+        with open(f, "rb") as fh:
+            for chunk in iter(lambda: fh.read(8 * 1024 * 1024), b""):
+                hasher.update(chunk)
+                size += len(chunk)
+
+        return json.dumps(
+            {
+                "success": True,
+                "path": str(f),
+                "algorithm": algo,
+                "hash": hasher.hexdigest(),
+                "size_bytes": size,
+            },
+            indent=2,
+        )
+    except (ValidationError, FileOperationError) as e:
+        logger.warning(f"file_hash failed: {e}")
+        return json.dumps({"error": str(e), "type": "validation"})
+    except Exception as e:
+        logger.error(f"Unexpected error in file_hash: {e}")
+        return json.dumps({"error": str(e), "type": "unknown"})
+
+
+@tool_handler
+def read_file_lines(path: str, start_line: int = 1, num_lines: int = 100) -> str:
+    """
+    Read a slice of lines from a file (paged reading for large files).
+
+    Unlike read_file (hard 10MB cap), this streams the file and returns only
+    the requested line range, so arbitrarily large files can be inspected.
+
+    Args:
+        path: Path to the file
+        start_line: First line to return (1-based, default 1)
+        num_lines: Number of lines to return (default 100, max 5000)
+
+    Returns:
+        JSON string with the lines, requested range and total line count
+    """
+    try:
+        if start_line < 1:
+            raise ValidationError("start_line must be >= 1 (1-based)")
+        if num_lines < 1 or num_lines > 5000:
+            raise ValidationError("num_lines must be between 1 and 5000")
+
+        f = sanitize_path(path)
+        if not f.exists():
+            raise FileOperationError(f"File not found: {path}")
+        if not f.is_file():
+            raise FileOperationError(f"Not a file: {path}")
+
+        lines: list[str] = []
+        total = 0
+        end_line = start_line + num_lines - 1
+        with open(f, encoding="utf-8", errors="replace", newline="") as fh:
+            for line_number, line in enumerate(fh, start=1):
+                total = line_number
+                if start_line <= line_number <= end_line:
+                    lines.append(line.rstrip("\r\n"))
+
+        return json.dumps(
+            {
+                "success": True,
+                "path": str(f),
+                "start_line": start_line,
+                "num_lines": len(lines),
+                "total_lines": total,
+                "lines": lines,
+                "has_more": end_line < total,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+    except ValidationError as e:
+        logger.warning(f"read_file_lines validation error: {e}")
+        return json.dumps({"error": str(e), "type": "validation"})
+    except FileOperationError as e:
+        logger.warning(f"read_file_lines failed: {e}")
+        return json.dumps({"error": str(e), "type": "file"})
+    except Exception as e:
+        logger.error(f"Unexpected error in read_file_lines: {e}")
+        return json.dumps({"error": str(e), "type": "unknown"})

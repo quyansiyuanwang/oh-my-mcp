@@ -287,3 +287,79 @@ class TestMovePath:
         dst = tmp_path / "dir"
         dst.mkdir()
         assert "Error" in T["move_path"](str(src), str(dst))
+
+
+class TestFileHash:
+    def test_sha256_known_value(self, tmp_path: Path) -> None:
+        import hashlib
+
+        f = tmp_path / "data.bin"
+        f.write_bytes(b"hello world")
+        result = json.loads(T["file_hash"](str(f)))
+        assert result["hash"] == hashlib.sha256(b"hello world").hexdigest()
+        assert result["algorithm"] == "sha256"
+        assert result["size_bytes"] == 11
+
+    def test_all_algorithms(self, tmp_path: Path) -> None:
+        import hashlib
+
+        f = tmp_path / "x.txt"
+        f.write_text("abc", encoding="utf-8")
+        expected = {
+            "md5": hashlib.md5(b"abc").hexdigest(),
+            "sha1": hashlib.sha1(b"abc").hexdigest(),
+            "sha256": hashlib.sha256(b"abc").hexdigest(),
+            "sha512": hashlib.sha512(b"abc").hexdigest(),
+        }
+        for algo, digest in expected.items():
+            result = json.loads(T["file_hash"](str(f), algorithm=algo))
+            assert result["hash"] == digest, algo
+
+    def test_invalid_algorithm(self, tmp_path: Path) -> None:
+        f = tmp_path / "x.txt"
+        f.write_text("x", encoding="utf-8")
+        result = json.loads(T["file_hash"](str(f), algorithm="rot13"))
+        assert "error" in result
+
+    def test_missing_file(self, tmp_path: Path) -> None:
+        assert "error" in json.loads(T["file_hash"](str(tmp_path / "nope")))
+
+    def test_large_file_streamed(self, tmp_path: Path) -> None:
+        import hashlib
+
+        f = tmp_path / "big.bin"
+        f.write_bytes(b"\xab" * (9 * 1024 * 1024))
+        result = json.loads(T["file_hash"](str(f)))
+        assert result["hash"] == hashlib.sha256(b"\xab" * (9 * 1024 * 1024)).hexdigest()
+
+
+class TestReadFileLines:
+    def test_paged_reading(self, tmp_path: Path) -> None:
+        f = tmp_path / "lines.txt"
+        f.write_text("\n".join(f"line-{i}" for i in range(1, 51)), encoding="utf-8")
+        result = json.loads(T["read_file_lines"](str(f), start_line=10, num_lines=5))
+        assert result["lines"] == [f"line-{i}" for i in range(10, 15)]
+        assert result["total_lines"] == 50
+        assert result["has_more"] is True
+
+    def test_last_page(self, tmp_path: Path) -> None:
+        f = tmp_path / "small.txt"
+        f.write_text("a\nb\nc", encoding="utf-8")
+        result = json.loads(T["read_file_lines"](str(f), start_line=2, num_lines=10))
+        assert result["lines"] == ["b", "c"]
+        assert result["has_more"] is False
+
+    def test_validation(self, tmp_path: Path) -> None:
+        f = tmp_path / "x.txt"
+        f.write_text("x", encoding="utf-8")
+        assert "error" in json.loads(T["read_file_lines"](str(f), start_line=0))
+        assert "error" in json.loads(T["read_file_lines"](str(f), num_lines=0))
+        assert "error" in json.loads(T["read_file_lines"](str(tmp_path / "nope")))
+        assert "error" in json.loads(T["read_file_lines"](str(tmp_path)))
+
+    def test_large_file_paged(self, tmp_path: Path) -> None:
+        f = tmp_path / "huge.log"
+        f.write_text("\n".join(f"row {i}" for i in range(100_000)), encoding="utf-8")
+        result = json.loads(T["read_file_lines"](str(f), start_line=99_999, num_lines=2))
+        assert result["lines"] == ["row 99998", "row 99999"]
+        assert result["total_lines"] == 100_000

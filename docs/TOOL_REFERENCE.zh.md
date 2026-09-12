@@ -585,7 +585,7 @@ toml_to_json(toml_string: str, indent: int = 2)
 Execute an allowlisted command with sanitized arguments (no shell).
 
 ```python
-run_command(command: str, args: str = '', cwd: str = '', timeout: int = COMMAND_TIMEOUT_DEFAULT)
+run_command(command: str, args: str = '', cwd: str = '', timeout: int = COMMAND_TIMEOUT_DEFAULT, max_output_chars: int = 10000)
 ```
 
 ### `list_allowed_commands`
@@ -611,7 +611,7 @@ remove_allowed_commands(commands: list[str])
 
 ---
 
-## 📁 文件系统 (工具) (14)
+## 📁 文件系统 (工具) (16)
 
 > 工具描述取自代码 docstring(英文为单一事实源)。
 
@@ -711,6 +711,20 @@ Move or rename a file or directory.
 
 ```python
 move_path(source: str, destination: str, overwrite: bool = False)
+```
+
+### `file_hash`
+Compute the hash of a file (streamed, supports large files).
+
+```python
+file_hash(path: str, algorithm: str = 'sha256')
+```
+
+### `read_file_lines`
+Read a slice of lines from a file (paged reading for large files).
+
+```python
+read_file_lines(path: str, start_line: int = 1, num_lines: int = 100)
 ```
 
 ---

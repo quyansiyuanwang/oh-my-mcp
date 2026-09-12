@@ -11,7 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `grep_files` content search, `move_path` (File System, now 14 tools),
+- `file_hash` (streamed, 9MB+ files verified) and `read_file_lines` (paged reading for arbitrarily large files) — File System, now 16 tools
+- `run_command` gained `max_output_chars` to cap stdout/stderr with tail-preserving truncation
+- `grep_files` content search, `move_path` (File System),
   `get_network_interfaces` and `get_battery_info` (System, now 10 tools)
 - **Command Execution category** (4 tools): the previously unwired
   `command_executor` infrastructure is now exposed as secure MCP tools

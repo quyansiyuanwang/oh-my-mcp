@@ -81,6 +81,7 @@ def run_command(
     args: str = "",
     cwd: str = "",
     timeout: int = COMMAND_TIMEOUT_DEFAULT,
+    max_output_chars: int = 10000,
 ) -> str:
     """
     Execute an allowlisted command with sanitized arguments (no shell).
@@ -94,13 +95,18 @@ def run_command(
         args: JSON array of argument strings, e.g. '["status", "--short"]'
         cwd: Working directory (empty = server current directory)
         timeout: Seconds before the command is killed (default 30, max 300)
+        max_output_chars: Truncate stdout/stderr to this many characters each
+            (default 10000; the tail is kept so error messages survive)
 
     Returns:
-        JSON string with returncode, stdout, stderr, execution_time
+        JSON string with returncode, stdout, stderr, execution_time and
+        output_truncated flag
     """
     try:
         if timeout < 1 or timeout > COMMAND_TIMEOUT_MAX:
             raise ValidationError(f"timeout must be between 1 and {COMMAND_TIMEOUT_MAX}")
+        if max_output_chars < 100:
+            raise ValidationError("max_output_chars must be at least 100")
 
         arg_list = _parse_args(args)
         result = _executor.execute(
@@ -109,6 +115,13 @@ def run_command(
             cwd=cwd or None,
             timeout=timeout,
         )
+        truncated = False
+        for field in ("stdout", "stderr"):
+            value = result[field]
+            if len(value) > max_output_chars:
+                result[field] = "...(truncated)..." + value[-max_output_chars:]
+                truncated = True
+        result["output_truncated"] = truncated
         return json.dumps(result, indent=2, ensure_ascii=False)
     except (
         ValidationError,

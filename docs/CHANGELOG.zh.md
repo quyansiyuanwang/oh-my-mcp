@@ -12,7 +12,9 @@
 
 ### 新增
 
-- `grep_files` 内容搜索、`move_path` 移动/重命名(File System,现为 14 个工具)、
+- `file_hash`(流式计算,已验证 9MB+ 文件)与 `read_file_lines`(大文件分页读取)—— File System 现为 16 个工具
+- `run_command` 新增 `max_output_chars` 参数,截断输出时保留尾部错误信息
+- `grep_files` 内容搜索、`move_path` 移动/重命名(File System),
   `get_network_interfaces` 网络接口与 `get_battery_info` 电池状态(System,现为 10 个工具)
 - **Command Execution 类别**(4 个工具):此前闲置的 `command_executor` 安全执行基础设施现以 MCP 工具形式开放
   - `run_command`:执行白名单命令(shell=False、参数清洗、超时上限、输出限长)

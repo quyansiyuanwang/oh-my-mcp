@@ -31,14 +31,14 @@ English (`X.md`) is the default language; Chinese versions use the unified
 ## Tool categories
 
 <!-- DOCGEN:docs-categories:start -->
-**149 practical tools across 11 categories:**
+**151 practical tools across 11 categories:**
 
 - **Browser Automation** (33 tools): Selenium-based browser automation
 - **Compression** (5 tools): ZIP/TAR compression and extraction with security features
 - **Computer Use** (25 tools): AI desktop control
 - **Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
 - **Command Execution** (4 tools): Secure allowlist-based command execution
-- **File System** (14 tools): Read, write, search files and directories, file comparison
+- **File System** (16 tools): Read, write, search files and directories, file comparison
 - **Subagent AI Orchestration** (6 tools): Delegate subtasks to external AI models with parallel execution and cost tracking
 - **System** (10 tools): System info, CPU/memory monitoring, environment variables
 - **Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity

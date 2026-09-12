@@ -30,7 +30,7 @@ oh-my-mcp/
 │           ├── 📂 web/          # 🌐 Web & Network (18 tools)
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           ├── 📂 file/         # 📁 File System (14 tools)
+│           ├── 📂 file/         # 📁 File System (16 tools)
 │           │   ├── config.yaml
 │           │   └── handlers.py
 │           ├── 📂 data/         # 📊 Data Processing (15 tools)

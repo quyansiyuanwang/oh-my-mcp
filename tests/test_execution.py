@@ -148,3 +148,25 @@ class TestRunCommand:
             result = json.loads(T["run_command"]("definitely-not-installed-xyz"))
         assert "error" in result
         assert "not found" in result["error"]
+
+
+class TestOutputLimit:
+    def test_max_output_chars_truncates_tail_kept(self, isolated_config: Path) -> None:
+        T["add_allowed_commands"](["echo"])
+        with _fake_run(returncode=0, stdout="x" * 5000):
+            result = json.loads(T["run_command"]("echo", max_output_chars=1000))
+        assert result["output_truncated"] is True
+        assert len(result["stdout"]) == len("...(truncated)...") + 1000
+        assert result["stdout"].endswith("x" * 50)
+
+    def test_under_limit_not_truncated(self, isolated_config: Path) -> None:
+        T["add_allowed_commands"](["echo"])
+        with _fake_run(returncode=0, stdout="short"):
+            result = json.loads(T["run_command"]("echo", max_output_chars=1000))
+        assert result["output_truncated"] is False
+        assert result["stdout"] == "short"
+
+    def test_min_bound_enforced(self, isolated_config: Path) -> None:
+        T["add_allowed_commands"](["echo"])
+        result = json.loads(T["run_command"]("echo", max_output_chars=10))
+        assert "error" in result
