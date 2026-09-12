@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-A powerful Model Context Protocol (MCP) server with **146 practical tools**
+A powerful Model Context Protocol (MCP) server with **149 practical tools**
 across 11 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
@@ -22,9 +22,9 @@ oh-my-mcp provides tools for:
 - **🖥️ Computer Use** (25 tools): AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration
 - **📊 Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
 - **⚡ Command Execution** (4 tools): Secure allowlist-based command execution: run whitelisted commands with argument sanitization, timeout protection, output size limits and audit logging; manage the persistent command allowlist
-- **📁 File System** (13 tools): Read, write, search files and directories, file comparison
+- **📁 File System** (14 tools): Read, write, search files and directories, file comparison
 - **🤖 Subagent AI Orchestration** (6 tools): Delegate subtasks to external AI models with parallel execution and cost tracking
-- **💻 System** (8 tools): System info, CPU/memory monitoring, environment variables
+- **💻 System** (10 tools): System info, CPU/memory monitoring, environment variables
 - **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
 - **🛠️ Utilities** (10 tools): UUID, hashing, date/time operations, math, password generation
 - **🌐 Web & Network** (18 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup

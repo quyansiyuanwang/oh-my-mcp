@@ -611,7 +611,7 @@ remove_allowed_commands(commands: list[str])
 
 ---
 
-## 📁 文件系统 (工具) (13)
+## 📁 文件系统 (工具) (14)
 
 > 工具描述取自代码 docstring(英文为单一事实源)。
 
@@ -706,6 +706,13 @@ Search file contents in a directory tree for a text string or regex.
 grep_files(directory: str = '.', pattern: str = '*', text: str = '', regex: str = '', ignore_case: bool = True, max_results: int = 100)
 ```
 
+### `move_path`
+Move or rename a file or directory.
+
+```python
+move_path(source: str, destination: str, overwrite: bool = False)
+```
+
 ---
 
 ## 🤖 Subagent AI 编排 (工具) (6)
@@ -756,7 +763,7 @@ subagent_config_list()
 
 ---
 
-## 💻 系统信息 (工具) (8)
+## 💻 系统信息 (工具) (10)
 
 > 工具描述取自代码 docstring(英文为单一事实源)。
 
@@ -814,6 +821,20 @@ Get information about the current process.
 
 ```python
 get_process_info()
+```
+
+### `get_network_interfaces`
+List network interfaces with addresses and link status.
+
+```python
+get_network_interfaces()
+```
+
+### `get_battery_info`
+Get battery status (percentage, charging state, time estimates).
+
+```python
+get_battery_info()
 ```
 
 ---

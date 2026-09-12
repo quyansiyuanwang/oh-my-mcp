@@ -30,16 +30,16 @@
 ## 工具分类
 
 <!-- DOCGEN:docs-categories:start -->
-**共 146 个实用工具,涵盖 11 个类别:**
+**共 149 个实用工具,涵盖 11 个类别:**
 
 - **🌐 浏览器自动化**(33 个工具):Selenium-based browser automation: navigation, interaction, screenshots, JS execution, console logs, cookies, network monitoring, form filling, multi-tab management
 - **📦 压缩工具**(5 个工具):ZIP/TAR compression and extraction with security features
 - **🖥️ 桌面控制**(25 个工具):AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration
 - **📊 数据处理**(15 个工具):JSON, CSV, XML, YAML, TOML parsing and manipulation
 - **⚡ 命令执行**(4 个工具):Secure allowlist-based command execution: run whitelisted commands with argument sanitization, timeout protection, output size limits and audit logging; manage the persistent command allowlist
-- **📁 文件系统**(13 个工具):Read, write, search files and directories, file comparison
+- **📁 文件系统**(14 个工具):Read, write, search files and directories, file comparison
 - **🤖 Subagent AI 编排**(6 个工具):Delegate subtasks to external AI models with parallel execution and cost tracking
-- **💻 系统信息**(8 个工具):System info, CPU/memory monitoring, environment variables
+- **💻 系统信息**(10 个工具):System info, CPU/memory monitoring, environment variables
 - **📝 文本处理**(9 个工具):Regex, encoding, email/URL extraction, text similarity
 - **🛠️ 实用工具**(10 个工具):UUID, hashing, date/time operations, math, password generation
 - **🌐 网络与搜索**(18 个工具):Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup

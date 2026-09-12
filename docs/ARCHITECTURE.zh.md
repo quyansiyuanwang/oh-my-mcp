@@ -23,7 +23,7 @@ oh-my-mcp/
 │   │   ├── web/                 # 网络工具 (18 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
-│   │   ├── file/                # 文件系统 (13 tools)
+│   │   ├── file/                # 文件系统 (14 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
 │   │   ├── data/                # 数据处理 (15 tools)
@@ -32,7 +32,7 @@ oh-my-mcp/
 │   │   ├── text/                # 文本处理 (9 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
-│   │   ├── system/              # 系统工具 (8 tools)
+│   │   ├── system/              # 系统工具 (10 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
 │   │   ├── utility/             # 实用工具 (10 tools)

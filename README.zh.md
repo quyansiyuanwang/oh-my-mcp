@@ -2,7 +2,7 @@
 
 中文 | [English](README.md)
 
-一个功能强大的模型上下文协议(MCP)服务器,内置 **146 个实用工具**、覆盖
+一个功能强大的模型上下文协议(MCP)服务器,内置 **149 个实用工具**、覆盖
 **11 个类别**,基于 [FastMCP](https://github.com/jlowin/fastmcp) 构建。
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)

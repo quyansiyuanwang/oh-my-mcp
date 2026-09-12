@@ -20,10 +20,10 @@ oh-my-mcp/
 │   │   ├── subagent_config.py   # Subagent credentials manager
 │   │   ├── compression/         # 📦 Compression (5 tools)
 │   │   ├── web/                 # 🌐 Web & Network (18 tools)
-│   │   ├── file/                # 📁 File System (13 tools)
+│   │   ├── file/                # 📁 File System (14 tools)
 │   │   ├── data/                # 📊 Data Processing (15 tools)
 │   │   ├── text/                # 📝 Text Processing (9 tools)
-│   │   ├── system/              # 💻 System (8 tools)
+│   │   ├── system/              # 💻 System (10 tools)
 │   │   ├── utility/             # 🛠️ Utilities (10 tools)
 │   │   ├── subagent/            # 🤖 Subagent AI Orchestration (6 tools)
 │   │   ├── browser/             # 🌐 Browser Automation (33 tools)

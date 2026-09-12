@@ -13,6 +13,7 @@ Provides tools for:
 import csv
 import io
 import json
+import tomllib
 import xml.etree.ElementTree as ET
 from typing import Any
 
@@ -26,7 +27,6 @@ except ImportError:
     yaml = None  # type: ignore[assignment]
 
 # tomllib is stdlib on the supported Python versions (>= 3.12)
-import tomllib
 
 
 @tool_handler

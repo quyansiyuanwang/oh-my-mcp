@@ -234,3 +234,56 @@ class TestGrepFiles:
         big.write_text("needle\n" * 500_000, encoding="utf-8")  # ~3.5MB > 2MB cap
         result = json.loads(T["grep_files"](str(tmp_path), text="needle"))
         assert result["files_searched"] == 0
+
+
+class TestMovePath:
+    def test_move_and_rename_file(self, tmp_path: Path) -> None:
+        src = tmp_path / "original.txt"
+        src.write_text("data", encoding="utf-8")
+        dst = tmp_path / "renamed.txt"
+        result = T["move_path"](str(src), str(dst))
+        assert "Moved" in result
+        assert not src.exists()
+        assert dst.read_text(encoding="utf-8") == "data"
+
+    def test_move_into_new_directory(self, tmp_path: Path) -> None:
+        src = tmp_path / "a.txt"
+        src.write_text("x", encoding="utf-8")
+        dst = tmp_path / "deep" / "nested" / "a.txt"
+        result = T["move_path"](str(src), str(dst))
+        assert "Error" not in result
+        assert dst.read_text(encoding="utf-8") == "x"
+
+    def test_move_directory_tree(self, tmp_path: Path) -> None:
+        src = tmp_path / "tree"
+        (src / "sub").mkdir(parents=True)
+        (src / "sub" / "f.txt").write_text("content", encoding="utf-8")
+        dst = tmp_path / "moved_tree"
+        assert "Moved" in T["move_path"](str(src), str(dst))
+        assert (dst / "sub" / "f.txt").read_text(encoding="utf-8") == "content"
+
+    def test_move_no_overwrite(self, tmp_path: Path) -> None:
+        src = tmp_path / "s.txt"
+        src.write_text("new", encoding="utf-8")
+        dst = tmp_path / "d.txt"
+        dst.write_text("existing", encoding="utf-8")
+        assert "Error" in T["move_path"](str(src), str(dst))
+        assert dst.read_text(encoding="utf-8") == "existing"
+
+    def test_move_overwrite(self, tmp_path: Path) -> None:
+        src = tmp_path / "s.txt"
+        src.write_text("new", encoding="utf-8")
+        dst = tmp_path / "d.txt"
+        dst.write_text("existing", encoding="utf-8")
+        assert "Moved" in T["move_path"](str(src), str(dst), overwrite=True)
+        assert dst.read_text(encoding="utf-8") == "new"
+
+    def test_move_source_missing(self, tmp_path: Path) -> None:
+        assert "Error" in T["move_path"](str(tmp_path / "nope"), str(tmp_path / "x"))
+
+    def test_move_file_onto_directory_rejected(self, tmp_path: Path) -> None:
+        src = tmp_path / "s.txt"
+        src.write_text("s", encoding="utf-8")
+        dst = tmp_path / "dir"
+        dst.mkdir()
+        assert "Error" in T["move_path"](str(src), str(dst))

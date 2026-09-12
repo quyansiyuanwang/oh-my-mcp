@@ -601,7 +601,7 @@ remove_allowed_commands(commands: list[str])
 
 ---
 
-## 📁 File System (Tools) (13)
+## 📁 File System (Tools) (14)
 
 ### `read_file`
 Read the contents of a file.
@@ -694,6 +694,13 @@ Search file contents in a directory tree for a text string or regex.
 grep_files(directory: str = '.', pattern: str = '*', text: str = '', regex: str = '', ignore_case: bool = True, max_results: int = 100)
 ```
 
+### `move_path`
+Move or rename a file or directory.
+
+```python
+move_path(source: str, destination: str, overwrite: bool = False)
+```
+
 ---
 
 ## 🤖 Subagent AI Orchestration (Tools) (6)
@@ -742,7 +749,7 @@ subagent_config_list()
 
 ---
 
-## 💻 System (Tools) (8)
+## 💻 System (Tools) (10)
 
 ### `get_system_info`
 Get comprehensive system information.
@@ -798,6 +805,20 @@ Get information about the current process.
 
 ```python
 get_process_info()
+```
+
+### `get_network_interfaces`
+List network interfaces with addresses and link status.
+
+```python
+get_network_interfaces()
+```
+
+### `get_battery_info`
+Get battery status (percentage, charging state, time estimates).
+
+```python
+get_battery_info()
 ```
 
 ---

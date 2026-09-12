@@ -700,3 +700,39 @@ def grep_files(
     except Exception as e:
         logger.error(f"Unexpected error in grep_files: {e}")
         return json.dumps({"error": str(e), "type": "unknown"})
+
+
+@tool_handler
+def move_path(source: str, destination: str, overwrite: bool = False) -> str:
+    """
+    Move or rename a file or directory.
+
+    Args:
+        source: Path to the file or directory to move
+        destination: Target path (parent directories are created if needed)
+        overwrite: Remove an existing destination file first (default False)
+
+    Returns:
+        Success message with source and destination paths
+    """
+    try:
+        src = sanitize_path(source)
+        dst = sanitize_path(destination)
+
+        if not src.exists():
+            return f"Error: Source not found: {source}"
+
+        if dst.exists():
+            if dst.is_dir() and src.is_file():
+                return f"Error: Destination is an existing directory: {destination}"
+            if not overwrite:
+                return f"Error: Destination exists and overwrite=False: {destination}"
+            dst.unlink()
+
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.move(str(src), str(dst))
+        return f"Moved {source} -> {destination}"
+
+    except Exception as e:
+        logger.error(f"Failed to move {source}: {e}")
+        return f"Error: {e!s}"

@@ -336,3 +336,74 @@ def get_process_info() -> str:
     except Exception as e:
         logger.error(f"Failed to get process info: {e}")
         return error_json(f"Failed to get process info: {e!s}")
+
+
+@tool_handler
+def get_network_interfaces() -> str:
+    """
+    List network interfaces with addresses and link status.
+
+    Returns:
+        JSON string with per-interface IPv4/IPv6/MAC addresses, MTU,
+        up/down state and speed
+    """
+    try:
+        import psutil
+
+        addrs_by_if = psutil.net_if_addrs()
+        stats_by_if = psutil.net_if_stats()
+
+        interfaces = []
+        for name, addr_list in addrs_by_if.items():
+            entry: dict[str, Any] = {"name": name, "addresses": []}
+            stats = stats_by_if.get(name)
+            if stats is not None:
+                entry["is_up"] = stats.isup
+                entry["mtu"] = stats.mtu
+                entry["speed_mbps"] = stats.speed
+            for addr in addr_list:
+                family = str(addr.family).rsplit(".", 1)[-1]
+                info = {"family": family, "address": addr.address}
+                if addr.netmask:
+                    info["netmask"] = addr.netmask
+                entry["addresses"].append(info)
+            interfaces.append(entry)
+
+        return json.dumps({"success": True, "interfaces": interfaces}, indent=2)
+    except Exception as e:
+        logger.error(f"Failed to get network interfaces: {e}")
+        return error_json(f"Failed to get network interfaces: {e}")
+
+
+@tool_handler
+def get_battery_info() -> str:
+    """
+    Get battery status (percentage, charging state, time estimates).
+
+    On systems without a battery (desktops) returns has_battery=False.
+
+    Returns:
+        JSON string with battery information
+    """
+    try:
+        import psutil
+
+        battery = psutil.sensors_battery()
+        if battery is None:
+            return json.dumps({"success": True, "has_battery": False}, indent=2)
+
+        result: dict[str, Any] = {
+            "success": True,
+            "has_battery": True,
+            "percent": round(battery.percent, 1),
+            "plugged_in": battery.power_plugged is True,
+        }
+        if battery.secsleft not in (psutil.POWER_TIME_UNLIMITED, psutil.POWER_TIME_UNKNOWN, -1):
+            hours, remainder = divmod(battery.secsleft, 3600)
+            result["time_left"] = f"{hours:02d}:{remainder // 60:02d}"
+        elif battery.power_plugged:
+            result["time_left"] = "charging"
+        return json.dumps(result, indent=2)
+    except Exception as e:
+        logger.error(f"Failed to get battery info: {e}")
+        return error_json(f"Failed to get battery info: {e}")

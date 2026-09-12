@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `grep_files` content search, `move_path` (File System, now 14 tools),
+  `get_network_interfaces` and `get_battery_info` (System, now 10 tools)
 - **Command Execution category** (4 tools): the previously unwired
   `command_executor` infrastructure is now exposed as secure MCP tools
   - `run_command` executes allowlisted commands with shell=False, argument

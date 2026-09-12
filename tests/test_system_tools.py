@@ -101,3 +101,18 @@ def test_get_current_time_custom_format() -> None:
 def test_get_process_info() -> None:
     result = T["get_process_info"]()
     assert isinstance(result, str) and result
+
+
+def test_get_network_interfaces() -> None:
+    result = json.loads(T["get_network_interfaces"]())
+    assert result["success"] is True
+    assert len(result["interfaces"]) >= 1  # loopback always exists
+    loopback = [i for i in result["interfaces"] if "lo" in i["name"].lower()]
+    assert loopback, "expected a loopback interface"
+
+
+def test_get_battery_info() -> None:
+    result = json.loads(T["get_battery_info"]())
+    # desktops/VMs may not have a battery; both shapes are valid
+    assert result["success"] is True
+    assert "has_battery" in result

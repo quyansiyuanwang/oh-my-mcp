@@ -437,8 +437,9 @@ def run(check: bool) -> int:
         ("docs/BUILD.zh.md", r"\d+ 个工具", "{total} 个工具"),
         ("docs/CONFIGURATION.zh.md", r"\d+ 个工具", "{total} 个工具"),
         ("docs/CONFIGURATION.zh.md", r"\d+ practical tools", "{total} practical tools"),
-        ("docs/COMPUTER_USE_GUIDE.zh.md", r"共 \*\*\d+ 个工具\*\*", "共 **{total} 个工具**"),
-        ("docs/COMPUTER_USE_GUIDE.md", r"\d+ tools\*\* in total", "{total} tools** in total"),
+        # these guides describe a single category, not the whole server
+        ("docs/COMPUTER_USE_GUIDE.zh.md", r"共 \*\*\d+ 个工具\*\*", "共 **{computer} 个工具**"),
+        ("docs/COMPUTER_USE_GUIDE.md", r"\d+ tools\*\* in total", "{computer} tools** in total"),
         (
             "README.md",
             r"\*\*\d+ practical tools\*\*",
@@ -464,10 +465,11 @@ def run(check: bool) -> int:
         path = ROOT / rel
         if not path.exists():
             continue
+        computer = next(len(c.tools) for c in categories if c.dir_name == "computer")
         update_counts(
             path,
             pattern,
-            template.format(total=total, categories=len(categories)),
+            template.format(total=total, categories=len(categories), computer=computer),
             changed,
             check,
         )

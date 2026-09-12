@@ -34,7 +34,7 @@ oh-my-mcp/
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           ├── 📂 file/             # 📁 文件系统 (13 tools)
+│           ├── 📂 file/             # 📁 文件系统 (14 tools)
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
@@ -46,7 +46,7 @@ oh-my-mcp/
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           ├── 📂 system/           # 💻 系统工具 (8 tools)
+│           ├── 📂 system/           # 💻 系统工具 (10 tools)
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
