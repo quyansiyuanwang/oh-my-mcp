@@ -567,7 +567,39 @@ toml_to_json(toml_string: str, indent: int = 2)
 
 ---
 
-## 📁 File System Tools (12)
+## ⚡ Command Execution Tools (4)
+
+### `run_command`
+Execute an allowlisted command with sanitized arguments (no shell).
+
+```python
+run_command(command: str, args: str = '', cwd: str = '', timeout: int = COMMAND_TIMEOUT_DEFAULT)
+```
+
+### `list_allowed_commands`
+List the commands that run_command is allowed to execute.
+
+```python
+list_allowed_commands()
+```
+
+### `add_allowed_commands`
+Permanently allow commands for run_command (persisted across restarts).
+
+```python
+add_allowed_commands(commands: list[str])
+```
+
+### `remove_allowed_commands`
+Remove commands from the run_command allowlist (persisted).
+
+```python
+remove_allowed_commands(commands: list[str])
+```
+
+---
+
+## 📁 File System Tools (13)
 
 ### `read_file`
 Read the contents of a file.
@@ -651,6 +683,13 @@ Compare two text strings and show differences.
 
 ```python
 diff_text(text1: str, text2: str, format: str = 'unified')
+```
+
+### `grep_files`
+Search file contents in a directory tree for a text string or regex.
+
+```python
+grep_files(directory: str = '.', pattern: str = '*', text: str = '', regex: str = '', ignore_case: bool = True, max_results: int = 100)
 ```
 
 ---

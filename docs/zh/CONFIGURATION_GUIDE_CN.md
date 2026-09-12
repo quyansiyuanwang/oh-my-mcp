@@ -96,7 +96,7 @@ python -m mcp_server.cli.config --server-name my-mcp-tools --output config.json
       "command": "D:\\path\\to\\python.exe",
       "args": ["-m", "mcp_server.main"],
       "env": {},
-      "description": "oh-my-mcp - MCP Server with 141 practical tools"
+      "description": "oh-my-mcp - MCP Server with 146 practical tools"
     }
   }
 }
@@ -248,7 +248,7 @@ python -m mcp_server.cli.config --http-server --port 9000
 
 ## 📚 相关文档
 
-- [完整功能文档](../README.md) - 查看所有 141 个工具的详细说明
+- [完整功能文档](../README.md) - 查看所有 146 个工具的详细说明
 - [MCP 协议文档](https://modelcontextprotocol.io/) - 了解 MCP 协议
 - [Claude Desktop](https://claude.ai/download) - 下载 Claude Desktop
 
@@ -266,7 +266,7 @@ pip install -e .
 python -m mcp_server.cli.config --claude
 
 # 3. 重启 Claude Desktop
-# 完成！开始使用 141 个工具！
+# 完成！开始使用 146 个工具！
 ```
 
 **HTTP 服务器方式：**

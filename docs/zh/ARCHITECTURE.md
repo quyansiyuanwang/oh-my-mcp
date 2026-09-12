@@ -21,7 +21,7 @@ oh-my-mcp/
 │   │   ├── web/                 # 网络工具 (18 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
-│   │   ├── file/                # 文件系统 (12 tools)
+│   │   ├── file/                # 文件系统 (13 tools)
 │   │   │   ├── config.yaml
 │   │   │   └── handlers.py
 │   │   ├── data/                # 数据处理 (15 tools)
@@ -43,7 +43,8 @@ oh-my-mcp/
 │   │       ├── config.yaml
 │   │       ├── session_manager.py
 │   │       └── handlers.py
-│   │   └── computer/            # Computer Use (25 tools)
+│   │   ├── computer/            # Computer Use (25 tools)
+│   │   └── execution/           # 命令执行 (4 tools)
 │   │       ├── config.yaml
 │   │       ├── computer_manager.py
 │   │       └── handlers.py

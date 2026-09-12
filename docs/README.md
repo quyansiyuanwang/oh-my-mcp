@@ -49,13 +49,14 @@ oh-my-mcp — **141 tools across 10 categories** | **141 个工具，10 个类�
 ## 📊 Tool Categories | 工具分类
 
 <!-- DOCGEN:docs-categories:start -->
-**141 practical tools across 10 categories:**
+**146 practical tools across 11 categories:**
 
 - **Browser Automation** (33 tools): Selenium-based browser automation
 - **Compression** (5 tools): ZIP/TAR compression and extraction with security features
 - **Computer Use** (25 tools): AI desktop control
 - **Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
-- **File System** (12 tools): Read, write, search files and directories, file comparison
+- **Command Execution** (4 tools): Secure allowlist-based command execution
+- **File System** (13 tools): Read, write, search files and directories, file comparison
 - **Subagent AI Orchestration** (6 tools): Delegate subtasks to external AI models with parallel execution and cost tracking
 - **System** (8 tools): System info, CPU/memory monitoring, environment variables
 - **Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity

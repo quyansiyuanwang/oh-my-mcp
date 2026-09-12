@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Command Execution category** (4 tools): the previously unwired
+  `command_executor` infrastructure is now exposed as secure MCP tools
+  - `run_command` executes allowlisted commands with shell=False, argument
+    sanitization, timeout caps and output size limits; the allowlist starts
+    EMPTY so nothing runs until explicitly trusted
+  - `list_allowed_commands` / `add_allowed_commands` / `remove_allowed_commands`
+    manage the persistent allowlist (~/.oh-my-mcp/execution_config.json)
+- `grep_files` (File System, now 13 tools): content search across a directory
+  tree with regex or plain text, line numbers, binary-file skipping
+  (extension + NUL sniffing) and a 2MB per-file cap
+- Documentation bilingual reorganization: Chinese-content docs moved from
+  docs/en/ to docs/zh/, fresh English versions written; docgen now also
+  refreshes per-category counts in project trees and guide references
+
+### Changed
+
+- Tool count 141 -> 146 across 11 categories
 - **Computer Use category** (now 25 tools): AI-driven desktop control via pyautogui/mss/pyperclip/pygetwindow
   - Screen capture: `computer_screenshot` (region/monitor, file or base64), `computer_get_screen_size`,
     `computer_get_monitors`, `computer_get_pixel_color`, `computer_locate_on_screen`

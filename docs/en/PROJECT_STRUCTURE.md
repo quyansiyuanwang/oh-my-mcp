@@ -30,7 +30,7 @@ oh-my-mcp/
 │           ├── 📂 web/          # 🌐 Web & Network (18 tools)
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           ├── 📂 file/         # 📁 File System (12 tools)
+│           ├── 📂 file/         # 📁 File System (13 tools)
 │           │   ├── config.yaml
 │           │   └── handlers.py
 │           ├── 📂 data/         # 📊 Data Processing (15 tools)
@@ -55,7 +55,8 @@ oh-my-mcp/
 │           │   ├── browser_config.py
 │           │   ├── session_manager.py
 │           │   └── handlers.py
-│           └── 📂 computer/     # 🖥️ Computer Use (25 tools)
+│           ├── 📂 computer/     # 🖥️ Computer Use (25 tools)
+│           └── 📂 execution/    # Command Execution (4 tools)
 │               ├── __init__.py
 │               ├── config.yaml
 │               ├── computer_manager.py

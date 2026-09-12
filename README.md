@@ -18,7 +18,8 @@ oh-my-mcp provides tools for:
 - **📦 Compression** (5 tools): ZIP/TAR compression and extraction with security features
 - **🖥️ Computer Use** (25 tools): AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration
 - **📊 Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
-- **📁 File System** (12 tools): Read, write, search files and directories, file comparison
+- **⚡ Command Execution** (4 tools): Secure allowlist-based command execution: run whitelisted commands with argument sanitization, timeout protection, output size limits and audit logging; manage the persistent command allowlist
+- **📁 File System** (13 tools): Read, write, search files and directories, file comparison
 - **🤖 Subagent AI Orchestration** (6 tools): Delegate subtasks to external AI models with parallel execution and cost tracking
 - **💻 System** (8 tools): System info, CPU/memory monitoring, environment variables
 - **📝 Text Processing** (9 tools): Regex, encoding, email/URL extraction, text similarity
@@ -157,21 +158,22 @@ oh-my-mcp/
         ├── command_executor.py      # Secure command execution
         ├── cli/
         │   └── config.py            # Configuration generator
-        └── tools/                   # Tool plugins (10 categories)
+        └── tools/                   # Tool plugins (11 categories)
             ├── __init__.py          # Plugin auto-discovery
             ├── registry.py          # @tool_handler & ToolPlugin
             ├── search_engine.py     # Web search backend
             ├── subagent_config.py   # Subagent config manager
             ├── compression/         # Compression tools (5)
             ├── web/                 # Web & Network tools (18)
-            ├── file/                # File System tools (12)
+            ├── file/                # File System tools (13)
             ├── data/                # Data Processing tools (15)
             ├── text/                # Text Processing tools (9)
             ├── system/              # System tools (8)
             ├── utility/             # Utility tools (10)
             ├── subagent/            # AI Orchestration tools (6)
             ├── browser/             # Browser Automation tools (33)
-            └── computer/            # Computer Use tools (25)
+            ├── computer/            # Computer Use tools (25)
+            └── execution/           # Command Execution tools (4)
 ```
 
 ### Adding New Tools

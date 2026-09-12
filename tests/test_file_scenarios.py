@@ -175,3 +175,62 @@ class TestErrorAndEdge:
         dst_dir.mkdir()
         result = T["copy_file"](str(src), str(dst_dir), overwrite=True)
         assert "Error" in result
+
+
+class TestGrepFiles:
+    def test_text_search_with_line_numbers(self, tmp_path: Path) -> None:
+        (tmp_path / "code.py").write_text("def hello():\n    return 'world'\n", encoding="utf-8")
+        (tmp_path / "note.md").write_text("# hello note\n", encoding="utf-8")
+        result = json.loads(T["grep_files"](str(tmp_path), text="hello"))
+        assert result["total_matches"] == 2
+        assert result["files_searched"] == 2
+        files = {m["file"] for m in result["matches"]}
+        assert len(files) == 2
+        first = result["matches"][0]
+        assert first["line_number"] == 1
+
+    def test_regex_search(self, tmp_path: Path) -> None:
+        (tmp_path / "code.py").write_text("def hello():\n    return 'world'\n", encoding="utf-8")
+        result = json.loads(T["grep_files"](str(tmp_path), regex=r"def \w+"))
+        assert result["total_matches"] == 1
+        assert "hello" in result["matches"][0]["line"]
+
+    def test_ignore_case_toggle(self, tmp_path: Path) -> None:
+        (tmp_path / "a.txt").write_text("MixedCase", encoding="utf-8")
+        assert json.loads(T["grep_files"](str(tmp_path), text="mixedcase"))["total_matches"] == 1
+        result = json.loads(T["grep_files"](str(tmp_path), text="mixedcase", ignore_case=False))
+        assert result["total_matches"] == 0
+
+    def test_skips_binary_and_null_bytes(self, tmp_path: Path) -> None:
+        (tmp_path / "bin.dat").write_bytes(b"\x00\x01hello\x00")
+        (tmp_path / "img.png").write_bytes(b"\x89PNGhello")
+        result = json.loads(T["grep_files"](str(tmp_path), text="hello"))
+        assert result["total_matches"] == 0
+
+    def test_pattern_filter_and_max_results(self, tmp_path: Path) -> None:
+        for i in range(5):
+            (tmp_path / f"f{i}.log").write_text(f"needle {i}\n", encoding="utf-8")
+        (tmp_path / "other.txt").write_text("needle here\n", encoding="utf-8")
+
+        result = json.loads(T["grep_files"](str(tmp_path), text="needle", pattern="*.log"))
+        assert result["total_matches"] == 5
+        assert result["files_searched"] == 5
+
+        result = json.loads(
+            T["grep_files"](str(tmp_path), text="needle", pattern="*.log", max_results=2)
+        )
+        assert len(result["matches"]) == 2
+        assert result["total_matches"] == 5
+        assert result["truncated"] is True
+
+    def test_validation_errors(self, tmp_path: Path) -> None:
+        assert "error" in json.loads(T["grep_files"](str(tmp_path)))
+        assert "error" in json.loads(T["grep_files"](str(tmp_path), regex="[unclosed"))
+        assert "error" in json.loads(T["grep_files"](str(tmp_path / "nope"), text="x"))
+        assert "error" in json.loads(T["grep_files"](str(tmp_path), text="x", max_results=0))
+
+    def test_skips_oversized_files(self, tmp_path: Path) -> None:
+        big = tmp_path / "big.log"
+        big.write_text("needle\n" * 500_000, encoding="utf-8")  # ~3.5MB > 2MB cap
+        result = json.loads(T["grep_files"](str(tmp_path), text="needle"))
+        assert result["files_searched"] == 0

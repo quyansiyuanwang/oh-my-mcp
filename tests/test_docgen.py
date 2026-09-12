@@ -128,9 +128,9 @@ class TestRenderers:
 class TestRealRepo:
     def test_load_categories_finds_all_plugins(self) -> None:
         categories = docgen.load_categories()
-        assert len(categories) == 10
+        assert len(categories) == 11
         assert all(c.tools for c in categories)
-        assert docgen.total_tools(categories) == 141
+        assert docgen.total_tools(categories) == 146
 
     def test_check_mode_passes_on_fresh_checkout(self) -> None:
         # The committed docs must be in sync with the code

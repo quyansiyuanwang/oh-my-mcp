@@ -4,7 +4,7 @@ English | [中文](../zh/COMPUTER_USE_GUIDE.md)
 
 The **Computer Use** category lets an AI safely take over a computer: observe
 the screen, control mouse and keyboard, use the clipboard and manage windows —
-**141 tools** in total.
+**146 tools** in total.
 
 ## Contents
 
