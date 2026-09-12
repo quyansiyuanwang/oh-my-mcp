@@ -27,7 +27,7 @@ oh-my-mcp/
 │   │   ├── utility/             # 🛠️ Utilities (10 tools)
 │   │   ├── subagent/            # 🤖 Subagent AI Orchestration (6 tools)
 │   │   ├── browser/             # 🌐 Browser Automation (33 tools)
-│   │   ├── computer/            # 🖥️ Computer Use (25 tools)
+│   │   ├── computer/            # 🖥️ Computer Use (26 tools)
 │   │   └── execution/           # Command Execution (5 tools)
 │   └── cli/                     # Configuration generator CLI
 ├── scripts/                     # Build & doc generation scripts

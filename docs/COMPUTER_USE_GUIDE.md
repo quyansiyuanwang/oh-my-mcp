@@ -4,7 +4,7 @@ English | [中文](COMPUTER_USE_GUIDE.zh.md)
 
 The **Computer Use** category lets an AI safely take over a computer: observe
 the screen, control mouse and keyboard, use the clipboard and manage windows —
-**25 tools** in total.
+**26 tools** in total.
 
 ## Contents
 
@@ -40,6 +40,7 @@ import and the tools gracefully report unavailability.
 | `computer_get_monitors` | List all displays with geometry |
 | `computer_get_pixel_color` | RGB/hex color at a coordinate |
 | `computer_locate_on_screen` | Find a reference image on screen, return center coordinates |
+| `computer_wait_for_image` | Poll the screen until a reference image appears (timeout-aware) |
 
 ### Mouse (5)
 

@@ -2,7 +2,7 @@
 
 [English](COMPUTER_USE_GUIDE.md) | 中文
 
-oh-my-mcp 的 **Computer Use** 类别让 AI 可以安全地接管电脑:截屏观察屏幕、控制鼠标键盘、操作剪贴板和管理窗口,共 **25 个工具**。
+oh-my-mcp 的 **Computer Use** 类别让 AI 可以安全地接管电脑:截屏观察屏幕、控制鼠标键盘、操作剪贴板和管理窗口,共 **26 个工具**。
 
 ## 目录
 
@@ -36,6 +36,7 @@ Linux 无显示环境(如 CI/headless 服务器)下导入会自动降级为不�
 | `computer_get_monitors` | 列出所有显示器及其几何信息 |
 | `computer_get_pixel_color` | 获取某坐标像素的 RGB/十六进制颜色 |
 | `computer_locate_on_screen` | 在屏幕上查找参考图片,返回中心坐标(视觉定位的关键) |
+| `computer_wait_for_image` | 轮询屏幕直到参考图片出现(带超时),点击后等待界面加载的关键工具 |
 
 ### 鼠标控制(5 个)
 

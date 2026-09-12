@@ -2,7 +2,7 @@
 
 English | [中文](README.zh.md)
 
-A powerful Model Context Protocol (MCP) server with **153 practical tools**
+A powerful Model Context Protocol (MCP) server with **154 practical tools**
 across 11 categories, built using [FastMCP](https://github.com/jlowin/fastmcp).
 
 [![Build and Release](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml/badge.svg)](https://github.com/quyansiyuanwang/oh-my-mcp/actions/workflows/build-release.yml)
@@ -19,7 +19,7 @@ oh-my-mcp provides tools for:
 <!-- DOCGEN:readme-features:start -->
 - **🌐 Browser Automation** (33 tools): Selenium-based browser automation: navigation, interaction, screenshots, JS execution, console logs, cookies, network monitoring, form filling, multi-tab management
 - **📦 Compression** (5 tools): ZIP/TAR compression and extraction with security features
-- **🖥️ Computer Use** (25 tools): AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration
+- **🖥️ Computer Use** (26 tools): AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration
 - **📊 Data Processing** (15 tools): JSON, CSV, XML, YAML, TOML parsing and manipulation
 - **⚡ Command Execution** (5 tools): Secure allowlist-based command execution: run whitelisted commands with argument sanitization, timeout protection, output size limits and audit logging; manage the persistent command allowlist
 - **📁 File System** (16 tools): Read, write, search files and directories, file comparison

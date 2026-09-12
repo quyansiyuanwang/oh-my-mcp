@@ -88,6 +88,9 @@ class MockPyAutoGUI:
 
     def __init__(self) -> None:
         self.calls: list[tuple[str, tuple[Any, ...], dict[str, Any]]] = []
+        # set to a list to script locateOnScreen results; None means "not found".
+        # An exhausted (empty) list keeps returning None.
+        self.locate_results: list[MockBox | None] | None = None
         self.pos = MockPoint(100, 200)
         self.FAILSAFE = True
         self.PAUSE = 0.1
@@ -135,6 +138,10 @@ class MockPyAutoGUI:
 
     def locateOnScreen(self, path: str, **kwargs: Any) -> MockBox | None:
         self._record("locateOnScreen", (path,), kwargs)
+        if self.locate_results:
+            return self.locate_results.pop(0)
+        if self.locate_results is not None:
+            return None  # scripted queue exhausted -> "not found"
         if Path(path).name == "missing-on-screen.png":
             return None
         return MockBox(10, 20, 100, 50)
@@ -589,8 +596,42 @@ class TestConfig:
 
 
 class TestRegistration:
-    def test_25_tools_registered(self) -> None:
-        assert len(T) == 25
+    def test_26_tools_registered(self) -> None:
+        assert len(T) == 26
 
     def test_tool_naming(self) -> None:
         assert all(name.startswith("computer_") for name in T)
+
+
+class TestWaitForImage:
+    def test_found_on_second_poll(self, pag: MockPyAutoGUI, tmp_path: Path) -> None:
+        ref = tmp_path / "ref.png"
+        ref.write_bytes(b"\x89PNG")
+        # first poll misses, second poll finds
+        pag.locate_results = [None, MockBox(10, 20, 100, 50)]
+        with patch("mcp_server.tools.computer.handlers.time.sleep"):  # skip poll delay
+            result = json.loads(T["computer_wait_for_image"](str(ref), poll_interval=0.1))
+        assert result["found"] is True
+        assert result["center"] == {"x": 60, "y": 45}
+        assert result["waited"] >= 0
+
+    def test_times_out(self, pag: MockPyAutoGUI, tmp_path: Path) -> None:
+        ref = tmp_path / "never.png"
+        ref.write_bytes(b"\x89PNG")
+        pag.locate_results = [None]  # never found
+        with patch("mcp_server.tools.computer.handlers.time.sleep"):
+            result = json.loads(
+                T["computer_wait_for_image"](str(ref), timeout_seconds=0.5, poll_interval=0.1)
+            )
+        assert result["found"] is False
+        assert result["timed_out"] is True
+
+    def test_missing_reference(self, pag: MockPyAutoGUI, tmp_path: Path) -> None:
+        result = json.loads(T["computer_wait_for_image"](str(tmp_path / "nope.png")))
+        assert "error" in result
+
+    def test_bounds_validation(self, pag: MockPyAutoGUI, tmp_path: Path) -> None:
+        ref = tmp_path / "ok.png"
+        ref.write_bytes(b"\x89PNG")
+        assert "error" in json.loads(T["computer_wait_for_image"](str(ref), timeout_seconds=0.1))
+        assert "error" in json.loads(T["computer_wait_for_image"](str(ref), poll_interval=50))

@@ -285,7 +285,7 @@ list_archive_contents(archive_path: str)
 
 ---
 
-## 🖥️ 桌面控制 (工具) (25)
+## 🖥️ 桌面控制 (工具) (26)
 
 > 工具描述取自代码 docstring(英文为单一事实源)。
 
@@ -462,6 +462,13 @@ Update the computer use module configuration.
 
 ```python
 computer_config_set(pause: float | None = None, failsafe: bool | None = None, screenshot_dir: str | None = None)
+```
+
+### `computer_wait_for_image`
+Poll the screen until a reference image appears (or the timeout expires).
+
+```python
+computer_wait_for_image(image_path: str, timeout_seconds: float = 10.0, poll_interval: float = 0.5, confidence: float = 0.9, grayscale: bool = False)
 ```
 
 ---

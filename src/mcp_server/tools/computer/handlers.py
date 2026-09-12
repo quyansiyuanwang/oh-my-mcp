@@ -16,6 +16,7 @@ dependencies produce actionable error payloads instead of crashing the server.
 
 import json
 import time
+from pathlib import Path
 from typing import Any
 
 from mcp_server.tools.computer import computer_manager as _lib
@@ -210,18 +211,7 @@ def computer_locate_on_screen(
         if not ref.is_file():
             raise ValidationError(f"Reference image not found: {image_path}")
 
-        note = None
-        if _lib.opencv_available():
-            box = _lib.pyautogui.locateOnScreen(
-                str(ref), confidence=confidence, grayscale=grayscale
-            )
-        else:
-            # Exact pixel match; confidence matching needs OpenCV
-            box = _lib.pyautogui.locateOnScreen(str(ref), grayscale=grayscale)
-            note = (
-                "OpenCV not installed; used exact pixel matching (confidence ignored). "
-                "Install opencv-python for fuzzy matching."
-            )
+        box, note = _locate_once(ref, confidence, grayscale)
         if box is None:
             return json.dumps(
                 {"success": False, "found": False, "message": "Image not found on screen"}
@@ -856,3 +846,100 @@ def computer_config_set(
     except Exception as e:
         logger.error(f"computer_config_set unexpected error: {e}")
         return error_json(f"Failed to set config: {e}")
+
+
+def _locate_once(image_path: Path, confidence: float, grayscale: bool) -> tuple[Any, str | None]:
+    """Single locateOnScreen attempt; returns (box, note)."""
+    note = None
+    if _lib.opencv_available():
+        box = _lib.pyautogui.locateOnScreen(
+            str(image_path), confidence=confidence, grayscale=grayscale
+        )
+    else:
+        # Exact pixel match; confidence matching needs OpenCV
+        box = _lib.pyautogui.locateOnScreen(str(image_path), grayscale=grayscale)
+        note = (
+            "OpenCV not installed; used exact pixel matching (confidence ignored). "
+            "Install opencv-python for fuzzy matching."
+        )
+    return box, note
+
+
+@tool_handler
+def computer_wait_for_image(
+    image_path: str,
+    timeout_seconds: float = 10.0,
+    poll_interval: float = 0.5,
+    confidence: float = 0.9,
+    grayscale: bool = False,
+) -> str:
+    """
+    Poll the screen until a reference image appears (or the timeout expires).
+
+    Useful after clicking a button or launching an app: wait for the expected
+    UI state instead of guessing a sleep duration. Confidence matching
+    requires opencv-python; without it, exact pixel matching is used.
+
+    Args:
+        image_path: Path to a small reference PNG to wait for
+        timeout_seconds: Give up after this many seconds (0.5-120, default 10)
+        poll_interval: Seconds between attempts (0.1-10, default 0.5)
+        confidence: Matching confidence 0-1 (default 0.9, needs opencv-python)
+        grayscale: Match in grayscale for speed (default False)
+
+    Returns:
+        JSON string with found, center/box (when found), waited seconds and
+        the elapsed/timeout outcome
+    """
+    try:
+        _check_pyautogui_available()
+        ref = sanitize_path(image_path)
+        if not ref.is_file():
+            raise ValidationError(f"Reference image not found: {image_path}")
+        if not 0.5 <= timeout_seconds <= 120:
+            raise ValidationError("timeout_seconds must be between 0.5 and 120")
+        if not 0.1 <= poll_interval <= 10:
+            raise ValidationError("poll_interval must be between 0.1 and 10")
+
+        started = time.monotonic()
+        note = None
+        while True:
+            box, locate_note = _locate_once(ref, confidence, grayscale)
+            note = locate_note
+            if box is not None:
+                break
+            if time.monotonic() - started >= timeout_seconds:
+                return json.dumps(
+                    {
+                        "success": False,
+                        "found": False,
+                        "timed_out": True,
+                        "waited": round(time.monotonic() - started, 2),
+                        "message": (f"Image did not appear within {timeout_seconds} seconds"),
+                    },
+                    indent=2,
+                )
+            time.sleep(poll_interval)
+
+        center = _lib.pyautogui.center(box)
+        result: dict[str, Any] = {
+            "success": True,
+            "found": True,
+            "waited": round(time.monotonic() - started, 2),
+            "center": {"x": center.x, "y": center.y},
+            "box": {
+                "left": box.left,
+                "top": box.top,
+                "width": box.width,
+                "height": box.height,
+            },
+        }
+        if note:
+            result["note"] = note
+        return json.dumps(result, indent=2)
+    except (ValidationError, ComputerUseError) as e:
+        logger.warning(f"computer_wait_for_image failed: {e}")
+        return error_json(str(e))
+    except Exception as e:
+        logger.error(f"computer_wait_for_image unexpected error: {e}")
+        return error_json(f"Wait for image failed: {e}")
