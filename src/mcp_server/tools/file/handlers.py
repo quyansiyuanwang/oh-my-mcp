@@ -12,6 +12,7 @@ Provides tools for:
 import difflib
 import glob
 import json
+import re
 import shutil
 from pathlib import Path
 from typing import Any
@@ -553,4 +554,149 @@ def diff_text(text1: str, text2: str, format: str = "unified") -> str:
         return json.dumps({"error": str(e), "type": "validation"})
     except Exception as e:
         logger.error(f"Unexpected error in diff_text: {e}")
+        return json.dumps({"error": str(e), "type": "unknown"})
+
+
+# Binary extensions skipped by grep_files
+_BINARY_EXTENSIONS = {
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".bmp",
+    ".ico",
+    ".webp",
+    ".pdf",
+    ".zip",
+    ".tar",
+    ".gz",
+    ".bz2",
+    ".7z",
+    ".rar",
+    ".exe",
+    ".dll",
+    ".so",
+    ".dylib",
+    ".class",
+    ".jar",
+    ".pyc",
+    ".woff",
+    ".woff2",
+    ".ttf",
+    ".mp3",
+    ".mp4",
+    ".avi",
+    ".mov",
+    ".sqlite",
+    ".db",
+}
+
+_MAX_GREP_FILE_SIZE = 2 * 1024 * 1024  # 2MB per file
+
+
+@tool_handler
+def grep_files(
+    directory: str = ".",
+    pattern: str = "*",
+    text: str = "",
+    regex: str = "",
+    ignore_case: bool = True,
+    max_results: int = 100,
+) -> str:
+    """
+    Search file contents in a directory tree for a text string or regex.
+
+    Skips binary files (by extension and NUL-byte sniffing) and files larger
+    than 2MB. Provide either `text` (plain substring search) or `regex`
+    (Python regular expression); if both are given, `regex` wins.
+
+    Args:
+        directory: Directory to search in (searched recursively)
+        pattern: Glob pattern to filter files (default: all files)
+        text: Plain text to search for
+        regex: Regular expression to search for
+        ignore_case: Case-insensitive matching (default True)
+        max_results: Maximum number of matching lines returned (default 100)
+
+    Returns:
+        JSON string with matched lines (file, line number, content) and totals
+    """
+    try:
+        if not text and not regex:
+            raise ValidationError("Provide either 'text' or 'regex' to search for")
+
+        base = sanitize_path(directory)
+        if not base.exists():
+            return json.dumps({"error": f"Directory not found: {directory}"})
+        if not base.is_dir():
+            return json.dumps({"error": f"Not a directory: {directory}"})
+
+        if max_results < 1 or max_results > 1000:
+            raise ValidationError("max_results must be between 1 and 1000")
+
+        flags = re.IGNORECASE if ignore_case else 0
+        if regex:
+            try:
+                matcher = re.compile(regex, flags)
+            except re.error as e:
+                raise ValidationError(f"Invalid regex: {e}") from e
+        else:
+            matcher = re.compile(re.escape(text), flags)
+
+        matches: list[dict[str, Any]] = []
+        total_matches = 0
+        files_searched = 0
+        truncated = False
+
+        for item_path in sorted(glob.glob(str(base / "**" / pattern), recursive=True)):
+            item = Path(item_path)
+            if not item.is_file() or item.suffix.lower() in _BINARY_EXTENSIONS:
+                continue
+            try:
+                if item.stat().st_size > _MAX_GREP_FILE_SIZE:
+                    continue
+                content = item.read_text(encoding="utf-8", errors="strict")
+            except UnicodeDecodeError:
+                continue  # binary content
+            except OSError as e:
+                logger.warning(f"Could not read {item_path}: {e}")
+                continue
+
+            if "\x00" in content:
+                continue  # NUL byte sniffing: binary content despite extension
+
+            files_searched += 1
+            for line_number, line in enumerate(content.splitlines(), start=1):
+                if matcher.search(line):
+                    total_matches += 1
+                    if total_matches <= max_results:
+                        matches.append(
+                            {
+                                "file": str(item),
+                                "line_number": line_number,
+                                "line": line[:500],
+                            }
+                        )
+
+        truncated = total_matches > max_results
+
+        return json.dumps(
+            {
+                "success": True,
+                "directory": str(base),
+                "pattern": pattern,
+                "files_searched": files_searched,
+                "total_matches": total_matches,
+                "truncated": truncated,
+                "matches": matches,
+            },
+            indent=2,
+            ensure_ascii=False,
+        )
+
+    except ValidationError as e:
+        logger.warning(f"grep_files validation error: {e}")
+        return json.dumps({"error": str(e), "type": "validation"})
+    except Exception as e:
+        logger.error(f"Unexpected error in grep_files: {e}")
         return json.dumps({"error": str(e), "type": "unknown"})
