@@ -63,3 +63,10 @@ nul
 
 # AI-related
 CLAUDE.md
+
+# Local AI agent session data
+.zcode/
+
+# Tool caches (untracked by luck previously)
+.mypy_cache/
+.ruff_cache/
