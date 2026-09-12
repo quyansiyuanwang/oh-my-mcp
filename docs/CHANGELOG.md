@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.0] - 2026-09-12
 
+- Intermediate release (146 tools / 11 categories): Command Execution
+  category, grep_files, move_path, bilingual documentation reorganization
+- Superseded within the day by 1.1.0
+
+## [1.1.0] - 2026-09-12
+
 ### Added
 
 - `file_hash` (streamed, 9MB+ files verified) and `read_file_lines` (paged reading for arbitrarily large files) — File System, now 16 tools

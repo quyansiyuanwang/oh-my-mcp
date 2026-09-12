@@ -10,4 +10,4 @@ This module provides a collection of tools organized by category:
 - Utilities: Date/time, hashing, UUID generation, math
 """
 
-__version__ = "0.2.0"
+__version__ = "1.1.0"
