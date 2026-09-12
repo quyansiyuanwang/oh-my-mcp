@@ -234,7 +234,48 @@ def update_counts(
         )
     updated = re.sub(pattern, replacement, original)
     if updated != original:
-        changed.append(str(path.relative_to(ROOT)))
+        rel = str(path.relative_to(ROOT))
+        if rel not in changed:
+            changed.append(rel)
+        if not check:
+            write_text(path, updated, crlf)
+
+
+def update_tree_counts(
+    path: Path, categories: list[CategoryInfo], changed: list[str], check: bool
+) -> None:
+    """Refresh per-category tool counts in ASCII project trees.
+
+    A tree line looks like ``└── 📂 computer/  # 🖥️ Computer Use (25 tools)``.
+    Any line containing ``<dir_name>/`` has its last number replaced with the
+    category's real tool count, so both English and Chinese labels work.
+    """
+    if not path.exists():
+        return
+    original = read_text(path)
+    crlf = b"\r\n" in path.read_bytes()
+    lines = original.split("\n")
+    changed_any = False
+    for i, line in enumerate(lines):
+        for cat in categories:
+            token = f"{cat.dir_name}/"
+            if token not in line or "(" not in line:
+                continue
+            numbers = list(re.finditer(r"\d+", line))
+            if not numbers:
+                continue
+            last = numbers[-1]
+            if int(last.group()) != len(cat.tools):
+                lines[i] = line[: last.start()] + str(len(cat.tools)) + line[last.end() :]
+                changed_any = True
+    updated = "\n".join(lines)
+    if updated != original and not changed_any:
+        # defensive: no explicit change detected but bytes differ (line endings)
+        changed_any = True
+    if changed_any:
+        rel = str(path.relative_to(ROOT))
+        if rel not in changed:
+            changed.append(rel)
         if not check:
             write_text(path, updated, crlf)
 
@@ -300,6 +341,39 @@ def run(check: bool) -> int:
         changed,
         check,
     )
+
+    # 7. Per-category counts inside ASCII project trees (en + zh)
+    for rel in [
+        "README.md",
+        "docs/zh/ARCHITECTURE.md",
+        "docs/zh/PROJECT_STRUCTURE.md",
+        "docs/en/ARCHITECTURE.md",
+        "docs/en/PROJECT_STRUCTURE.md",
+    ]:
+        update_tree_counts(ROOT / rel, categories, changed, check)
+    if claude_md.exists():
+        update_tree_counts(claude_md, categories, changed, check)
+
+    # 8. Free-form count references in guides (Chinese & English phrasings)
+    for rel, pattern, template in [
+        ("docs/zh/BUILD.md", r"\d+ 个工具", "{total} 个工具"),
+        ("docs/zh/CONFIGURATION_GUIDE_CN.md", r"\d+ 个工具", "{total} 个工具"),
+        ("docs/zh/CONFIGURATION_GUIDE_CN.md", r"\d+ practical tools", "{total} practical tools"),
+        ("docs/zh/COMPUTER_USE_GUIDE.md", r"共 \*\*\d+ 个工具\*\*", "共 **{total} 个工具**"),
+        ("docs/en/COMPUTER_USE_GUIDE.md", r"\d+ tools\*\* in total", "{total} tools** in total"),
+        ("README.md", r"Tool plugins \(\d+ categories\)", f"Tool plugins ({len(categories)} categories)"),
+        ("CLAUDE.md", r"Tool plugins \(\d+ categories\)", f"Tool plugins ({len(categories)} categories)"),
+    ]:
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        update_counts(
+            path,
+            pattern,
+            template.format(total=total, categories=len(categories)),
+            changed,
+            check,
+        )
 
     if check:
         if changed:
