@@ -33,6 +33,50 @@ SRC_TOOLS = ROOT / "src" / "mcp_server" / "tools"
 
 MARKER_PATTERN = "<!-- DOCGEN:{key}:{bound} -->"
 
+# Topics that must exist in BOTH languages: docs/<Topic>.md (English default)
+# and docs/<Topic>.zh.md (Chinese).
+BILINGUAL_TOPICS = [
+    "README",
+    "INSTALLATION",
+    "SETUP_GUIDE",
+    "CONFIGURATION",
+    "TOOL_REFERENCE",
+    "COMPUTER_USE_GUIDE",
+    "SUBAGENT_GUIDE",
+    "SUBAGENT_CONFIG",
+    "BROWSER_CONFIG",
+    "BROWSER_CONFIG_QUICKSTART",
+    "SEARCH_ADVANCED",
+    "ARCHITECTURE",
+    "PROJECT_STRUCTURE",
+    "BUILD",
+    "CONTRIBUTING",
+    "CHANGELOG",
+]
+
+
+def check_bilingual_pairs() -> list[str]:
+    """Every topic must have both the English and the Chinese version."""
+    problems: list[str] = []
+    for topic in BILINGUAL_TOPICS:
+        for rel in (f"docs/{topic}.md", f"docs/{topic}.zh.md"):
+            if not (ROOT / rel).exists():
+                problems.append(f"missing bilingual doc: {rel}")
+    return problems
+
+
+def check_doc_links() -> list[str]:
+    """All relative .md links inside docs/*.md must resolve to real files."""
+    problems: list[str] = []
+    for md in sorted((ROOT / "docs").glob("*.md")):
+        text = read_text(md)
+        for target in re.findall(r"\]\(([^)#\s]+\.md)\)", text):
+            if target.startswith(("http://", "https://")):
+                continue
+            if not (md.parent / target).resolve().exists():
+                problems.append(f"{md.relative_to(ROOT)}: broken link -> {target}")
+    return problems
+
 
 @dataclass
 class ToolInfo:
@@ -49,6 +93,7 @@ class CategoryInfo:
 
     dir_name: str
     category_name: str
+    category_name_zh: str
     emoji: str
     description: str
     tools: list[ToolInfo] = field(default_factory=list)
@@ -122,6 +167,7 @@ def load_categories() -> list[CategoryInfo]:
             CategoryInfo(
                 dir_name=plugin_dir.name,
                 category_name=str(meta["category_name"]),
+                category_name_zh=str(meta.get("category_name_zh", meta["category_name"])),
                 emoji=str(meta.get("emoji", "🔧")),
                 description=str(meta.get("category_description", "")),
                 tools=parse_handlers(handlers),
@@ -158,7 +204,17 @@ def render_claude_bullets(categories: list[CategoryInfo]) -> str:
     return "\n".join(lines)
 
 
-def render_docs_index_categories(categories: list[CategoryInfo]) -> str:
+def render_docs_index_categories(categories: list[CategoryInfo], locale: str = "en") -> str:
+    if locale == "zh":
+        lines = [
+            f"**共 {total_tools(categories)} 个实用工具,涵盖 {len(categories)} 个类别:**",
+            "",
+        ]
+        for c in categories:
+            lines.append(
+                f"- **{c.emoji} {c.category_name_zh}**({len(c.tools)} 个工具):{c.description}"
+            )
+        return "\n".join(lines)
     lines = [
         f"**{total_tools(categories)} practical tools across {len(categories)} categories:**",
         "",
@@ -168,10 +224,18 @@ def render_docs_index_categories(categories: list[CategoryInfo]) -> str:
     return "\n".join(lines)
 
 
-def render_tool_reference(categories: list[CategoryInfo]) -> str:
+def render_tool_reference(categories: list[CategoryInfo], locale: str = "en") -> str:
+    """Render the full tool reference. Descriptions come from the English
+    docstrings (single source of truth) in both locales; the zh version
+    localizes headings via category_name_zh and says so explicitly."""
     blocks = []
     for c in categories:
-        lines = [f"## {c.emoji} {c.category_name} Tools ({len(c.tools)})", ""]
+        display = c.category_name_zh if locale == "zh" else c.category_name
+        suffix = "工具" if locale == "zh" else "Tools"
+        lines = [f"## {c.emoji} {display} ({suffix}) ({len(c.tools)})", ""]
+        if locale == "zh":
+            lines.append("> 工具描述取自代码 docstring(英文为单一事实源)。")
+            lines.append("")
         for tool in c.tools:
             lines.append(f"### `{tool.name}`")
             lines.append(tool.description or "No description.")
@@ -308,7 +372,7 @@ def run(check: bool) -> int:
             check,
         )
 
-    # 3. docs/README.md — tool categories section
+    # 3. docs/README.md — English tool categories section
     update_markdown(
         ROOT / "docs" / "README.md",
         {"docs-categories": render_docs_index_categories(categories)},
@@ -316,10 +380,24 @@ def run(check: bool) -> int:
         check,
     )
 
-    # 4. docs/en/TOOL_REFERENCE.md — full per-category tool sections
+    # 3b. docs/README.zh.md — Chinese tool categories section
     update_markdown(
-        ROOT / "docs" / "en" / "TOOL_REFERENCE.md",
+        ROOT / "docs" / "README.zh.md",
+        {"docs-categories": render_docs_index_categories(categories, locale="zh")},
+        changed,
+        check,
+    )
+
+    # 4. docs/TOOL_REFERENCE.md + docs/TOOL_REFERENCE.zh.md — full sections
+    update_markdown(
+        ROOT / "docs" / "TOOL_REFERENCE.md",
         {"tool-reference": render_tool_reference(categories)},
+        changed,
+        check,
+    )
+    update_markdown(
+        ROOT / "docs" / "TOOL_REFERENCE.zh.md",
+        {"tool-reference": render_tool_reference(categories, locale="zh")},
         changed,
         check,
     )
@@ -345,10 +423,10 @@ def run(check: bool) -> int:
     # 7. Per-category counts inside ASCII project trees (en + zh)
     for rel in [
         "README.md",
-        "docs/zh/ARCHITECTURE.md",
-        "docs/zh/PROJECT_STRUCTURE.md",
-        "docs/en/ARCHITECTURE.md",
-        "docs/en/PROJECT_STRUCTURE.md",
+        "docs/ARCHITECTURE.zh.md",
+        "docs/PROJECT_STRUCTURE.zh.md",
+        "docs/ARCHITECTURE.md",
+        "docs/PROJECT_STRUCTURE.md",
     ]:
         update_tree_counts(ROOT / rel, categories, changed, check)
     if claude_md.exists():
@@ -356,20 +434,31 @@ def run(check: bool) -> int:
 
     # 8. Free-form count references in guides (Chinese & English phrasings)
     for rel, pattern, template in [
-        ("docs/zh/BUILD.md", r"\d+ 个工具", "{total} 个工具"),
-        ("docs/zh/CONFIGURATION_GUIDE_CN.md", r"\d+ 个工具", "{total} 个工具"),
-        ("docs/zh/CONFIGURATION_GUIDE_CN.md", r"\d+ practical tools", "{total} practical tools"),
-        ("docs/zh/COMPUTER_USE_GUIDE.md", r"共 \*\*\d+ 个工具\*\*", "共 **{total} 个工具**"),
-        ("docs/en/COMPUTER_USE_GUIDE.md", r"\d+ tools\*\* in total", "{total} tools** in total"),
+        ("docs/BUILD.zh.md", r"\d+ 个工具", "{total} 个工具"),
+        ("docs/CONFIGURATION.zh.md", r"\d+ 个工具", "{total} 个工具"),
+        ("docs/CONFIGURATION.zh.md", r"\d+ practical tools", "{total} practical tools"),
+        ("docs/COMPUTER_USE_GUIDE.zh.md", r"共 \*\*\d+ 个工具\*\*", "共 **{total} 个工具**"),
+        ("docs/COMPUTER_USE_GUIDE.md", r"\d+ tools\*\* in total", "{total} tools** in total"),
         (
             "README.md",
-            r"Tool plugins \(\d+ categories\)",
-            f"Tool plugins ({len(categories)} categories)",
+            r"\*\*\d+ practical tools\*\*",
+            f"**{total} practical tools**",
         ),
+        ("README.md", r"across \d+ categories", f"across {len(categories)} categories"),
         (
             "CLAUDE.md",
             r"Tool plugins \(\d+ categories\)",
             f"Tool plugins ({len(categories)} categories)",
+        ),
+        (
+            "README.zh.md",
+            r"\*\*\d+ 个实用工具\*\*",
+            f"**{total} 个实用工具**",
+        ),
+        (
+            "README.zh.md",
+            r"\*\*\d+ 个类别\*\*",
+            f"**{len(categories)} 个类别**",
         ),
     ]:
         path = ROOT / rel
@@ -384,10 +473,16 @@ def run(check: bool) -> int:
         )
 
     if check:
-        if changed:
-            print("Documentation is out of date for:")
-            for f in changed:
-                print(f"  - {f}")
+        problems = check_bilingual_pairs() + check_doc_links()
+        if changed or problems:
+            if changed:
+                print("Documentation is out of date for:")
+                for f in changed:
+                    print(f"  - {f}")
+            if problems:
+                print("Documentation structure problems:")
+                for p in problems:
+                    print(f"  - {p}")
             print("\nRun: python scripts/docs/generate_docs.py --write")
             return 1
         print(f"Documentation is up to date ({total} tools, {len(categories)} categories).")

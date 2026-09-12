@@ -87,6 +87,7 @@ class TestRenderers:
             docgen.CategoryInfo(
                 dir_name="alpha",
                 category_name="Alpha Things",
+                category_name_zh="阿尔法",
                 emoji="🅰️",
                 description="Do alpha: with details here",
                 tools=[
@@ -97,6 +98,7 @@ class TestRenderers:
             docgen.CategoryInfo(
                 dir_name="beta",
                 category_name="Beta Things",
+                category_name_zh="贝塔",
                 emoji="🅱️",
                 description="Do beta",
                 tools=[docgen.ToolInfo("beta_one", "Only tool.", "(y: str = 'z')")],
@@ -113,7 +115,7 @@ class TestRenderers:
     def test_tool_reference_sections(self) -> None:
         cats = self._sample()
         text = docgen.render_tool_reference(cats)
-        assert "## 🅰️ Alpha Things Tools (2)" in text
+        assert "## 🅰️ Alpha Things (Tools) (2)" in text
         assert "### `alpha_one`" in text
         assert "First tool." in text
         assert "alpha_one(x: int)" in text
@@ -125,12 +127,67 @@ class TestRenderers:
         assert docgen.short_description(cats[1]) == "Do beta"
 
 
+class TestBilingual:
+    def test_render_tool_reference_zh_localizes_headings(self) -> None:
+        cats = [
+            docgen.CategoryInfo(
+                dir_name="alpha",
+                category_name="Alpha Things",
+                category_name_zh="阿尔法",
+                emoji="A",
+                description="Do alpha",
+                tools=[docgen.ToolInfo("t1", "Tool one.", "(x: int)")],
+            )
+        ]
+        zh = docgen.render_tool_reference(cats, locale="zh")
+        assert "## A 阿尔法 (工具) (1)" in zh
+        assert "docstring" in zh
+        assert "### `t1`" in zh
+        en = docgen.render_tool_reference(cats)
+        assert "## A Alpha Things (Tools) (1)" in en
+
+    def test_render_docs_index_zh(self) -> None:
+        cats = [
+            docgen.CategoryInfo(
+                dir_name="alpha",
+                category_name="Alpha Things",
+                category_name_zh="阿尔法",
+                emoji="A",
+                description="Do alpha",
+                tools=[docgen.ToolInfo("t1", "Tool one.", "()")],
+            )
+        ]
+        zh = docgen.render_docs_index_categories(cats, locale="zh")
+        assert "1 个类别" in zh
+        assert "阿尔法" in zh
+
+    def test_check_bilingual_pairs_reports_missing(self) -> None:
+        problems = docgen.check_bilingual_pairs()
+        # the real repo must have every topic in both languages
+        assert problems == []
+
+    def test_check_doc_links_reports_broken(self, tmp_path: Path) -> None:
+        # simulate by pointing ROOT at a temp tree
+        docs = tmp_path / "docs"
+        docs.mkdir()
+        (docs / "A.md").write_text("[broken](MISSING.md)", encoding="utf-8")
+        (docs / "A.zh.md").write_text("x", encoding="utf-8")
+        orig_root = docgen.ROOT
+        try:
+            docgen.ROOT = tmp_path  # type: ignore[assignment]
+            problems = docgen.check_doc_links()
+            assert any("MISSING.md" in p for p in problems)
+        finally:
+            docgen.ROOT = orig_root  # type: ignore[assignment]
+
+
 class TestRealRepo:
     def test_load_categories_finds_all_plugins(self) -> None:
         categories = docgen.load_categories()
         assert len(categories) == 11
         assert all(c.tools for c in categories)
         assert docgen.total_tools(categories) == 146
+        assert all(c.category_name_zh for c in categories)
 
     def test_check_mode_passes_on_fresh_checkout(self) -> None:
         # The committed docs must be in sync with the code
