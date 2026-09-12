@@ -126,8 +126,13 @@ class TestRunCommand:
         assert result["stderr"] == "boom"
 
     def test_exe_suffix_matches_allowlist(self, isolated_config: Path) -> None:
+        # ".exe" suffix is stripped before the allowlist comparison; the
+        # command-existence check is mocked so the test is platform-neutral
         T["add_allowed_commands"](["git"])
-        with _fake_run():
+        with _fake_run(), patch(
+            "mcp_server.command_executor.CommandExecutor._check_command_exists",
+            return_value=True,
+        ):
             result = json.loads(T["run_command"]("git.exe", args='["status"]'))
         assert "error" not in result
 
