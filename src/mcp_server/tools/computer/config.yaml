@@ -1,5 +1,6 @@
 category_name: "Computer Use"
 emoji: "🖥️"
+category_name_zh: "桌面控制"
 category_description: "AI desktop control: screen capture (multi-monitor, base64/file), mouse control (move/click/drag/scroll), keyboard input (typing/keys/hotkeys), clipboard access, window management, safety failsafe configuration"
 enabled: true
 

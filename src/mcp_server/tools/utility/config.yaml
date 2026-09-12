@@ -1,4 +1,5 @@
 category_name: "Utilities"
 emoji: "🛠️"
+category_name_zh: "实用工具"
 category_description: "UUID, hashing, date/time operations, math, password generation"
 enabled: true

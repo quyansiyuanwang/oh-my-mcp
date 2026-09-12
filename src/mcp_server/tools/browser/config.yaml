@@ -1,5 +1,6 @@
 category_name: "Browser Automation"
 emoji: "🌐"
+category_name_zh: "浏览器自动化"
 category_description: "Selenium-based browser automation: navigation, interaction, screenshots, JS execution, console logs, cookies, network monitoring, form filling, multi-tab management"
 enabled: true
 

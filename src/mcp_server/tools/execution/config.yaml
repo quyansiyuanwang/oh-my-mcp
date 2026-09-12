@@ -1,5 +1,6 @@
 category_name: "Command Execution"
 emoji: "⚡"
+category_name_zh: "命令执行"
 category_description: "Secure allowlist-based command execution: run whitelisted commands with argument sanitization, timeout protection, output size limits and audit logging; manage the persistent command allowlist"
 enabled: true
 
