@@ -14,6 +14,7 @@ from typing import Any
 
 from fastmcp import FastMCP
 
+from mcp_server import __version__
 from mcp_server.tools import load_all_plugins
 from mcp_server.utils import logger
 
@@ -30,7 +31,8 @@ def get_version() -> str:
             project_version: str = data.get("project", {}).get("version", "0.1.0")
             return project_version
     except Exception:
-        return "0.1.0"
+        # frozen builds ship without pyproject.toml — fall back to the package version
+        return __version__
 
 
 # Create the MCP server
