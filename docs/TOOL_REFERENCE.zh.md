@@ -577,7 +577,7 @@ toml_to_json(toml_string: str, indent: int = 2)
 
 ---
 
-## ⚡ 命令执行 (工具) (4)
+## ⚡ 命令执行 (工具) (5)
 
 > 工具描述取自代码 docstring(英文为单一事实源)。
 
@@ -607,6 +607,13 @@ Remove commands from the run_command allowlist (persisted).
 
 ```python
 remove_allowed_commands(commands: list[str])
+```
+
+### `run_script`
+Execute a script file (.py/.ps1/.sh/.bat/.cmd) with sanitized arguments.
+
+```python
+run_script(script_path: str, args: str = '', cwd: str = '', timeout: int = COMMAND_TIMEOUT_DEFAULT, max_output_chars: int = 10000)
 ```
 
 ---
@@ -777,7 +784,7 @@ subagent_config_list()
 
 ---
 
-## 💻 系统信息 (工具) (10)
+## 💻 系统信息 (工具) (11)
 
 > 工具描述取自代码 docstring(英文为单一事实源)。
 
@@ -849,6 +856,13 @@ Get battery status (percentage, charging state, time estimates).
 
 ```python
 get_battery_info()
+```
+
+### `list_processes`
+List running processes sorted by CPU, memory, name or PID.
+
+```python
+list_processes(sort_by: str = 'cpu', limit: int = 20)
 ```
 
 ---

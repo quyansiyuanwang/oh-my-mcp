@@ -186,7 +186,7 @@ class TestRealRepo:
         categories = docgen.load_categories()
         assert len(categories) == 11
         assert all(c.tools for c in categories)
-        assert docgen.total_tools(categories) == 151
+        assert docgen.total_tools(categories) == 153
         assert all(c.category_name_zh for c in categories)
 
     def test_check_mode_passes_on_fresh_checkout(self) -> None:

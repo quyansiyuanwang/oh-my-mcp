@@ -569,7 +569,7 @@ toml_to_json(toml_string: str, indent: int = 2)
 
 ---
 
-## ⚡ Command Execution (Tools) (4)
+## ⚡ Command Execution (Tools) (5)
 
 ### `run_command`
 Execute an allowlisted command with sanitized arguments (no shell).
@@ -597,6 +597,13 @@ Remove commands from the run_command allowlist (persisted).
 
 ```python
 remove_allowed_commands(commands: list[str])
+```
+
+### `run_script`
+Execute a script file (.py/.ps1/.sh/.bat/.cmd) with sanitized arguments.
+
+```python
+run_script(script_path: str, args: str = '', cwd: str = '', timeout: int = COMMAND_TIMEOUT_DEFAULT, max_output_chars: int = 10000)
 ```
 
 ---
@@ -763,7 +770,7 @@ subagent_config_list()
 
 ---
 
-## 💻 System (Tools) (10)
+## 💻 System (Tools) (11)
 
 ### `get_system_info`
 Get comprehensive system information.
@@ -833,6 +840,13 @@ Get battery status (percentage, charging state, time estimates).
 
 ```python
 get_battery_info()
+```
+
+### `list_processes`
+List running processes sorted by CPU, memory, name or PID.
+
+```python
+list_processes(sort_by: str = 'cpu', limit: int = 20)
 ```
 
 ---

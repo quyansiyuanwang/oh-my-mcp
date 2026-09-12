@@ -23,12 +23,12 @@ oh-my-mcp/
 │   │   ├── file/                # 📁 File System (16 tools)
 │   │   ├── data/                # 📊 Data Processing (15 tools)
 │   │   ├── text/                # 📝 Text Processing (9 tools)
-│   │   ├── system/              # 💻 System (10 tools)
+│   │   ├── system/              # 💻 System (11 tools)
 │   │   ├── utility/             # 🛠️ Utilities (10 tools)
 │   │   ├── subagent/            # 🤖 Subagent AI Orchestration (6 tools)
 │   │   ├── browser/             # 🌐 Browser Automation (33 tools)
 │   │   ├── computer/            # 🖥️ Computer Use (25 tools)
-│   │   └── execution/           # Command Execution (4 tools)
+│   │   └── execution/           # Command Execution (5 tools)
 │   └── cli/                     # Configuration generator CLI
 ├── scripts/                     # Build & doc generation scripts
 └── tests/                       # Pytest suite (per category + scenarios)

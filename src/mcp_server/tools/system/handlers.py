@@ -19,7 +19,7 @@ from typing import Any
 import psutil
 
 from mcp_server.tools.registry import tool_handler
-from mcp_server.utils import error_json, format_bytes, logger
+from mcp_server.utils import ValidationError, error_json, format_bytes, logger
 
 
 @tool_handler
@@ -348,8 +348,6 @@ def get_network_interfaces() -> str:
         up/down state and speed
     """
     try:
-        import psutil
-
         addrs_by_if = psutil.net_if_addrs()
         stats_by_if = psutil.net_if_stats()
 
@@ -386,8 +384,6 @@ def get_battery_info() -> str:
         JSON string with battery information
     """
     try:
-        import psutil
-
         battery = psutil.sensors_battery()
         if battery is None:
             return json.dumps({"success": True, "has_battery": False}, indent=2)
@@ -407,3 +403,61 @@ def get_battery_info() -> str:
     except Exception as e:
         logger.error(f"Failed to get battery info: {e}")
         return error_json(f"Failed to get battery info: {e}")
+
+
+@tool_handler
+def list_processes(sort_by: str = "cpu", limit: int = 20) -> str:
+    """
+    List running processes sorted by CPU, memory, name or PID.
+
+    Args:
+        sort_by: "cpu", "memory", "name" or "pid" (default "cpu").
+            CPU percentages need a short sampling interval (~0.1s).
+        limit: Maximum number of processes returned (default 20, max 200)
+
+    Returns:
+        JSON string with the process list and total process count
+    """
+    try:
+        if limit < 1 or limit > 200:
+            raise ValidationError("limit must be between 1 and 200")
+        sort_key = sort_by.lower()
+        if sort_key not in ("cpu", "memory", "name", "pid"):
+            raise ValidationError("sort_by must be one of: cpu, memory, name, pid")
+
+        procs = []
+        for proc in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
+            try:
+                info = proc.info
+                procs.append(
+                    {
+                        "pid": info["pid"],
+                        "name": info["name"] or "",
+                        "cpu_percent": info["cpu_percent"] or 0.0,
+                        "memory_percent": round(info["memory_percent"] or 0.0, 2),
+                    }
+                )
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                continue
+
+        reverse = sort_key in ("cpu", "memory")
+        procs.sort(
+            key=lambda p: p[sort_key if sort_key != "cpu" else "cpu_percent"], reverse=reverse
+        )
+
+        return json.dumps(
+            {
+                "success": True,
+                "sort_by": sort_key,
+                "total_processes": len(procs),
+                "returned": min(limit, len(procs)),
+                "processes": procs[:limit],
+            },
+            indent=2,
+        )
+    except ValidationError as e:
+        logger.warning(f"list_processes validation error: {e}")
+        return error_json(str(e))
+    except Exception as e:
+        logger.error(f"Failed to list processes: {e}")
+        return error_json(f"Failed to list processes: {e}")

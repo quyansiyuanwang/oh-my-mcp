@@ -170,3 +170,50 @@ class TestOutputLimit:
         T["add_allowed_commands"](["echo"])
         result = json.loads(T["run_command"]("echo", max_output_chars=10))
         assert "error" in result
+
+
+class TestRunScript:
+    def test_rejects_unsupported_extension(self, isolated_config: Path) -> None:
+        f = isolated_config.parent / "script.rb"
+        f.write_text("puts 1", encoding="utf-8")
+        result = json.loads(T["run_script"](str(f)))
+        assert "error" in result
+        assert "Unsupported script type" in result["error"]
+
+    def test_rejects_missing_script(self, isolated_config: Path) -> None:
+        result = json.loads(T["run_script"](str(isolated_config.parent / "no.py")))
+        assert "error" in result
+        assert "Script not found" in result["error"]
+
+    def test_requires_interpreter_allowlisted(self, isolated_config: Path) -> None:
+        script = isolated_config.parent / "s.py"
+        script.write_text("print('hi')", encoding="utf-8")
+        result = json.loads(T["run_script"](str(script)))
+        assert "error" in result
+        assert "not allowlisted" in result["error"]
+
+    def test_runs_python_script(self, isolated_config: Path) -> None:
+        # allowlist the *interpreter name recorded by the executor*; on this
+        # machine run_script passes sys.executable, which is always present
+        script = isolated_config.parent / "s.py"
+        script.write_text("print('script-output-42')", encoding="utf-8")
+        # allowlist whichever command run_script will use
+        import sys as _sys
+
+        from mcp_server.tools.execution.handlers import _SCRIPT_INTERPRETERS
+
+        T["add_allowed_commands"]([_sys.executable])
+        assert _SCRIPT_INTERPRETERS[".py"][0] == _sys.executable
+        result = json.loads(T["run_script"](str(script)))
+        assert "error" not in result, result
+        assert "script-output-42" in result["stdout"]
+
+    def test_args_passed_through(self, isolated_config: Path) -> None:
+        import sys as _sys
+
+        T["add_allowed_commands"]([_sys.executable])
+        script = isolated_config.parent / "args.py"
+        script.write_text("import sys\nprint('ARG=' + sys.argv[1])", encoding="utf-8")
+        result = json.loads(T["run_script"](str(script), args='["VALUE123"]'))
+        assert "error" not in result, result
+        assert "ARG=VALUE123" in result["stdout"]

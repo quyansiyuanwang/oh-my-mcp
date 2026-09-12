@@ -46,7 +46,7 @@ oh-my-mcp/
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           ├── 📂 system/           # 💻 系统工具 (10 tools)
+│           ├── 📂 system/           # 💻 系统工具 (11 tools)
 │           │   ├── __init__.py
 │           │   ├── config.yaml
 │           │   └── handlers.py
@@ -64,7 +64,7 @@ oh-my-mcp/
 │               ├── session_manager.py
 │               └── handlers.py
 │           ├── 📂 computer/         # 🖥️ Computer Use (25 tools)
-│           └── 📂 execution/        # 命令执行 (4 tools)
+│           └── 📂 execution/        # 命令执行 (5 tools)
 │               ├── __init__.py
 │               ├── config.yaml
 │               ├── computer_manager.py

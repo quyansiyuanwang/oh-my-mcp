@@ -13,6 +13,7 @@ persistent, user-managed allowlist:
 """
 
 import json
+import sys
 from pathlib import Path
 
 from mcp_server.command_executor import CommandExecutor, CommandValidator
@@ -27,6 +28,7 @@ from mcp_server.utils import (
     ValidationError,
     error_json,
     logger,
+    sanitize_path,
 )
 
 _CONFIG_PATH = Path.home() / ".oh-my-mcp" / "execution_config.json"
@@ -242,3 +244,95 @@ def remove_allowed_commands(commands: list[str]) -> str:
     except Exception as e:
         logger.error(f"remove_allowed_commands unexpected error: {e}")
         return error_json(f"Failed to remove allowed commands: {e}")
+
+
+# Script extension -> interpreter command that must be allowlisted.
+# sys.executable is used for Python so the server's own interpreter runs it.
+_SCRIPT_INTERPRETERS: dict[str, tuple[str, ...]] = {
+    ".py": (sys.executable,),
+    ".ps1": ("powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-File"),
+    ".sh": ("bash",),
+    ".bat": ("cmd", "/c"),
+    ".cmd": ("cmd", "/c"),
+}
+
+
+@tool_handler
+def run_script(
+    script_path: str,
+    args: str = "",
+    cwd: str = "",
+    timeout: int = COMMAND_TIMEOUT_DEFAULT,
+    max_output_chars: int = 10000,
+) -> str:
+    """
+    Execute a script file (.py/.ps1/.sh/.bat/.cmd) with sanitized arguments.
+
+    The interpreter that runs the script (python, powershell, bash, cmd) must
+    be in the allowlist first — e.g. add_allowed_commands(["python"]) for
+    .py scripts. Running a script is arbitrary code execution, so only point
+    this at scripts you trust.
+
+    Args:
+        script_path: Path to the script file
+        args: JSON array of argument strings passed to the script
+        cwd: Working directory (empty = server current directory)
+        timeout: Seconds before the script is killed (default 30, max 300)
+        max_output_chars: Truncate stdout/stderr to this many characters each
+
+    Returns:
+        JSON string with returncode, stdout, stderr, execution_time
+    """
+    try:
+        if timeout < 1 or timeout > COMMAND_TIMEOUT_MAX:
+            raise ValidationError(f"timeout must be between 1 and {COMMAND_TIMEOUT_MAX}")
+
+        script = sanitize_path(script_path)
+        if not script.exists():
+            raise ValidationError(f"Script not found: {script_path}")
+        if not script.is_file():
+            raise ValidationError(f"Not a file: {script_path}")
+
+        ext = script.suffix.lower()
+        interpreter = _SCRIPT_INTERPRETERS.get(ext)
+        if interpreter is None:
+            raise ValidationError(
+                f"Unsupported script type: {ext}. "
+                f"Supported: {', '.join(sorted(_SCRIPT_INTERPRETERS))}"
+            )
+
+        # the interpreter must be explicitly trusted, same as run_command
+        if interpreter[0] not in _load_allowlist():
+            raise ValidationError(
+                f"Interpreter '{interpreter[0]}' is not allowlisted. "
+                f'Run add_allowed_commands(["{interpreter[0]}"]) first.'
+            )
+
+        arg_list = _parse_args(args)
+        result = _executor.execute(
+            command=interpreter[0],
+            args=[*interpreter[1:], str(script), *arg_list],
+            cwd=cwd or None,
+            timeout=timeout,
+        )
+        truncated = False
+        for field in ("stdout", "stderr"):
+            value = result[field]
+            if len(value) > max_output_chars:
+                result[field] = "...(truncated)..." + value[-max_output_chars:]
+                truncated = True
+        result["output_truncated"] = truncated
+        result["script"] = str(script)
+        return json.dumps(result, indent=2, ensure_ascii=False)
+    except (
+        ValidationError,
+        CommandValidationError,
+        CommandTimeoutError,
+        CommandExecutionError,
+        SecurityError,
+    ) as e:
+        logger.warning(f"run_script failed: {e}")
+        return error_json(str(e))
+    except Exception as e:
+        logger.error(f"run_script unexpected error: {e}")
+        return error_json(f"Script execution failed: {e}")

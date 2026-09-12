@@ -39,7 +39,7 @@ oh-my-mcp/
 │           ├── 📂 text/         # 📝 Text Processing (9 tools)
 │           │   ├── config.yaml
 │           │   └── handlers.py
-│           ├── 📂 system/       # 💻 System (10 tools)
+│           ├── 📂 system/       # 💻 System (11 tools)
 │           │   ├── config.yaml
 │           │   └── handlers.py
 │           ├── 📂 utility/      # 🛠️ Utilities (10 tools)
@@ -56,7 +56,7 @@ oh-my-mcp/
 │           │   ├── session_manager.py
 │           │   └── handlers.py
 │           ├── 📂 computer/     # 🖥️ Computer Use (25 tools)
-│           └── 📂 execution/    # Command Execution (4 tools)
+│           └── 📂 execution/    # Command Execution (5 tools)
 │               ├── __init__.py
 │               ├── config.yaml
 │               ├── computer_manager.py
