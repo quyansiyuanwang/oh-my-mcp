@@ -9,21 +9,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Computer Use category** (22 tools): AI-driven desktop control via pyautogui/mss/pyperclip/pygetwindow
+- **Computer Use category** (now 25 tools): AI-driven desktop control via pyautogui/mss/pyperclip/pygetwindow
   - Screen capture: `computer_screenshot` (region/monitor, file or base64), `computer_get_screen_size`,
     `computer_get_monitors`, `computer_get_pixel_color`, `computer_locate_on_screen`
   - Mouse: move, click, drag, scroll, position
   - Keyboard: `computer_type_text`, `computer_press_key`, `computer_hotkey`
   - Clipboard: read/write via pyperclip
-  - Window management: list, focus, info, resize, move
+  - Window management: list, focus, info, resize, move, minimize, maximize
+  - Pacing: `computer_wait` (0-60s) between UI actions
   - Safety: FAILSAFE on by default, adjustable action pause, `computer_config_get/set`
-  - New guide: `docs/zh/COMPUTER_USE_GUIDE.md`
+  - Guides: `docs/zh/COMPUTER_USE_GUIDE.md` + `docs/en/COMPUTER_USE_GUIDE.md`
+- **Documentation generation system** (`scripts/docs/generate_docs.py`):
+  - AST-extracts tool names/descriptions/signatures from `@tool_handler` docstrings
+    and category metadata from each plugin's `config.yaml` (new `emoji` field)
+  - Regenerates count/description fragments between `<!-- DOCGEN:... -->` markers in
+    README.md, CLAUDE.md, docs/README.md, docs/en/TOOL_REFERENCE.md, plus counts in
+    pyproject.toml, main.py and per-category counts in project trees and guides
+  - `--check` mode fails CI when docs are stale
+- **Complex scenario test suites** (67 cases): zip-slip/symlink/zip-bomb security,
+  malformed archives, unicode filenames, large roundtrips (compression); CRLF
+  preservation, deep nesting, size limits (file); cross-format roundtrips,
+  special values (data)
+- English versions of core docs: INSTALLATION, CONTRIBUTING, BUILD, ARCHITECTURE,
+  PROJECT_STRUCTURE, COMPUTER_USE_GUIDE
 
 ### Changed
 
-- Tool count 116 -> 138 across 10 categories (README, docs, package description)
+- Tool count 116 -> 141 across 10 categories (README, docs, package description)
+- `compress_zip`/`compress_tar` accept directories and pack them recursively with
+  hierarchy preserved (previously flattened to basenames / rejected directories)
+- Documentation reorganized into true bilingual layout: Chinese-content docs moved
+  from `docs/en/` to `docs/zh/` (ARCHITECTURE, BUILD, INSTALLATION, CONTRIBUTING,
+  PROJECT_STRUCTURE); README resource lists consolidated
+- `uv.lock` is now committed — it was gitignored, which let CI re-resolve to newer
+  tool versions (ruff 0.16) that failed the build
 - Build: removed PIL from PyInstaller excludes (required for computer-use screenshots)
 - Added `computer` optional dependency group and core dependencies for desktop control
+
+### Fixed
+
+- `read_file`/`write_file`/`append_file`: newline translation corrupted `\r\n`
+  content on Windows (now byte-faithful via `newline=""`)
+- `copy_file` silently placed files inside an existing destination directory
+- `flatten_json` dropped empty dict/list values
+- `validate_json_schema` reported booleans as numbers
+- 51 error responses interpolated paths into JSON templates producing invalid
+  JSON on Windows paths (now use shared `error_json()` helper)
+- `extract_tar` hardening: `filter="data"` (Python 3.14 compat, symlink escapes)
+- `calculate_expression` rejected documented math functions; identifier whitelist
+  now allows sqrt/sin/abs/max/... while keeping eval sandboxed
+- `date_to_timestamp` ignored `timezone="utc"`
+- `locate_on_screen` unusable without OpenCV (graceful exact-match fallback)
 
 ## [0.1.1] - 2026-02-11
 

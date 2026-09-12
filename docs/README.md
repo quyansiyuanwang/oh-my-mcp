@@ -1,32 +1,34 @@
 # MCP Server Documentation | MCP 服务器文档
 
-## 📚 Choose Your Language | 选择语言
+oh-my-mcp — **141 tools across 10 categories** | **141 个工具，10 个类别**
 
-### 🇨🇳 [中文文档](zh/)
+## 📚 Documentation by Topic | 按主题浏览
 
-**配置与使用**
-- [设置指南](zh/SETUP_GUIDE.md) - 交互式配置向导，推荐新用户
-- [完整配置指南](zh/CONFIGURATION_GUIDE_CN.md) - 详细配置说明
+| Topic 主题 | English | 中文 |
+|---|---|---|
+| Installation 安装 | [en/INSTALLATION.md](en/INSTALLATION.md) | [zh/INSTALLATION.md](zh/INSTALLATION.md) |
+| Setup Wizard 配置向导 | — | [zh/SETUP_GUIDE.md](zh/SETUP_GUIDE.md) |
+| Configuration 配置 | — | [zh/CONFIGURATION_GUIDE_CN.md](zh/CONFIGURATION_GUIDE_CN.md) |
+| Tool Reference 工具参考 | [en/TOOL_REFERENCE.md](en/TOOL_REFERENCE.md) 🤖 auto-generated | — |
+| Computer Use 桌面控制 | [en/COMPUTER_USE_GUIDE.md](en/COMPUTER_USE_GUIDE.md) | [zh/COMPUTER_USE_GUIDE.md](zh/COMPUTER_USE_GUIDE.md) |
+| Subagent Guide AI 编排 | — | [zh/SUBAGENT_GUIDE.md](zh/SUBAGENT_GUIDE.md) |
+| Subagent Config AI 配置 | — | [zh/SUBAGENT_CONFIG.md](zh/SUBAGENT_CONFIG.md) |
+| Browser Config 浏览器配置 | — | [zh/BROWSER_CONFIG_GUIDE.md](zh/BROWSER_CONFIG_GUIDE.md) / [Quickstart](zh/BROWSER_CONFIG_QUICKSTART.md) |
+| Advanced Search 高级搜索 | — | [zh/SEARCH_ADVANCED.md](zh/SEARCH_ADVANCED.md) |
+| Architecture 架构 | [en/ARCHITECTURE.md](en/ARCHITECTURE.md) | [zh/ARCHITECTURE.md](zh/ARCHITECTURE.md) |
+| Project Structure 结构 | [en/PROJECT_STRUCTURE.md](en/PROJECT_STRUCTURE.md) | [zh/PROJECT_STRUCTURE.md](zh/PROJECT_STRUCTURE.md) |
+| Build 打包 | [en/BUILD.md](en/BUILD.md) | [zh/BUILD.md](zh/BUILD.md) |
+| Contributing 贡献 | [en/CONTRIBUTING.md](en/CONTRIBUTING.md) | [zh/CONTRIBUTING.md](zh/CONTRIBUTING.md) |
+| Changelog 更新日志 | [en/CHANGELOG.md](en/CHANGELOG.md) | — |
 
-**AI 功能**
-- [Subagent 配置](zh/SUBAGENT_CONFIG.md) - AI 任务配置管理
-- [Subagent 使用指南](zh/SUBAGENT_GUIDE.md) - AI 编排完整教程
+> Entries marked "—" have no translation yet; contributions are welcome.
+> 标注 "—" 的条目暂无翻译，欢迎贡献。
 
-**高级功能**
-- [高级搜索](zh/SEARCH_ADVANCED.md) - 多引擎搜索功能
-- [Computer Use 指南](zh/COMPUTER_USE_GUIDE.md) - AI 桌面控制
-
-### 🇬🇧 [English Documentation](en/)
-
-**Project Information**
-- [Architecture](en/ARCHITECTURE.md) - System design and architecture
-- [Project Structure](en/PROJECT_STRUCTURE.md) - Codebase organization
-- [Changelog](en/CHANGELOG.md) - Version history
-
-**Development**
-- [Installation](en/INSTALLATION.md) - Setup instructions
-- [Build Guide](en/BUILD.md) - Creating executables
-- [Contributing](en/CONTRIBUTING.md) - Contribution guidelines
+> 🤖 Auto-generated: tool counts and one-line descriptions in these docs are
+> produced by `scripts/docs/generate_docs.py` from the code. After adding or
+> removing tools, run it with `--write`; CI verifies freshness with `--check`.
+> 🤖 自动生成：文档中的工具数量与描述由脚本从代码生成，增删工具后请运行
+> `python scripts/docs/generate_docs.py --write`，CI 会用 `--check` 校验。
 
 ---
 
@@ -40,13 +42,11 @@
 ### English Users
 1. Read [Installation Guide](en/INSTALLATION.md)
 2. Run `python configure.py` for setup
-3. Check [Changelog](en/CHANGELOG.md) for updates
+3. Check the [Tool Reference](en/TOOL_REFERENCE.md) for the full tool list
 
 ---
 
 ## 📊 Tool Categories | 工具分类
-
-**141 practical tools across 10 categories:**
 
 <!-- DOCGEN:docs-categories:start -->
 **141 practical tools across 10 categories:**
@@ -69,20 +69,29 @@
 
 ```
 docs/
-├── zh/                              # 中文文档
-│   ├── SETUP_GUIDE.md                  # 设置指南
-│   ├── CONFIGURATION_GUIDE_CN.md       # 配置指南
-│   ├── SUBAGENT_CONFIG.md              # Subagent 配置
-│   ├── SUBAGENT_GUIDE.md               # Subagent 使用
-│   ├── COMPUTER_USE_GUIDE.md           # Computer Use 指南
-│   └── SEARCH_ADVANCED.md              # 高级搜索
 ├── en/                              # English docs
 │   ├── ARCHITECTURE.md                 # Architecture
 │   ├── BUILD.md                        # Build guide
 │   ├── CHANGELOG.md                    # Changelog
+│   ├── COMPUTER_USE_GUIDE.md           # Computer use guide
 │   ├── CONTRIBUTING.md                 # Contributing
 │   ├── INSTALLATION.md                 # Installation
-│   └── PROJECT_STRUCTURE.md            # Project structure
+│   ├── PROJECT_STRUCTURE.md            # Project structure
+│   └── TOOL_REFERENCE.md               # Tool reference (auto-generated)
+├── zh/                              # 中文文档
+│   ├── ARCHITECTURE.md                 # 架构概述
+│   ├── BROWSER_CONFIG_GUIDE.md         # 浏览器配置指南
+│   ├── BROWSER_CONFIG_QUICKSTART.md    # 浏览器配置快速开始
+│   ├── BUILD.md                        # 构建指南
+│   ├── COMPUTER_USE_GUIDE.md           # Computer Use 指南
+│   ├── CONFIGURATION_GUIDE_CN.md       # 配置指南
+│   ├── CONTRIBUTING.md                 # 贡献指南
+│   ├── INSTALLATION.md                 # 安装指南
+│   ├── PROJECT_STRUCTURE.md            # 项目结构
+│   ├── SEARCH_ADVANCED.md              # 高级搜索
+│   ├── SETUP_GUIDE.md                  # 设置指南
+│   ├── SUBAGENT_CONFIG.md              # Subagent 配置
+│   └── SUBAGENT_GUIDE.md               # Subagent 使用
 └── README.md                        # This index file
 ```
 

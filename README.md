@@ -26,17 +26,25 @@ oh-my-mcp provides tools for:
 - **🌐 Web & Network** (18 tools): Web search, page fetching, HTML parsing, downloads, HTTP API client, DNS lookup
 <!-- DOCGEN:readme-features:end -->
 
-> **Note:** Python Development, UV Package Manager, and Pylance/Pyright tools have been removed from the packaged version as they require external Python interpreters and package managers. All remaining tools work completely standalone.
-
 ## 📚 Documentation
 
-- **[📖 Documentation Index](docs/README.md)** - Complete documentation hub (中文)
-- **[🏗️ Project Structure](docs/en/PROJECT_STRUCTURE.md)** - Detailed project organization
-- **[🎯 Setup Guide](docs/zh/SETUP_GUIDE.md)** - Interactive configuration wizard guide
-- **[📦 Build Guide](docs/en/BUILD.md)** - Package for Windows/Linux distribution
-- **[🏛️ Architecture Guide](docs/en/ARCHITECTURE.md)** - System architecture and design
-- **[🧪 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md)** - AI orchestration features
-- **[🖥️ Computer Use Guide](docs/zh/COMPUTER_USE_GUIDE.md)** - AI desktop control (中文)
+The full index lives in **[docs/README.md](docs/README.md)**. Highlights:
+
+| Document | English | 中文 |
+|---|---|---|
+| Installation | [docs/en/INSTALLATION.md](docs/en/INSTALLATION.md) | [docs/zh/INSTALLATION.md](docs/zh/INSTALLATION.md) |
+| Tool Reference (all 141 tools) | [docs/en/TOOL_REFERENCE.md](docs/en/TOOL_REFERENCE.md) | — |
+| Computer Use Guide | [docs/en/COMPUTER_USE_GUIDE.md](docs/en/COMPUTER_USE_GUIDE.md) | [docs/zh/COMPUTER_USE_GUIDE.md](docs/zh/COMPUTER_USE_GUIDE.md) |
+| Setup Wizard Guide | — | [docs/zh/SETUP_GUIDE.md](docs/zh/SETUP_GUIDE.md) |
+| Build Guide | [docs/en/BUILD.md](docs/en/BUILD.md) | [docs/zh/BUILD.md](docs/zh/BUILD.md) |
+| Architecture | [docs/en/ARCHITECTURE.md](docs/en/ARCHITECTURE.md) | [docs/zh/ARCHITECTURE.md](docs/zh/ARCHITECTURE.md) |
+| Project Structure | [docs/en/PROJECT_STRUCTURE.md](docs/en/PROJECT_STRUCTURE.md) | [docs/zh/PROJECT_STRUCTURE.md](docs/zh/PROJECT_STRUCTURE.md) |
+| Subagent Guide | — | [docs/zh/SUBAGENT_GUIDE.md](docs/zh/SUBAGENT_GUIDE.md) |
+| Contributing | [docs/en/CONTRIBUTING.md](docs/en/CONTRIBUTING.md) | [docs/zh/CONTRIBUTING.md](docs/zh/CONTRIBUTING.md) |
+| Changelog | [docs/en/CHANGELOG.md](docs/en/CHANGELOG.md) | — |
+
+Tool counts and descriptions in the docs are generated from code — see
+[Documentation Generation](#documentation-generation).
 
 
 ### ⚡ 快速安装与配置
@@ -163,7 +171,7 @@ oh-my-mcp/
             ├── utility/             # Utility tools (10)
             ├── subagent/            # AI Orchestration tools (6)
             ├── browser/             # Browser Automation tools (33)
-            └── computer/            # Computer Use tools (22)
+            └── computer/            # Computer Use tools (25)
 ```
 
 ### Adding New Tools
@@ -233,41 +241,6 @@ This project is provided as-is for educational and practical use.
 - [FastMCP Documentation](https://github.com/jlowin/fastmcp)
 - [Model Context Protocol (MCP)](https://modelcontextprotocol.io/)
 - [DuckDuckGo Search](https://pypi.org/project/duckduckgo-search/)
-
----
-
-## 📖 Additional Resources
-
-### Documentation
-
-- [📚 Documentation Hub](docs/README.md) - Complete documentation index (中文)
-- [🏗️ Project Structure](docs/en/PROJECT_STRUCTURE.md) - Project organization guide
-- [🏛️ Architecture](docs/en/ARCHITECTURE.md) - System architecture and design
-- [📋 Test Report](tests/) - Test suite
-
-### Configuration & Setup
-
-- [⚙️ Configuration Guide (CN)](docs/zh/CONFIGURATION_GUIDE_CN.md) - Complete configuration reference
-- [🎯 Setup Guide](docs/zh/SETUP_GUIDE.md) - Step-by-step setup instructions
-
-### Build & Deploy
-
-- [📦 Build Guide](docs/en/BUILD.md) - Package for Windows/Linux
-- [🚀 Installation Guide](docs/en/INSTALLATION.md) - Installation details
-
-### Advanced Features
-
-- [🤖 Subagent Configuration](docs/zh/SUBAGENT_CONFIG.md) - AI task delegation setup
-- [🧠 Subagent Guide](docs/zh/SUBAGENT_GUIDE.md) - AI orchestration features
-- [🔍 Advanced Search](docs/zh/SEARCH_ADVANCED.md) - Search functionality details
-
-### Developer Resources
-
-- [🏛️ Architecture Guide](docs/en/ARCHITECTURE.md) - System architecture and design
-- [🤝 Contributing Guide](docs/en/CONTRIBUTING.md) - How to contribute
-- [📝 Changelog](docs/en/CHANGELOG.md) - Version history
-
-
 
 ---
 
